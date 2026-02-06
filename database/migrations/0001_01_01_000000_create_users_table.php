@@ -4,8 +4,14 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+/**
+ * Migration untuk tabel users
+ * 
+ * Struktur sesuai ERD:
+ * - id, no_telephone, username, password, image, email, role
+ * - Dengan soft deletes untuk keamanan data
+ */
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,12 +19,18 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->string('no_telephone', 20)->nullable();
+            $table->string('username', 50)->unique();
             $table->string('password');
-            $table->rememberToken();
+            $table->string('image')->nullable();
+            $table->string('email')->unique();
+            $table->enum('role', ['admin', 'customer'])->default('customer');
             $table->timestamps();
+            $table->softDeletes();
+
+            // Index untuk optimasi query
+            $table->index('role');
+            $table->index('email');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
