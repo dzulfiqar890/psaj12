@@ -185,8 +185,15 @@ class AuthController extends Controller
     {
         $user = $request->user();
 
-        // Hapus token yang sedang digunakan
-        $user->currentAccessToken()->delete();
+        // Untuk API token authentication
+        if ($request->user()->tokens()->count() > 0) {
+            $request->user()->tokens()->delete();
+        }
+
+        // Untuk session-based authentication (Scramble)
+        Auth::guard('web')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         // Log activity
         Log::info("User logged out: {$user->email}", ['user_id' => $user->id]);

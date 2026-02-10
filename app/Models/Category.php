@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 /**
@@ -15,7 +14,6 @@ use Illuminate\Support\Str;
  * Mendukung soft deletes dan auto-generate slug.
  * 
  * @property int $id
- * @property string|null $image
  * @property string $name
  * @property string|null $description
  * @property string $slug
@@ -30,7 +28,6 @@ class Category extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'image',
         'name',
         'description',
         'slug',
@@ -82,18 +79,6 @@ class Category extends Model
         }
 
         return $slug;
-    }
-
-    /**
-     * Accessor untuk mendapatkan URL gambar lengkap.
-     */
-    public function getImageUrlAttribute(): ?string
-    {
-        if (!$this->image) {
-            return null;
-        }
-
-        return Storage::url($this->image);
     }
 
     /**

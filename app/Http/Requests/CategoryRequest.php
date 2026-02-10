@@ -27,7 +27,6 @@ class CategoryRequest extends FormRequest
         $rules = [
             'name' => 'required|string|max:100',
             'description' => 'nullable|string|max:1000',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120', // Maks 5MB
         ];
 
         // Untuk update, slug opsional
@@ -49,9 +48,6 @@ class CategoryRequest extends FormRequest
             'name.required' => 'Nama kategori wajib diisi.',
             'name.max' => 'Nama kategori maksimal 100 karakter.',
             'description.max' => 'Deskripsi maksimal 1000 karakter.',
-            'image.image' => 'File harus berupa gambar.',
-            'image.mimes' => 'Format gambar harus JPG, PNG, atau WEBP.',
-            'image.max' => 'Ukuran file terlalu besar. Maksimal 5MB.',
             'slug.unique' => 'Slug sudah digunakan. Silakan gunakan slug lain.',
         ];
     }

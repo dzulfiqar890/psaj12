@@ -6,7 +6,6 @@ use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
-use App\Services\ImageService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -16,11 +15,6 @@ use Illuminate\Support\Facades\Log;
  */
 class CategoryController extends Controller
 {
-    public function __construct(
-        private ImageService $imageService
-    ) {
-    }
-
     /**
      * @OA\Get(
      *     path="/admin/categories",
@@ -50,14 +44,10 @@ class CategoryController extends Controller
      *     security={{"bearerAuth": {}}},
      *     @OA\RequestBody(
      *         required=true,
-     *         @OA\MediaType(
-     *             mediaType="multipart/form-data",
-     *             @OA\Schema(
-     *                 required={"name"},
-     *                 @OA\Property(property="name", type="string"),
-     *                 @OA\Property(property="description", type="string"),
-     *                 @OA\Property(property="image", type="string", format="binary")
-     *             )
+     *         @OA\JsonContent(
+     *             required={"name"},
+     *             @OA\Property(property="name", type="string"),
+     *             @OA\Property(property="description", type="string")
      *         )
      *     ),
      *     @OA\Response(response=201, description="Kategori berhasil dibuat"),
@@ -69,10 +59,6 @@ class CategoryController extends Controller
         try {
             return DB::transaction(function () use ($request) {
                 $data = $request->validated();
-
-                if ($request->hasFile('image')) {
-                    $data['image'] = $this->imageService->upload($request->file('image'), 'categories');
-                }
 
                 $category = Category::create($data);
 
@@ -116,13 +102,9 @@ class CategoryController extends Controller
      *     @OA\Parameter(name="slug", in="path", required=true, @OA\Schema(type="string")),
      *     @OA\RequestBody(
      *         required=true,
-     *         @OA\MediaType(
-     *             mediaType="multipart/form-data",
-     *             @OA\Schema(
-     *                 @OA\Property(property="name", type="string"),
-     *                 @OA\Property(property="description", type="string"),
-     *                 @OA\Property(property="image", type="string", format="binary")
-     *             )
+     *         @OA\JsonContent(
+     *             @OA\Property(property="name", type="string"),
+     *             @OA\Property(property="description", type="string")
      *         )
      *     ),
      *     @OA\Response(response=200, description="Kategori berhasil diupdate"),
@@ -134,14 +116,6 @@ class CategoryController extends Controller
         try {
             return DB::transaction(function () use ($request, $category) {
                 $data = $request->validated();
-
-                if ($request->hasFile('image')) {
-                    $data['image'] = $this->imageService->update(
-                        $request->file('image'),
-                        $category->image,
-                        'categories'
-                    );
-                }
 
                 $category->update($data);
 
@@ -183,9 +157,6 @@ class CategoryController extends Controller
 
         try {
             return DB::transaction(function () use ($category) {
-                // Hapus gambar
-                $this->imageService->delete($category->image);
-
                 $categoryName = $category->name;
                 $category->delete();
 
@@ -203,3 +174,4 @@ class CategoryController extends Controller
         }
     }
 }
+
