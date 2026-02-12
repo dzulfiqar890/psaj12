@@ -27,6 +27,13 @@ Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
 
+Route::get('/register', function () {
+    if (Auth::check()) {
+        return redirect('/');
+    }
+    return view('auth.register');
+})->name('register');
+
 Route::post('/login', function (Illuminate\Http\Request $request) {
     $credentials = $request->validate([
         'email' => ['required', 'email'],

@@ -11,8 +11,11 @@ use App\Services\ImageService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\VerificationCodeMail;
 
 /**
  * @OA\Schema(
@@ -73,8 +76,103 @@ class AuthController extends Controller
      *     @OA\Response(response=422, description="Validasi gagal")
      * )
      */
+    /**
+     * @OA\Post(
+     *     path="/register/send-verification",
+     *     tags={"Authentication"},
+     *     summary="Kirim kode verifikasi",
+     *     description="Mengirim kode verifikasi ke email calon user",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"email"},
+     *             @OA\Property(property="email", type="string", format="email", example="john@example.com")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Kode verifikasi dikirim",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Kode verifikasi telah dikirim ke email Anda.")
+     *         )
+     *     )
+     * )
+     */
+    public function sendVerification(Request $request): JsonResponse
+    {
+        $request->validate([
+            'email' => 'required|email|unique:users,email',
+        ]);
+
+        $email = $request->email;
+        $code = str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
+
+        // Simpan kode di cache selama 5 menit
+        Cache::put('otp_' . $email, $code, 300);
+
+        try {
+            Mail::to($email)->send(new VerificationCodeMail($code));
+        } catch (\Exception $e) {
+            Log::error('Failed to send verification email: ' . $e->getMessage());
+            return ApiResponse::error('Gagal mengirim email verifikasi. Silakan coba lagi.', 500);
+        }
+
+        return ApiResponse::success(null, 'Kode verifikasi telah dikirim ke email Anda. Berlaku selama 5 menit.');
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/register",
+     *     tags={"Authentication"},
+     *     summary="Registrasi user baru",
+     *     description="Mendaftarkan user baru sebagai customer",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 required={"username", "email", "password", "password_confirmation", "code"},
+     *                 @OA\Property(property="username", type="string", example="johndoe"),
+     *                 @OA\Property(property="email", type="string", format="email", example="john@example.com"),
+     *                 @OA\Property(property="password", type="string", format="password", example="password123"),
+     *                 @OA\Property(property="password_confirmation", type="string", format="password", example="password123"),
+     *                 @OA\Property(property="no_telephone", type="string", example="081234567890"),
+     *                 @OA\Property(property="image", type="string", format="binary"),
+     *                 @OA\Property(property="code", type="string", example="123456", description="Kode verifikasi dari email")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Registrasi berhasil",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Registrasi berhasil."),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 @OA\Property(property="user", ref="#/components/schemas/User"),
+     *                 @OA\Property(property="token", type="string", example="1|abc123...")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response=422, description="Validasi gagal")
+     * )
+     */
     public function register(RegisterRequest $request): JsonResponse
     {
+        // Validasi kode verifikasi manually atau tambahkan ke request rule (pilih manual disini untuk pemisahan logic)
+        $request->validate([
+            'code' => 'required|string',
+        ]);
+
+        $cachedCode = Cache::get('otp_' . $request->email);
+
+        if (!$cachedCode || $cachedCode !== $request->code) {
+            return ApiResponse::error('Kode verifikasi salah atau sudah kadaluwarsa.', 422);
+        }
+
         try {
             return DB::transaction(function () use ($request) {
                 $data = $request->validated();
@@ -89,6 +187,9 @@ class AuthController extends Controller
 
                 // Buat user baru
                 $user = User::create($data);
+
+                // Hapus OTP dari cache
+                Cache::forget('otp_' . $request->email);
 
                 // Generate token
                 $token = $user->createToken('auth_token')->plainTextToken;

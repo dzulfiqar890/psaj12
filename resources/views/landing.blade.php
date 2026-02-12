@@ -44,26 +44,29 @@
         }
 
         .hero-bg {
-    position: relative;
-    background-image: url('{{ asset("Foto/1.png") }}');
-    background-size: cover;
-    background-position: center;
-    overflow: hidden;
-}
+            position: relative;
+            background-image: url('{{ asset("Foto/1.png") }}');
+            background-size: cover;
+            background-position: center;
+            overflow: hidden;
+        }
 
-.hero-bg::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.45); /* tingkat gelap */
-    backdrop-filter: blur(3px);      /* blur halus */
-    z-index: 1;
-}
+        .hero-bg::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            /* tingkat gelap */
+            backdrop-filter: blur(3px);
+            /* blur halus */
+            z-index: 1;
+        }
 
-.hero-bg > * {
-    position: relative;
-    z-index: 2; /* konten tetap tajam */
-}
+        .hero-bg>* {
+            position: relative;
+            z-index: 2;
+            /* konten tetap tajam */
+        }
 
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
@@ -128,6 +131,21 @@
                     class="nav-link text-white/90 hover:text-gold-500 transition-colors duration-300 font-medium text-sm uppercase tracking-wider relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-gold-500 after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">About</a>
                 <a href="#contact"
                     class="nav-link text-white/90 hover:text-gold-500 transition-colors duration-300 font-medium text-sm uppercase tracking-wider relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-gold-500 after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">Contact</a>
+
+                @auth
+                    <form method="POST" action="{{ route('logout') }}" class="inline">
+                        @csrf
+                        <button type="submit"
+                            class="nav-link text-white/90 hover:text-gold-500 transition-all duration-300 font-medium text-sm uppercase tracking-wider border border-current rounded-full px-6 py-2 hover:bg-gold-500/10">
+                            Logout
+                        </button>
+                    </form>
+                @else
+                    <a href="{{ route('login') }}"
+                        class="nav-link text-white/90 hover:text-gold-500 transition-all duration-300 font-medium text-sm uppercase tracking-wider border border-current rounded-full px-6 py-2 hover:bg-gold-500/10">
+                        Login
+                    </a>
+                @endauth
             </div>
 
             <!-- Mobile Menu Button -->
@@ -150,6 +168,20 @@
                 <a href="#about"
                     class="text-gray-800 hover:text-gold-500 font-medium py-2 border-b border-gray-100">About</a>
                 <a href="#contact" class="text-gray-800 hover:text-gold-500 font-medium py-2">Contact</a>
+                @auth
+                    <form method="POST" action="{{ route('logout') }}" class="w-full">
+                        @csrf
+                        <button type="submit"
+                            class="w-full text-left text-gray-800 hover:text-gold-500 font-medium py-2 border-t border-gray-100 mt-2">
+                            Logout
+                        </button>
+                    </form>
+                @else
+                    <a href="{{ route('login') }}"
+                        class="block w-full text-left text-gray-800 hover:text-gold-500 font-medium py-2 border-t border-gray-100 mt-2">
+                        Login
+                    </a>
+                @endauth
             </div>
         </div>
     </nav>
@@ -161,7 +193,7 @@
             <div class="max-w-2xl text-right">
                 <h1 class="text-5xl md:text-7xl font-serif font-bold text-white mb-6 leading-tight drop-shadow-2xl">
                     King Gitar <br>
-                    
+
                 </h1>
                 <p class="text-lg md:text-xl text-gray-200 mb-10 font-light leading-relaxed ml-auto">
                     King Gitar adalah platform e-commerce yang menyediakan berbagai pilihan gitar berkualitas, mulai
@@ -409,12 +441,8 @@
         <div class="bg-white p-8 rounded-2xl shadow-lg max-w-3xl mx-auto">
             <h3 class="text-2xl font-serif font-bold text-center mb-6">Masukan & Saran</h3>
             <form class="space-y-5">
-                <div class="grid md:grid-cols-2 gap-5">
-                    <input type="text" placeholder="Nama Lengkap"
-                        class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-500 transition-all">
-                    <input type="email" placeholder="Email Address"
-                        class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-500 transition-all">
-                </div>
+                <input type="text" placeholder="Judul"
+                    class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-500 transition-all">
                 <textarea rows="4" placeholder="Tulis masukan Anda disini..."
                     class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-500 transition-all"></textarea>
                 <button type="submit"

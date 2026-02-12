@@ -43,6 +43,9 @@ Route::prefix('v1')->group(function () {
     });
 
     // Authentication
+    Route::post('/register/send-verification', [AuthController::class, 'sendVerification'])
+        ->middleware('throttle:5,1'); // Rate limit: 5 requests per menit
+
     Route::post('/register', [AuthController::class, 'register'])
         ->middleware('throttle:5,1'); // Rate limit: 5 requests per menit
 
@@ -98,7 +101,7 @@ Route::prefix('v1/admin')
         Route::put('categories/{category}', [AdminCategoryController::class, 'update']); //->name('admin.categories.update')
         Route::patch('categories/{category}', [AdminCategoryController::class, 'update']);
         Route::delete('categories/{category}', [AdminCategoryController::class, 'destroy']); //->name('admin.categories.destroy')
-
+    
         // Products Management
         // Menggunakan Hybrid Binding (ID atau Slug)
         Route::get('products', [AdminProductController::class, 'index']); //->name('admin.products.index')
@@ -107,7 +110,7 @@ Route::prefix('v1/admin')
         Route::put('products/{product}', [AdminProductController::class, 'update']); //->name('admin.products.update')
         Route::patch('products/{product}', [AdminProductController::class, 'update']);
         Route::delete('products/{product}', [AdminProductController::class, 'destroy']); //->name('admin.products.destroy')
-
+    
         // Banners Management
         Route::apiResource('banners', AdminBannerController::class);
 
