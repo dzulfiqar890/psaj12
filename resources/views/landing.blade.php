@@ -107,6 +107,12 @@
             padding-top: 1.5rem !important;
             padding-bottom: 1.5rem !important;
         }
+
+        /* Active Link Scroll State */
+        .nav-link.active::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
     </style>
 </head>
 
@@ -125,7 +131,7 @@
             <div class="hidden md:flex space-x-8 items-center">
                 <a href="#home"
                     class="nav-link text-white/90 hover:text-gold-500 transition-colors duration-300 font-medium text-sm uppercase tracking-wider relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-gold-500 after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">Home</a>
-                <a href="#catalog"
+                <a href="{{ url('/katalog') }}"
                     class="nav-link text-white/90 hover:text-gold-500 transition-colors duration-300 font-medium text-sm uppercase tracking-wider relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-gold-500 after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">Catalog</a>
                 <a href="#about"
                     class="nav-link text-white/90 hover:text-gold-500 transition-colors duration-300 font-medium text-sm uppercase tracking-wider relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-gold-500 after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">About</a>
@@ -157,28 +163,49 @@
             </button>
         </div>
 
-        <!-- Mobile Menu (Hidden by default) -->
-        <div id="mobile-menu"
-            class="hidden md:hidden absolute top-full left-0 w-full bg-white shadow-lg py-4 px-6 border-t border-gray-100">
-            <div class="flex flex-col space-y-4">
-                <a href="#home"
-                    class="text-gray-800 hover:text-gold-500 font-medium py-2 border-b border-gray-100">Home</a>
-                <a href="#catalog"
-                    class="text-gray-800 hover:text-gold-500 font-medium py-2 border-b border-gray-100">Catalog</a>
-                <a href="#about"
-                    class="text-gray-800 hover:text-gold-500 font-medium py-2 border-b border-gray-100">About</a>
-                <a href="#contact" class="text-gray-800 hover:text-gold-500 font-medium py-2">Contact</a>
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu-overlay"
+            class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity duration-300 opacity-0 md:hidden"
+            aria-hidden="true"></div>
+
+        <!-- Mobile Menu Drawer -->
+        <div id="mobile-menu-drawer"
+            class="fixed inset-y-0 right-0 w-64 bg-white z-[70] transform translate-x-full transition-transform duration-300 ease-in-out md:hidden shadow-2xl flex flex-col">
+            <div class="p-6 flex justify-between items-center border-b border-gray-100">
+                <span class="text-xl font-serif font-bold text-dark-900">Menu</span>
+                <button id="mobile-menu-close"
+                    class="text-gray-500 hover:text-red-500 focus:outline-none transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+            <div class="flex-1 overflow-y-auto py-4">
+                <nav class="flex flex-col space-y-1 px-4">
+                    <a href="#home"
+                        class="block px-4 py-3 bg-gold-500/10 text-gold-500 rounded-lg transition-colors font-bold border-l-4 border-gold-500">Home</a>
+                    <a href="#about"
+                        class="block px-4 py-3 text-gray-800 hover:bg-gold-500/10 hover:text-gold-500 rounded-lg transition-colors font-medium">About
+                        Us</a>
+                    <a href="{{ url('/katalog') }}"
+                        class="block px-4 py-3 text-gray-800 hover:bg-gold-500/10 hover:text-gold-500 rounded-lg transition-colors font-medium">Katalog</a>
+                    <a href="#contact"
+                        class="block px-4 py-3 text-gray-800 hover:bg-gold-500/10 hover:text-gold-500 rounded-lg transition-colors font-medium">Contact</a>
+                </nav>
+            </div>
+            <div class="p-4 border-t border-gray-100">
                 @auth
-                    <form method="POST" action="{{ route('logout') }}" class="w-full">
+                    <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit"
-                            class="w-full text-left text-gray-800 hover:text-gold-500 font-medium py-2 border-t border-gray-100 mt-2">
+                            class="w-full text-center px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium rounded-lg transition-colors">
                             Logout
                         </button>
                     </form>
                 @else
                     <a href="{{ route('login') }}"
-                        class="block w-full text-left text-gray-800 hover:text-gold-500 font-medium py-2 border-t border-gray-100 mt-2">
+                        class="block w-full text-center px-4 py-3 bg-dark-900 hover:bg-gold-500 text-white font-medium rounded-lg transition-colors">
                         Login
                     </a>
                 @endauth
@@ -187,21 +214,21 @@
     </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="relative h-screen flex items-center justify-end hero-bg">
-        <div class="absolute inset-0 bg-gradient-to-l from-black/80 via-black/20 to-transparent"></div>
-        <div class="relative z-10 px-6 lg:px-12 max-w-7xl mx-auto w-full fade-in-up flex justify-end">
-            <div class="max-w-2xl text-right">
+    <section id="home" class="relative h-screen flex items-center justify-start hero-bg">
+        <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/20 to-transparent"></div>
+        <div class="relative z-10 px-6 lg:px-12 max-w-7xl mx-auto w-full fade-in-up flex justify-start">
+            <div class="max-w-2xl text-left">
                 <h1 class="text-5xl md:text-7xl font-serif font-bold text-white mb-6 leading-tight drop-shadow-2xl">
                     King Gitar <br>
 
                 </h1>
-                <p class="text-lg md:text-xl text-gray-200 mb-10 font-light leading-relaxed ml-auto">
+                <p class="text-lg md:text-xl text-gray-200 mb-10 font-light leading-relaxed">
                     King Gitar adalah platform e-commerce yang menyediakan berbagai pilihan gitar berkualitas, mulai
                     dari gitar akustik hingga elektrik. Kami menghadirkan produk dengan desain modern, material pilihan,
                     dan suara yang jernih untuk menunjang pengalaman bermusik Anda.
                 </p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-end">
-                    <a href="#catalog"
+                <div class="flex flex-col sm:flex-row gap-4 justify-start">
+                    <a href="{{ url('/katalog') }}"
                         class="group px-8 py-4 bg-white text-dark-900 font-bold rounded-full transition-all duration-300 hover:bg-gold-500 hover:text-white shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(212,175,55,0.6)] flex items-center justify-center gap-2">
                         View Collection
                         <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none"
@@ -215,110 +242,344 @@
         </div>
     </section>
 
+    <!-- Catalog Section CSS -->
+    <style>
+        /* ===== Catalog Section ===== */
+        .catalog-section {
+            padding: 80px 0;
+            background-color: #ffffff;
+        }
+
+        .catalog-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        .catalog-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 50px;
+        }
+
+        .catalog-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 0 0 8px 0;
+            line-height: 1.2;
+        }
+
+        .catalog-title-underline {
+            width: 90px;
+            height: 5px;
+            background-color: #D4AF37;
+            border-radius: 3px;
+        }
+
+        .catalog-view-all {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: #D4AF37;
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .catalog-view-all:hover {
+            color: #1a1a1a;
+        }
+
+        .catalog-view-all svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Product Grid */
+        .catalog-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        /* Product Card */
+        .catalog-card {
+            position: relative;
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 24px;
+            border: 1px solid #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            transition: box-shadow 0.4s ease, transform 0.4s ease;
+            overflow: hidden;
+        }
+
+        .catalog-card:hover {
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+            transform: translateY(-4px);
+        }
+
+        /* Badge */
+        .catalog-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            padding: 5px 14px;
+            border-radius: 50px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            z-index: 2;
+        }
+
+        .catalog-badge--gray {
+            background-color: #f3f4f6;
+            color: #4b5563;
+        }
+
+        .catalog-badge--gold {
+            background-color: #D4AF37;
+            color: #ffffff;
+        }
+
+        /* Image Container — CRITICAL FIX */
+        .catalog-card__image-wrap {
+            width: 100%;
+            height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+
+        .catalog-card__image-wrap a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .catalog-card__image-wrap img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            transition: transform 0.5s ease;
+        }
+
+        .catalog-card:hover .catalog-card__image-wrap img {
+            transform: scale(1.05);
+        }
+
+        /* Product Info */
+        .catalog-card__info {
+            text-align: center;
+            width: 100%;
+            background: #ffffff;
+            position: relative;
+            z-index: 2;
+            padding-top: 4px;
+        }
+
+        .catalog-card__name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 0 0 8px 0;
+            transition: color 0.3s ease;
+        }
+
+        .catalog-card__name a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .catalog-card:hover .catalog-card__name {
+            color: #D4AF37;
+        }
+
+        /* Price Row */
+        .catalog-card__footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            border-top: 1px solid #f0f0f0;
+            padding-top: 16px;
+            margin-top: 10px;
+        }
+
+        .catalog-card__price {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .catalog-card__add-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .catalog-card__add-btn:hover {
+            background-color: #D4AF37;
+        }
+
+        .catalog-card__add-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .catalog-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 24px;
+            }
+
+            .catalog-title {
+                font-size: 2.2rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .catalog-section {
+                padding: 50px 0;
+            }
+
+            .catalog-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+                margin-bottom: 30px;
+            }
+
+            .catalog-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .catalog-title {
+                font-size: 1.8rem;
+            }
+
+            .catalog-card__image-wrap {
+                height: 200px;
+            }
+        }
+    </style>
+
     <!-- Catalog Section -->
-    <section id="catalog" class="py-24 bg-white">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-16 fade-in-up">
+    <section id="catalog" class="catalog-section">
+        <div class="catalog-container">
+            <!-- Header -->
+            <div class="catalog-header fade-in-up">
                 <div>
-                    <h2 class="text-4xl md:text-5xl font-serif font-bold text-dark-900 mb-2">Catalog Produk</h2>
-                    <div class="w-24 h-1.5 bg-gold-500 rounded-full"></div>
+                    <h2 class="catalog-title">Catalog Produk</h2>
+                    <div class="catalog-title-underline"></div>
                 </div>
-                <a href="#"
-                    class="mt-4 md:mt-0 text-gold-500 font-medium hover:text-dark-900 transition-colors flex items-center gap-1">
-                    View All <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <a href="{{ url('/katalog') }}" class="catalog-view-all">
+                    View All
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
                 </a>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <!-- Product Grid -->
+            <div class="catalog-grid">
+
                 <!-- Product Card 1 -->
-                <div class="group fade-in-up">
-                    <div
-                        class="relative bg-white rounded-3xl p-8 transition-all duration-500 hover:shadow-2xl border border-gray-100 flex flex-col items-center">
-                        <div
-                            class="absolute top-4 right-4 bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
-                            Stock Ready</div>
-                        <div class="h-64 md:h-80 w-full flex items-center justify-center mb-6 relative z-10">
-                            <img src="{{ asset('Foto/2.png') }}" alt="Gitar 1"
-                                class="max-h-full object-contain transform group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-500 drop-shadow-xl">
-                        </div>
-                        <div class="text-center w-full">
-                            <h3
-                                class="text-2xl font-serif font-bold text-dark-900 mb-2 group-hover:text-gold-500 transition-colors">
-                                Classic Acoustic</h3>
-                            <div class="flex items-center justify-between w-full border-t border-gray-100 pt-4 mt-2">
-                                <span class="text-xl font-bold text-dark-900">Rp 2.500.000</span>
-                                <button
-                                    class="w-10 h-10 rounded-full bg-dark-900 text-white flex items-center justify-center group-hover:bg-gold-500 transition-colors">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 4v16m8-8H4"></path>
-                                    </svg>
-                                </button>
-                            </div>
+                <div class="catalog-card fade-in-up">
+                    <span class="catalog-badge catalog-badge--gray">STOCK READY</span>
+                    <div class="catalog-card__image-wrap">
+                        <a href="{{ url('/produk/detail') }}">
+                            <img src="{{ asset('Foto/2.png') }}" alt="Classic Acoustic Guitar">
+                        </a>
+                    </div>
+                    <div class="catalog-card__info">
+                        <h3 class="catalog-card__name"><a href="{{ url('/produk/detail') }}">Classic Acoustic</a></h3>
+                        <div class="catalog-card__footer">
+                            <span class="catalog-card__price">Rp 2.500.000</span>
+                            <button class="catalog-card__add-btn" aria-label="Tambah ke keranjang">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 4v16m8-8H4"></path>
+                                </svg>
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- Product Card 2 -->
-                <div class="group fade-in-up" style="transition-delay: 100ms;">
-                    <div
-                        class="relative bg-white rounded-3xl p-8 transition-all duration-500 hover:shadow-2xl border border-gray-100 flex flex-col items-center">
-                        <div
-                            class="absolute top-4 right-4 bg-gold-500 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
-                            Best Seller</div>
-                        <div class="h-64 md:h-80 w-full flex items-center justify-center mb-6 relative z-10">
-                            <img src="{{ asset('Foto/3.png') }}" alt="Gitar 2"
-                                class="max-h-full object-contain transform group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500 drop-shadow-xl">
-                        </div>
-                        <div class="text-center w-full">
-                            <h3
-                                class="text-2xl font-serif font-bold text-dark-900 mb-2 group-hover:text-gold-500 transition-colors">
-                                Premium Classic</h3>
-                            <div class="flex items-center justify-between w-full border-t border-gray-100 pt-4 mt-2">
-                                <span class="text-xl font-bold text-dark-900">Rp 4.200.000</span>
-                                <button
-                                    class="w-10 h-10 rounded-full bg-dark-900 text-white flex items-center justify-center group-hover:bg-gold-500 transition-colors">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 4v16m8-8H4"></path>
-                                    </svg>
-                                </button>
-                            </div>
+                <div class="catalog-card fade-in-up">
+                    <span class="catalog-badge catalog-badge--gold">BEST SELLER</span>
+                    <div class="catalog-card__image-wrap">
+                        <a href="{{ url('/produk/detail') }}">
+                            <img src="{{ asset('Foto/3.png') }}" alt="Premium Classic Guitar">
+                        </a>
+                    </div>
+                    <div class="catalog-card__info">
+                        <h3 class="catalog-card__name"><a href="{{ url('/produk/detail') }}">Premium Classic</a></h3>
+                        <div class="catalog-card__footer">
+                            <span class="catalog-card__price">Rp 4.200.000</span>
+                            <button class="catalog-card__add-btn" aria-label="Tambah ke keranjang">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 4v16m8-8H4"></path>
+                                </svg>
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- Product Card 3 -->
-                <div class="group fade-in-up" style="transition-delay: 200ms;">
-                    <div
-                        class="relative bg-white rounded-3xl p-8 transition-all duration-500 hover:shadow-2xl border border-gray-100 flex flex-col items-center">
-                        <div
-                            class="absolute top-4 right-4 bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
-                            New</div>
-                        <div class="h-64 md:h-80 w-full flex items-center justify-center mb-6 relative z-10">
-                            <img src="{{ asset('Foto/4.png') }}" alt="Gitar 3"
-                                class="max-h-full object-contain transform group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-500 drop-shadow-xl">
-                        </div>
-                        <div class="text-center w-full">
-                            <h3
-                                class="text-2xl font-serif font-bold text-dark-900 mb-2 group-hover:text-gold-500 transition-colors">
-                                Electric Jazz</h3>
-                            <div class="flex items-center justify-between w-full border-t border-gray-100 pt-4 mt-2">
-                                <span class="text-xl font-bold text-dark-900">Rp 3.800.000</span>
-                                <button
-                                    class="w-10 h-10 rounded-full bg-dark-900 text-white flex items-center justify-center group-hover:bg-gold-500 transition-colors">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 4v16m8-8H4"></path>
-                                    </svg>
-                                </button>
-                            </div>
+                <div class="catalog-card fade-in-up">
+                    <span class="catalog-badge catalog-badge--gray">NEW</span>
+                    <div class="catalog-card__image-wrap">
+                        <a href="{{ url('/produk/detail') }}">
+                            <img src="{{ asset('Foto/4.png') }}" alt="Electric Jazz Guitar">
+                        </a>
+                    </div>
+                    <div class="catalog-card__info">
+                        <h3 class="catalog-card__name"><a href="{{ url('/produk/detail') }}">Electric Jazz</a></h3>
+                        <div class="catalog-card__footer">
+                            <span class="catalog-card__price">Rp 3.800.000</span>
+                            <button class="catalog-card__add-btn" aria-label="Tambah ke keranjang">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 4v16m8-8H4"></path>
+                                </svg>
+                            </button>
                         </div>
                     </div>
                 </div>
+
             </div>
+        </div>
         </div>
     </section>
 
@@ -547,10 +808,45 @@
 
         window.addEventListener('scroll', updateNavbar);
 
-        // Mobile Menu Toggle
-        mobileMenuBtn.addEventListener('click', () => {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
+        // Mobile Menu Logic
+        const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+        const mobileMenuDrawer = document.getElementById('mobile-menu-drawer');
+        const mobileMenuCloseBtn = document.getElementById('mobile-menu-close');
+
+        function openMenu() {
+            mobileMenuOverlay.classList.remove('hidden');
+            // Small delay to allow display:block to apply before opacity transition
+            setTimeout(() => {
+                mobileMenuOverlay.classList.remove('opacity-0');
+                mobileMenuDrawer.classList.remove('translate-x-full');
+            }, 10);
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        }
+
+        function closeMenu() {
+            mobileMenuOverlay.classList.add('opacity-0');
+            mobileMenuDrawer.classList.add('translate-x-full');
+
+            // Wait for transition to finish before hiding
+            setTimeout(() => {
+                mobileMenuOverlay.classList.add('hidden');
+                document.body.style.overflow = ''; // Restore scrolling
+            }, 300);
+        }
+
+        mobileMenuBtn.addEventListener('click', openMenu);
+
+        if (mobileMenuCloseBtn) {
+            mobileMenuCloseBtn.addEventListener('click', closeMenu);
+        }
+
+        if (mobileMenuOverlay) {
+            mobileMenuOverlay.addEventListener('click', closeMenu);
+        }
+
+        // Close on link click
+        document.querySelectorAll('#mobile-menu-drawer a').forEach(link => {
+            link.addEventListener('click', closeMenu);
         });
 
         // Intersection Observer
@@ -563,6 +859,48 @@
         }, { threshold: 0.1 });
 
         document.querySelectorAll('.fade-in-up').forEach((el) => observer.observe(el));
+
+        // Scroll Spy Logic
+        const sections = document.querySelectorAll('section[id]');
+        const desktopNavLinks = document.querySelectorAll('.hidden.md\\:flex .nav-link');
+
+        function scrollSpy() {
+            let current = '';
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.offsetHeight;
+                if (window.scrollY >= (sectionTop - 150)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            desktopNavLinks.forEach(link => {
+                link.classList.remove('active');
+
+                // Match Logic
+                const href = link.getAttribute('href');
+
+                // Matching standard anchors (#home, #about, #contact)
+                if (href.includes('#' + current)) {
+                    link.classList.add('active');
+                }
+
+                // Special case for Catalog (External link but exists as section)
+                if (current === 'catalog' && href.includes('katalog')) {
+                    link.classList.add('active');
+                }
+
+                // Special case for Home when at very top
+                if (window.scrollY < 100 && href.includes('#home')) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', scrollSpy);
+        // Run on load
+        scrollSpy();
     </script>
 </body>
 

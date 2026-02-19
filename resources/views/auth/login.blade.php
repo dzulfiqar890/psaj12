@@ -20,7 +20,8 @@
 </head>
 
 <body class="bg-slate-50 min-h-screen flex items-center justify-center p-4">
-    <p class="absolute top-4 left-4 text-gray-800"><a href="/" class="text-gold hover:underline font-semibold">Kembali</a></p>
+    <p class="absolute top-4 left-4 text-gray-800"><a href="/"
+            class="text-gold hover:underline font-semibold">Kembali</a></p>
     <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md border border-slate-100">
         <div class="text-center mb-8">
             <img src="/Foto/Logo.png" alt="King Gitar" class="h-16 mx-auto mb-4">
