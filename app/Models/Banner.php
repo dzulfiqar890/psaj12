@@ -34,6 +34,15 @@ class Banner extends Model
     ];
 
     /**
+     * Atribut yang ditambahkan ke response array/JSON.
+     *
+     * @var list<string>
+     */
+    protected $appends = [
+        'image_url',
+    ];
+
+    /**
      * Casting atribut ke tipe tertentu.
      *
      * @return array<string, string>

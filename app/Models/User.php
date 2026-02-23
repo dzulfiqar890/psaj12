@@ -42,6 +42,15 @@ class User extends Authenticatable
     ];
 
     /**
+     * Atribut yang ditambahkan ke response array/JSON.
+     *
+     * @var list<string>
+     */
+    protected $appends = [
+        'image_url',
+    ];
+
+    /**
      * Atribut yang disembunyikan dari serialization.
      *
      * @var list<string>

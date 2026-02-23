@@ -7,90 +7,15 @@ Route::get('/', function () {
 });
 
 Route::get('/katalog', function () {
-    $products = [
-        ['id' => 0, 'nama' => 'Yamaha C315', 'harga' => 'Rp900.000 - Rp1.150.000', 'gambar' => 'Foto/10.png', 'kategori' => 'Gitar Klasik'],
-        ['id' => 1, 'nama' => 'Yamaha CS40', 'harga' => 'Rp1.310.000 - Rp1.638.000', 'gambar' => 'Foto/2.png', 'kategori' => 'Gitar Klasik'],
-        ['id' => 2, 'nama' => 'Yamaha C40', 'harga' => 'Rp1.414.000 - Rp1.704.000', 'gambar' => 'Foto/3.png', 'kategori' => 'Gitar Klasik'],
-        ['id' => 3, 'nama' => 'Yamaha C315', 'harga' => 'Rp900.000 - Rp1.150.000', 'gambar' => 'Foto/4.png', 'kategori' => 'Gitar Klasik'],
-        ['id' => 4, 'nama' => 'Yamaha F310', 'harga' => 'Rp 1.100.000 - Rp 1.300.000', 'gambar' => 'Foto/9.jpg', 'kategori' => 'Gitar Akustik'],
-        ['id' => 5, 'nama' => 'Yamaha APX600', 'harga' => 'Rp 3.165.000 - Rp 3.300.000', 'gambar' => 'Foto/11.jpg', 'kategori' => 'Gitar Akustik'],
-        ['id' => 6, 'nama' => 'Cort AD810', 'harga' => 'Rp 850.000 - Rp 1.300.000', 'gambar' => 'Foto/12.jpg', 'kategori' => 'Gitar Akustik'],
-        ['id' => 7, 'nama' => 'Yamaha JR1', 'harga' => 'Rp 1.285.000', 'gambar' => 'Foto/13.png', 'kategori' => 'Gitar Akustik'],
-    ];
-    return view('katalog', ['products' => $products]);
+    return view('katalog');
 });
 
-Route::get('/produk/{id}', function ($id) {
-    $products = [
-        ['id' => 0, 'nama' => 'Yamaha C315', 'harga' => 'Rp900.000 - Rp1.150.000', 'gambar' => 'Foto/10.png', 'kategori' => 'Gitar Klasik'],
-        ['id' => 1, 'nama' => 'Yamaha CS40', 'harga' => 'Rp1.310.000 - Rp1.638.000', 'gambar' => 'Foto/2.png', 'kategori' => 'Gitar Klasik'],
-        ['id' => 2, 'nama' => 'Yamaha C40', 'harga' => 'Rp1.414.000 - Rp1.704.000', 'gambar' => 'Foto/3.png', 'kategori' => 'Gitar Klasik'],
-        ['id' => 3, 'nama' => 'Yamaha C315', 'harga' => 'Rp900.000 - Rp1.150.000', 'gambar' => 'Foto/4.png', 'kategori' => 'Gitar Klasik'],
-        ['id' => 4, 'nama' => 'Yamaha F310', 'harga' => 'Rp 1.100.000 - Rp 1.300.000', 'gambar' => 'Foto/9.jpg', 'kategori' => 'Gitar Akustik'],
-        ['id' => 5, 'nama' => 'Yamaha APX600', 'harga' => 'Rp 3.165.000 - Rp 3.300.000', 'gambar' => 'Foto/11.jpg', 'kategori' => 'Gitar Akustik'],
-        ['id' => 6, 'nama' => 'Cort AD810', 'harga' => 'Rp 850.000 - Rp 1.300.000', 'gambar' => 'Foto/12.jpg', 'kategori' => 'Gitar Akustik'],
-        ['id' => 7, 'nama' => 'Yamaha JR1', 'harga' => 'Rp 1.285.000', 'gambar' => 'Foto/13.png', 'kategori' => 'Gitar Akustik'],
-    ];
-
-    $product = collect($products)->firstWhere('id', $id);
-
-    if (!$product) {
-        abort(404);
-    }
-
-    return view('detail-produk', ['product' => $product]);
+Route::get('/produk/{slug}', function ($slug) {
+    return view('detail-produk', ['slug' => $slug]);
 })->name('produk.detail');
 
-Route::get('/detail-katalog', function (Illuminate\Http\Request $request) {
-    $jenis = $request->query('jenis', 'all');
-
-    $allGuitars = [
-        'classic' => [
-            ['nama' => 'Yamaha C315', 'harga' => 'Rp 900.000', 'gambar' => 'Foto/10.png'],
-            ['nama' => 'Yamaha C40', 'harga' => 'Rp 1.150.000', 'gambar' => 'Foto/3.png'],
-            ['nama' => 'Cort AC100', 'harga' => 'Rp 850.000', 'gambar' => 'Foto/2.png'],
-            ['nama' => 'Ibanez GA15', 'harga' => 'Rp 1.300.000', 'gambar' => 'Foto/4.png'],
-            ['nama' => 'Admira Alba', 'harga' => 'Rp 2.100.000', 'gambar' => 'Foto/10.png'],
-            ['nama' => 'Valencia VC104', 'harga' => 'Rp 750.000', 'gambar' => 'Foto/3.png'],
-        ],
-        'akustik' => [
-            ['nama' => 'Taylor 214ce', 'harga' => 'Rp 15.500.000', 'gambar' => 'Foto/2.png'],
-            ['nama' => 'Martin D-28', 'harga' => 'Rp 25.000.000', 'gambar' => 'Foto/4.png'],
-            ['nama' => 'Yamaha FG800', 'harga' => 'Rp 3.200.000', 'gambar' => 'Foto/3.png'],
-            ['nama' => 'Epiphone Hummingbird', 'harga' => 'Rp 5.400.000', 'gambar' => 'Foto/10.png'],
-            ['nama' => 'Fender CD-60S', 'harga' => 'Rp 3.800.000', 'gambar' => 'Foto/2.png'],
-            ['nama' => 'Cort Earth 70', 'harga' => 'Rp 2.500.000', 'gambar' => 'Foto/4.png'],
-        ],
-        'elektrik' => [
-            ['nama' => 'Fender Stratocaster', 'harga' => 'Rp 18.000.000', 'gambar' => 'Foto/8.png'],
-            ['nama' => 'Gibson Les Paul', 'harga' => 'Rp 32.000.000', 'gambar' => 'Foto/1.png'],
-            ['nama' => 'Ibanez RG550', 'harga' => 'Rp 12.500.000', 'gambar' => 'Foto/8.png'],
-            ['nama' => 'PRS SE Custom 24', 'harga' => 'Rp 9.800.000', 'gambar' => 'Foto/1.png'],
-            ['nama' => 'ESP LTD EC-256', 'harga' => 'Rp 6.200.000', 'gambar' => 'Foto/8.png'],
-            ['nama' => 'Squier Telecaster', 'harga' => 'Rp 3.500.000', 'gambar' => 'Foto/1.png'],
-        ],
-    ];
-
-    $kategoriLabels = [
-        'classic' => 'Classic Gitar',
-        'akustik' => 'Akustik Gitar',
-        'elektrik' => 'Elektrik Gitar',
-        'all' => 'Semua Gitar',
-    ];
-
-    if ($jenis === 'all') {
-        $guitars = array_merge($allGuitars['classic'], $allGuitars['akustik'], $allGuitars['elektrik']);
-    } else {
-        $guitars = $allGuitars[$jenis] ?? [];
-    }
-
-    $kategori = $kategoriLabels[$jenis] ?? 'Semua Gitar';
-
-    return view('detail-katalog', [
-        'guitars' => $guitars,
-        'kategori' => $kategori,
-        'jenisAktif' => $jenis,
-    ]);
+Route::get('/kategori', function (Illuminate\Http\Request $request) {
+    return view('kategori');
 });
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {

@@ -161,22 +161,35 @@
         <div id="sidebarOverlay" class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden"></div>
 
         <!-- Main -->
-        <main class="flex-1 lg:ml-60 min-h-screen">
+        <main class="flex-1 lg:ml-60 min-h-screen w-full overflow-x-hidden relative">
             <!-- Top Bar -->
             <div
                 class="sticky top-0 z-20 bg-white/80 backdrop-blur-md border-b border-slate-100 px-6 py-4 hidden lg:flex items-center justify-between">
-                <div class="relative w-80">
+                <!-- <div class="relative w-80">
                     <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
                     <input type="text" placeholder="Search orders..."
                         class="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-gold/20 focus:border-gold text-sm transition">
-                </div>
-                <div class="flex items-center gap-4">
-                    <h1 class="text-sm font-semibold text-slate-700">
-                        Halo, <span id="typewriter-global" class="text-gold"></span> !!
-                    </h1>
-                    <div
-                        class="w-9 h-9 rounded-full bg-cream flex items-center justify-center text-gold font-bold text-sm">
-                        {{ strtoupper(substr(Auth::user()->username ?? 'A', 0, 1)) }}
+                </div> -->
+                <div class="w-full flex items-center justify-between">
+
+                    <!-- Bagian Kiri -->
+                    <div>
+                        <h1 class="text-sm font-semibold text-slate-700">
+                            Halo, <span id="typewriter-global" class="text-gold"></span> !!
+                        </h1>
+                    </div>
+
+                    <!-- Bagian Kanan (Profile) -->
+                    <div>
+                        @if(Auth::user() && Auth::user()->image)
+                            <img src="{{ Auth::user()->image_url }}"
+                                alt="Profile"
+                                class="w-9 h-9 rounded-full object-cover border border-gold/20">
+                        @else
+                            <div class="w-9 h-9 rounded-full bg-cream flex items-center justify-center text-gold font-bold text-sm">
+                                {{ strtoupper(substr(Auth::user()->username ?? 'A', 0, 1)) }}
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>

@@ -6,9 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>King Gitar - Premium Guitar Store</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -32,6 +31,14 @@
         }
     </script>
     <style>
+        .shimmer-bg {
+            background: #f6f7f8;
+            background-image: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
+            background-repeat: no-repeat;
+            background-size: 800px 100%; 
+            animation: placeholderShimmer 1.5s linear infinite;
+        }
+        @keyframes placeholderShimmer { 0% { background-position: -468px 0; } 100% { background-position: 468px 0; } }
         .fade-in-up {
             opacity: 0;
             transform: translateY(20px);
@@ -510,74 +517,11 @@
             </div>
 
             <!-- Product Grid -->
-            <div class="catalog-grid">
-
-                <!-- Product Card 1 -->
-                <div class="catalog-card fade-in-up">
-                    <span class="catalog-badge catalog-badge--gray">STOCK READY</span>
-                    <div class="catalog-card__image-wrap">
-                        <a href="{{ url('/produk/detail') }}">
-                            <img src="{{ asset('Foto/2.png') }}" alt="Classic Acoustic Guitar">
-                        </a>
-                    </div>
-                    <div class="catalog-card__info">
-                        <h3 class="catalog-card__name"><a href="{{ url('/produk/detail') }}">Classic Acoustic</a></h3>
-                        <div class="catalog-card__footer">
-                            <span class="catalog-card__price">Rp 2.500.000</span>
-                            <button class="catalog-card__add-btn" aria-label="Tambah ke keranjang">
-                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 4v16m8-8H4"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Product Card 2 -->
-                <div class="catalog-card fade-in-up">
-                    <span class="catalog-badge catalog-badge--gold">BEST SELLER</span>
-                    <div class="catalog-card__image-wrap">
-                        <a href="{{ url('/produk/detail') }}">
-                            <img src="{{ asset('Foto/3.png') }}" alt="Premium Classic Guitar">
-                        </a>
-                    </div>
-                    <div class="catalog-card__info">
-                        <h3 class="catalog-card__name"><a href="{{ url('/produk/detail') }}">Premium Classic</a></h3>
-                        <div class="catalog-card__footer">
-                            <span class="catalog-card__price">Rp 4.200.000</span>
-                            <button class="catalog-card__add-btn" aria-label="Tambah ke keranjang">
-                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 4v16m8-8H4"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Product Card 3 -->
-                <div class="catalog-card fade-in-up">
-                    <span class="catalog-badge catalog-badge--gray">NEW</span>
-                    <div class="catalog-card__image-wrap">
-                        <a href="{{ url('/produk/detail') }}">
-                            <img src="{{ asset('Foto/4.png') }}" alt="Electric Jazz Guitar">
-                        </a>
-                    </div>
-                    <div class="catalog-card__info">
-                        <h3 class="catalog-card__name"><a href="{{ url('/produk/detail') }}">Electric Jazz</a></h3>
-                        <div class="catalog-card__footer">
-                            <span class="catalog-card__price">Rp 3.800.000</span>
-                            <button class="catalog-card__add-btn" aria-label="Tambah ke keranjang">
-                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 4v16m8-8H4"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
+            <div class="catalog-grid" id="latest-products-grid">
+                <!-- Skeleton Loading -->
+                <div class="catalog-card fade-in-up shimmer-bg" style="height: 380px; border-radius: 20px;"></div>
+                <div class="catalog-card fade-in-up shimmer-bg" style="height: 380px; border-radius: 20px;"></div>
+                <div class="catalog-card fade-in-up shimmer-bg" style="height: 380px; border-radius: 20px;"></div>
             </div>
         </div>
         </div>
@@ -652,53 +596,106 @@
         </div>
     </section>
 
-    <!-- Testimonials Section -->
-    <section class="py-24 bg-cover bg-center relative" style="background-image: url('{{ asset('Foto/7.png') }}');">
-        <div class="absolute inset-0 bg-dark-900/60 backdrop-blur-sm"></div>
+    <!-- Testimonials Section - 3-card Peek Slider -->
+    <section class="py-24 bg-cover bg-center relative overflow-hidden" style="background-image: url('{{ asset('Foto/7.png') }}');">
+        <div class="absolute inset-0 bg-dark-900/65 backdrop-blur-sm"></div>
+
+        <style>
+            .testi-outer {
+                position: relative;
+                overflow: hidden;
+                /* Fade edges to hint at adjacent cards */
+                mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+                -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+            }
+            .testi-track {
+                display: flex;
+                transition: transform 0.55s cubic-bezier(.4,0,.2,1);
+                /* Each slide = 80% wide, leaving 10% peek on each side */
+            }
+            .testi-slide {
+                flex: 0 0 80%;
+                padding: 0 14px;
+                box-sizing: border-box;
+            }
+            @media (max-width: 768px) { .testi-slide { flex: 0 0 100%; } }
+            .testi-card {
+                background: rgba(255,255,255,0.09);
+                border: 1px solid rgba(255,255,255,0.14);
+                backdrop-filter: blur(12px);
+                border-radius: 20px;
+                padding: 36px 30px;
+                text-align: center;
+                transition: box-shadow .3s;
+            }
+            .testi-card.active-card { box-shadow: 0 8px 32px rgba(212,175,55,0.25); border-color: rgba(212,175,55,0.4); }
+            .testi-dot {
+                width: 9px; height: 9px;
+                border-radius: 50%;
+                background: rgba(255,255,255,0.3);
+                border: none; cursor: pointer;
+                transition: background .3s, transform .3s;
+            }
+            .testi-dot.active { background: #D4AF37; transform: scale(1.2); }
+            .testi-arrow {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                z-index: 10;
+                width: 44px; height: 44px;
+                border-radius: 50%;
+                background: rgba(255,255,255,0.12);
+                border: 1px solid rgba(255,255,255,0.2);
+                color: white;
+                cursor: pointer;
+                display: flex; align-items: center; justify-content: center;
+                transition: background .2s;
+            }
+            .testi-arrow:hover { background: #D4AF37; border-color: #D4AF37; }
+            .testi-arrow.left  { left: 6px; }
+            .testi-arrow.right { right: 6px; }
+        </style>
+
         <div class="max-w-7xl mx-auto px-6 relative z-10">
-            <div class="text-center mb-16 fade-in-up">
+            <div class="text-center mb-14 fade-in-up">
                 <h2 class="text-4xl md:text-5xl font-serif font-bold text-white mb-4">What Our Customers Say</h2>
-                <div class="w-16 h-1 bg-gold-500 mx-auto"></div>
+                <div class="w-16 h-1 bg-yellow-400 mx-auto"></div>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-8">
-                <!-- Testimonial Card 1 -->
-                <div
-                    class="glass-card p-10 rounded-2xl text-center fade-in-up hover:transform hover:-translate-y-2 transition-transform duration-300">
-                    <div
-                        class="w-16 h-16 bg-gray-200 rounded-full mx-auto mb-6 overflow-hidden border-2 border-gold-500 p-0.5">
-                        <div class="w-full h-full bg-gray-300 rounded-full"></div>
+            <!-- Slider wrapper with arrows absolutely positioned on sides -->
+            <div style="position:relative; padding:0 56px;">
+
+                <!-- Left Arrow -->
+                <button onclick="goTesti((testiIdx-1+testiData.length)%testiData.length)" class="testi-arrow left">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
+
+                <div class="testi-outer">
+                    <div id="testiTrack" class="testi-track" style="padding: 8px 0 20px;">
+                        <!-- Loading placeholder -->
+                        <div class="testi-slide">
+                            <div class="testi-card">
+                                <div class="w-14 h-14 rounded-full mx-auto mb-5 bg-white/20 animate-pulse"></div>
+                                <div class="h-4 bg-white/20 rounded w-1/2 mx-auto mb-3 animate-pulse"></div>
+                                <div class="h-16 bg-white/10 rounded animate-pulse"></div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="h-4 bg-gray-200 rounded w-3/4 mx-auto mb-3"></div>
-                    <div class="h-4 bg-gray-200 rounded w-1/2 mx-auto mb-6"></div>
-                    <div class="h-20 bg-gray-100 rounded mb-4"></div>
                 </div>
-                <!-- ... other cards ... -->
-                <div class="glass-card p-10 rounded-2xl text-center fade-in-up hover:transform hover:-translate-y-2 transition-transform duration-300"
-                    style="transition-delay: 100ms;">
-                    <div
-                        class="w-16 h-16 bg-gray-200 rounded-full mx-auto mb-6 overflow-hidden border-2 border-gold-500 p-0.5">
-                        <div class="w-full h-full bg-gray-300 rounded-full"></div>
-                    </div>
-                    <div class="h-4 bg-gray-200 rounded w-3/4 mx-auto mb-3"></div>
-                    <div class="h-4 bg-gray-200 rounded w-1/2 mx-auto mb-6"></div>
-                    <div class="h-20 bg-gray-100 rounded mb-4"></div>
-                </div>
-                <div class="glass-card p-10 rounded-2xl text-center fade-in-up hover:transform hover:-translate-y-2 transition-transform duration-300"
-                    style="transition-delay: 200ms;">
-                    <div
-                        class="w-16 h-16 bg-gray-200 rounded-full mx-auto mb-6 overflow-hidden border-2 border-gold-500 p-0.5">
-                        <div class="w-full h-full bg-gray-300 rounded-full"></div>
-                    </div>
-                    <div class="h-4 bg-gray-200 rounded w-3/4 mx-auto mb-3"></div>
-                    <div class="h-4 bg-gray-200 rounded w-1/2 mx-auto mb-6"></div>
-                    <div class="h-20 bg-gray-100 rounded mb-4"></div>
-                </div>
+
+                <!-- Right Arrow -->
+                <button onclick="nextTesti()" class="testi-arrow right">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+                </button>
+
             </div>
+
+            <!-- Dots -->
+            <div id="testiDots" class="flex justify-center gap-2 mt-6"></div>
         </div>
     </section>
 
-    <div class="mt-16 pt-12 border-t border-gray-200 mb-16 ">
+    <!-- <div class="mt-16 pt-12 border-t border-gray-200 mb-16 ">
         <div class="bg-white p-8 rounded-2xl shadow-lg max-w-3xl mx-auto">
             <h3 class="text-2xl font-serif font-bold text-center mb-6">Masukan & Saran</h3>
             <form class="space-y-5">
@@ -711,7 +708,7 @@
                     Masukan</button>
             </form>
         </div>
-    </div>
+    </div> -->
 
     <!-- Suggestions & Form Section -->
     <section id="contact" class="py-24 bg-[#FFF4E6]">
@@ -882,17 +879,17 @@
                 const href = link.getAttribute('href');
 
                 // Matching standard anchors (#home, #about, #contact)
-                if (href.includes('#' + current)) {
+                if (href && href.includes('#' + current)) {
                     link.classList.add('active');
                 }
 
                 // Special case for Catalog (External link but exists as section)
-                if (current === 'catalog' && href.includes('katalog')) {
+                if (current === 'catalog' && href && href.includes('katalog')) {
                     link.classList.add('active');
                 }
 
                 // Special case for Home when at very top
-                if (window.scrollY < 100 && href.includes('#home')) {
+                if (window.scrollY < 100 && href && href.includes('#home')) {
                     link.classList.add('active');
                 }
             });
@@ -901,7 +898,228 @@
         window.addEventListener('scroll', scrollSpy);
         // Run on load
         scrollSpy();
+        
+        // Fetch 3 Latest Products
+        async function fetchLatestProducts() {
+            try {
+                const response = await fetch('/api/v1/products?per_page=3&sort=updated_at&order=desc');
+                const result = await response.json();
+                
+                let productsData = [];
+                if (result.data) {
+                    if (Array.isArray(result.data.data)) productsData = result.data.data;
+                    else productsData = result.data;
+                } else if (result.products) {
+                    productsData = result.products.data || result.products;
+                } else if (Array.isArray(result)) {
+                    productsData = result;
+                }
+                
+                // Get exactly 3 items
+                productsData = productsData.slice(0, 3);
+                
+                const grid = document.getElementById('latest-products-grid');
+                if (productsData.length > 0) {
+                    grid.innerHTML = productsData.map(product => {
+                        let priceRaw = product.price || product.harga || 0;
+                        let priceFmt = (typeof priceRaw === 'string' && priceRaw.toLowerCase().includes('rp')) ? priceRaw : new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(priceRaw);
+                        
+                        let imgSrc = product.image_url || '/Foto/3.png';
+                        
+                        const catName = product.category?.name || product.kategori || 'NEW';
+                        const detailUrl = '/produk/' + (product.slug || product.id);
+                        const nameDsp  = product.name || product.nama || 'Produk';
+                        const priceFmt2 = product.formatted_price || new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(product.price || 0);
+                        
+                        return `
+                            <div class="catalog-card fade-in-up visible">
+                                <span class="catalog-badge catalog-badge--gold">${catName}</span>
+                                <div class="catalog-card__image-wrap bg-gray-50/50 rounded-xl">
+                                    <a href="${detailUrl}">
+                                        <img src="${imgSrc}" alt="${nameDsp}" onerror="this.src='/Foto/3.png'">
+                                    </a>
+                                </div>
+                                <div class="catalog-card__info">
+                                    <h3 class="catalog-card__name"><a href="${detailUrl}">${nameDsp}</a></h3>
+                                    <div class="catalog-card__footer">
+                                        <span class="catalog-card__price">${priceFmt2}</span>
+                                        <a href="${detailUrl}" class="catalog-card__add-btn" aria-label="Lihat Detail" style="text-decoration:none">
+                                            <i class="ph-bold ph-arrow-right text-white"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            } catch (error) {
+                console.error('API Error:', error);
+                document.getElementById('latest-products-grid').innerHTML = '<p class="text-center w-full col-span-3 text-gray-500 py-10">Gagal memuat produk dari server.</p>';
+            }
+        }
+        fetchLatestProducts();
+
+        // ===== Testimonials Slider =====
+        let testiData = [];
+        let testiIdx  = 0;
+        let testiTimer = null;
+
+        const testiTrack = document.getElementById('testiTrack');
+        const testiDots  = document.getElementById('testiDots');
+
+        function renderTesti() {
+            if (!testiData.length || !testiTrack) return;
+            testiTrack.innerHTML = testiData.map((t, i) => {
+                const stars = '★'.repeat(Math.min(5, t.rating || 5));
+                const initials = (t.name || 'A')[0].toUpperCase();
+                const imgHtml = t.image_url
+                    ? `<img src="${t.image_url}" alt="${t.name}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.style.display='none'">`
+                    : '';
+                return `
+                <div class="testi-slide">
+                    <div class="testi-card" id="tcard-${i}">
+                        <div style="width:56px;height:56px;border-radius:50%;margin:0 auto 18px;overflow:hidden;border:2px solid #D4AF37;position:relative;">
+                            ${imgHtml}
+                            <div style="width:100%;height:100%;background:rgba(212,175,55,0.2);border-radius:50%;display:${t.image_url?'none':'flex'};align-items:center;justify-content:center;color:white;font-weight:700;font-size:1.2rem;">${initials}</div>
+                        </div>
+                        <p style="color:#FACC15;font-size:1.1rem;margin-bottom:8px;">${stars}</p>
+                        <h4 style="color:white;font-weight:700;font-size:1.05rem;margin-bottom:4px;">${t.name || 'Anonim'}</h4>
+                        <p style="color:rgba(255,255,255,0.55);font-size:.82rem;margin-bottom:16px;">${t.role || t.title || 'Pelanggan King Gitar'}</p>
+                        <p style="color:rgba(255,255,255,0.88);font-size:.9rem;line-height:1.6;font-style:italic;">&ldquo;${t.message || t.content || ''}&rdquo;</p>
+                    </div>
+                </div>`;
+            }).join('');
+
+            // Dots
+            if (testiDots) {
+                testiDots.innerHTML = testiData.map((_, i) =>
+                    `<button onclick="goTesti(${i})" class="testi-dot ${i===0?'active':''}" data-idx="${i}"></button>`
+                ).join('');
+            }
+
+            goTesti(0);
+        }
+
+        function goTesti(idx) {
+            testiIdx = idx;
+            if (testiTrack) {
+                // Each slide is 80%. To center it with 10% peeking on both sides:
+                // offset = idx * 80 - 10  (in percent)
+                const offset = Math.max(0, idx * 80 - 10);
+                testiTrack.style.transform = `translateX(-${offset}%)`;
+                // Highlight active card
+                testiTrack.querySelectorAll('.testi-card').forEach((c, i) =>
+                    c.classList.toggle('active-card', i === idx));
+            }
+            if (testiDots) {
+                testiDots.querySelectorAll('.testi-dot').forEach((d, i) =>
+                    d.classList.toggle('active', i === idx));
+            }
+        }
+
+        function nextTesti() {
+            goTesti((testiIdx + 1) % testiData.length);
+        }
+
+        function startTestiAuto() {
+            if (testiTimer) clearInterval(testiTimer);
+            testiTimer = setInterval(nextTesti, 2000);
+        }
+
+        async function fetchTestimonials() {
+            try {
+                const res  = await fetch('/api/v1/testimonials');
+                const data = await res.json();
+                testiData  = (data.success ? data.data : []) || [];
+                if (!testiData.length) {
+                    // Fallback placeholders
+                    testiData = [
+                        { name: 'Arya S.', role: 'Gitaris Akustik', message: 'King Gitar punya koleksi terbaik!', rating: 5 },
+                        { name: 'Rina D.', role: 'Guru Musik', message: 'Kualitas premium, pelayanan ramah.', rating: 5 },
+                        { name: 'Dika R.', role: 'Musisi Studio', message: 'Mudah order, gitar langsung siap pakai.', rating: 5 },
+                    ];
+                }
+                renderTesti();
+                startTestiAuto();
+            } catch(e) {
+                console.error('Testi error:', e);
+            }
+        }
+        fetchTestimonials();
+
+        // Chat Widget Toggle logic for landing page
+        function toggleLandingChat() {
+            const chatWindow = document.getElementById('landing-chat-window');
+            const badge = document.getElementById('landing-chat-badge');
+            
+            if (chatWindow.classList.contains('hidden')) {
+                chatWindow.classList.remove('hidden');
+                if(badge) badge.style.display = 'none';
+                setTimeout(() => {
+                    chatWindow.classList.remove('scale-95', 'opacity-0');
+                    chatWindow.classList.add('scale-100', 'opacity-100');
+                }, 10);
+            } else {
+                chatWindow.classList.remove('scale-100', 'opacity-100');
+                chatWindow.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => {
+                    chatWindow.classList.add('hidden');
+                }, 300);
+            }
+        }
+        function insertLandingPrompt(text) {
+            document.getElementById('landing-chat-input').value = text;
+        }
     </script>
+    
+    <!-- Chatbot Widget Widget -->
+    <div class="fixed bottom-6 right-6 z-[60] flex flex-col items-end">
+        <!-- Chat Window -->
+        <div id="landing-chat-window" class="hidden w-[340px] bg-white rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.15)] border border-gray-100 overflow-hidden mb-4 transition-all duration-300 origin-bottom-right transform scale-95 opacity-0">
+            <div class="bg-gold-600 p-5 flex justify-between items-center text-white relative overflow-hidden">
+                <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 16px 16px;"></div>
+                <div class="flex items-center gap-3 relative z-10">
+                    <div class="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/20">
+                        <i class="ph-fill ph-sparkle text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-serif font-bold tracking-wide">King Gitar AI</h4>
+                        <p class="text-xs text-white/90">Online, siap membantu!</p>
+                    </div>
+                </div>
+                <button onclick="toggleLandingChat()" class="text-white/80 hover:text-white transition w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center relative z-10"><i class="ph-bold ph-x"></i></button>
+            </div>
+            <div class="p-5 h-[320px] overflow-y-auto bg-[#faf9f6]/50 flex flex-col gap-4">
+                <div class="bg-white p-4 rounded-2xl rounded-tl-sm border border-gray-100 text-sm md:w-[85%] shadow-sm text-gray-700 leading-relaxed border-l-2 border-l-gold-500">
+                    Halo, Sobat Gitaris! 🎸 Saya asisten AI pintar dari King Gitar. Ada yang bisa saya bantu atau rekomendasikan untuk Anda hari ini?
+                </div>
+                <div class="mt-2 space-y-2.5">
+                    <p class="text-xs text-gray-500 font-bold px-1 uppercase tracking-wider mb-2">💡 Prompt Recommendations</p>
+                    <button onclick="insertLandingPrompt('Rekomendasi gitar akustik pemula')" class="w-full text-left p-3 text-sm bg-white border border-gold-500/20 hover:border-gold-500 hover:shadow-md text-gray-700 font-medium rounded-xl transition duration-300 flex items-center gap-3 group">
+                        <span class="w-8 h-8 rounded-full bg-orange-50 text-orange-600 flex items-center justify-center group-hover:scale-110 transition shrink-0"><i class="ph-fill ph-fire"></i></span>
+                        <span class="truncate">Rekomendasi gitar akustik pemula</span>
+                    </button>
+                    <button onclick="insertLandingPrompt('Perbedaan Telecaster dan Stratocaster')" class="w-full text-left p-3 text-sm bg-white border border-gold-500/20 hover:border-gold-500 hover:shadow-md text-gray-700 font-medium rounded-xl transition duration-300 flex items-center gap-3 group">
+                        <span class="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-110 transition shrink-0"><i class="ph-fill ph-scales"></i></span>
+                        <span class="truncate">Perbedaan Telecaster & Stratocaster</span>
+                    </button>
+                </div>
+            </div>
+            <div class="p-4 bg-white border-t border-gray-100">
+                <div class="relative flex items-center gap-2">
+                    <input type="text" id="landing-chat-input" placeholder="Tanya saya apapun..." class="flex-1 bg-gray-50 hover:bg-white border border-gray-200 focus:border-gold-500 focus:ring-2 focus:ring-gold-500/20 rounded-xl px-4 py-3 text-sm transition-all outline-none">
+                    <button class="w-11 h-11 bg-dark-900 text-white rounded-xl hover:bg-gold-500 transition flex items-center justify-center shadow-lg shadow-dark-900/20 active:scale-95 shrink-0">
+                        <i class="ph-fill ph-paper-plane-right text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Chat Floating Button -->
+        <button onclick="toggleLandingChat()" class="w-16 h-16 bg-gold-500 hover:bg-gold-600 text-white rounded-full flex items-center justify-center shadow-[0_8px_30px_rgba(212,175,55,0.4)] transition-all duration-300 hover:scale-110 hover:-translate-y-1 group relative z-[61]">
+            <i class="ph-fill ph-sparkle text-3xl group-hover:rotate-12 transition-transform duration-500 flex items-center justify-center"></i>
+            <span class="absolute top-0 right-0 w-4 h-4 bg-red-500 border-2 border-white rounded-full block" id="landing-chat-badge"></span>
+        </button>
+    </div>
 </body>
 
 </html>

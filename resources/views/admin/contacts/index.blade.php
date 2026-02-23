@@ -27,7 +27,7 @@
 
         <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
             <div class="overflow-x-auto">
-                <table class="w-full text-left">
+                <table class="w-full text-left min-w-[800px] whitespace-nowrap">
                     <thead>
                         <tr class="bg-slate-50 border-b border-slate-100">
                             <th class="px-6 py-4 text-xs uppercase text-slate-500 font-semibold tracking-wider">Pengirim
