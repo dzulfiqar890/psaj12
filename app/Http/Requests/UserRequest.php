@@ -44,7 +44,7 @@ class UserRequest extends FormRequest
             ],
             'no_telephone' => 'nullable|string|max:20|regex:/^[0-9+\-\s]+$/',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
-            'role' => 'nullable|in:admin,customer',
+            'is_admin' => 'nullable|boolean',
         ];
 
         // Password wajib saat create, opsional saat update
@@ -81,7 +81,7 @@ class UserRequest extends FormRequest
             'image.image' => 'File harus berupa gambar.',
             'image.mimes' => 'Format gambar harus JPG, PNG, atau WEBP.',
             'image.max' => 'Ukuran file terlalu besar. Maksimal 5MB.',
-            'role.in' => 'Role harus admin atau customer.',
+            'is_admin.boolean' => 'Field is_admin harus berupa true atau false.',
         ];
     }
 }

@@ -102,6 +102,7 @@
                     <label class="block text-sm font-medium text-slate-700 mb-1">Gambar</label>
                     <input type="file" id="f-image" accept="image/*"
                         class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-medium file:bg-cream file:text-gold hover:file:bg-gold/20">
+                    <p class="text-xs text-slate-400 mt-1">Maksimal 5MB (JPG, PNG, WEBP)</p>
                 </div>
                 <button type="submit"
                     class="w-full bg-gold hover:bg-yellow-600 text-white font-medium py-2.5 rounded-xl transition">Simpan</button>

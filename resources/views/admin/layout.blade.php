@@ -10,7 +10,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -105,7 +105,7 @@
     <div class="lg:hidden flex items-center justify-between p-4 bg-white shadow-sm z-50 sticky top-0">
         <div class="flex items-center gap-2">
             <img src="/Foto/Logo.png" alt="Logo" class="h-8 w-auto">
-            <span class="font-bold text-gold text-lg">KING GITAR</span>
+            <span class="font-bold text-gold text-lg" style="font-family: 'Playfair Display', serif;">KING GITAR</span>
         </div>
         <button id="mobileMenuBtn" class="text-slate-600 hover:text-gold transition">
             <i data-lucide="menu" class="w-6 h-6"></i>
@@ -129,7 +129,6 @@
                         ['route' => 'admin.categories.index', 'icon' => 'layers', 'label' => 'Categories'],
                         ['route' => 'admin.testimonials.index', 'icon' => 'message-square', 'label' => 'Testimonials'],
                         ['route' => 'admin.products.index', 'icon' => 'guitar', 'label' => 'Products'],
-                        ['route' => 'admin.contacts.index', 'icon' => 'mail', 'label' => 'Contacts'],
                         ['route' => 'admin.banners.index', 'icon' => 'image', 'label' => 'Banners'],
                         ['route' => 'admin.users.index', 'icon' => 'users', 'label' => 'Users'],
                     ];
@@ -144,8 +143,14 @@
                 @endforeach
             </nav>
 
-            <!-- Logout -->
-            <div class="p-3 border-t border-slate-100 flex-shrink-0">
+            <!-- Catalog & Logout -->
+            <div class="p-3 border-t border-slate-100 flex-shrink-0 space-y-1">
+                <a href="{{ url('/katalog') }}"
+                    class="w-full sidebar-item flex items-center gap-3 px-4 py-2.5 rounded-xl hover:!bg-gold-light group">
+                    <i data-lucide="shopping-bag" class="w-5 h-5 text-slate-400 group-hover:text-gold"></i>
+                    <span class="text-sm text-slate-600 group-hover:text-gold">Catalog</span>
+                </a>
+
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit"

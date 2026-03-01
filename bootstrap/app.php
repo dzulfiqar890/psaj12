@@ -19,10 +19,15 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        // Alias middleware untuk role-based access control
+        // Alias middleware untuk admin access control
         $middleware->alias([
-            'role' => \App\Http\Middleware\RoleMiddleware::class,
+            'admin' => \App\Http\Middleware\AdminMiddleware::class,
             'security.headers' => \App\Http\Middleware\SecurityHeadersMiddleware::class,
+        ]);
+
+        // Exempt public API routes from CSRF verification
+        $middleware->validateCsrfTokens(except: [
+            'api/*',
         ]);
 
         // Sanctum stateful domains untuk SPA

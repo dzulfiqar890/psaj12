@@ -4,210 +4,15 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequest;
-use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\User;
 use App\Services\ImageService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\VerificationCodeMail;
 
-/**
- * @OA\Schema(
- *     schema="User",
- *     type="object",
- *     @OA\Property(property="id", type="integer", example=1),
- *     @OA\Property(property="username", type="string", example="johndoe"),
- *     @OA\Property(property="email", type="string", example="john@example.com"),
- *     @OA\Property(property="no_telephone", type="string", example="081234567890"),
- *     @OA\Property(property="image", type="string", nullable=true),
- *     @OA\Property(property="role", type="string", enum={"admin", "customer"}),
- *     @OA\Property(property="created_at", type="string", format="date-time"),
- *     @OA\Property(property="updated_at", type="string", format="date-time")
- * )
- */
 class AuthController extends Controller
 {
-    public function __construct(
-        private ImageService $imageService
-    ) {
-    }
-
-    /**
-     * @OA\Post(
-     *     path="/register",
-     *     tags={"Authentication"},
-     *     summary="Registrasi user baru",
-     *     description="Mendaftarkan user baru sebagai customer",
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\MediaType(
-     *             mediaType="multipart/form-data",
-     *             @OA\Schema(
-     *                 required={"username", "email", "password", "password_confirmation"},
-     *                 @OA\Property(property="username", type="string", example="johndoe"),
-     *                 @OA\Property(property="email", type="string", format="email", example="john@example.com"),
-     *                 @OA\Property(property="password", type="string", format="password", example="password123"),
-     *                 @OA\Property(property="password_confirmation", type="string", format="password", example="password123"),
-     *                 @OA\Property(property="no_telephone", type="string", example="081234567890"),
-     *                 @OA\Property(property="image", type="string", format="binary")
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=201,
-     *         description="Registrasi berhasil",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="success", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Registrasi berhasil."),
-     *             @OA\Property(
-     *                 property="data",
-     *                 type="object",
-     *                 @OA\Property(property="user", ref="#/components/schemas/User"),
-     *                 @OA\Property(property="token", type="string", example="1|abc123...")
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(response=422, description="Validasi gagal")
-     * )
-     */
-    /**
-     * @OA\Post(
-     *     path="/register/send-verification",
-     *     tags={"Authentication"},
-     *     summary="Kirim kode verifikasi",
-     *     description="Mengirim kode verifikasi ke email calon user",
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\JsonContent(
-     *             required={"email"},
-     *             @OA\Property(property="email", type="string", format="email", example="john@example.com")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Kode verifikasi dikirim",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="success", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Kode verifikasi telah dikirim ke email Anda.")
-     *         )
-     *     )
-     * )
-     */
-    public function sendVerification(Request $request): JsonResponse
-    {
-        $request->validate([
-            'email' => 'required|email|unique:users,email',
-        ]);
-
-        $email = $request->email;
-        $code = str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
-
-        // Simpan kode di cache selama 5 menit
-        Cache::put('otp_' . $email, $code, 300);
-
-        try {
-            Mail::to($email)->send(new VerificationCodeMail($code));
-        } catch (\Exception $e) {
-            Log::error('Failed to send verification email: ' . $e->getMessage());
-            return ApiResponse::error('Gagal mengirim email verifikasi. Silakan coba lagi.', 500);
-        }
-
-        return ApiResponse::success(null, 'Kode verifikasi telah dikirim ke email Anda. Berlaku selama 5 menit.');
-    }
-
-    /**
-     * @OA\Post(
-     *     path="/register",
-     *     tags={"Authentication"},
-     *     summary="Registrasi user baru",
-     *     description="Mendaftarkan user baru sebagai customer",
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\MediaType(
-     *             mediaType="multipart/form-data",
-     *             @OA\Schema(
-     *                 required={"username", "email", "password", "password_confirmation", "code"},
-     *                 @OA\Property(property="username", type="string", example="johndoe"),
-     *                 @OA\Property(property="email", type="string", format="email", example="john@example.com"),
-     *                 @OA\Property(property="password", type="string", format="password", example="password123"),
-     *                 @OA\Property(property="password_confirmation", type="string", format="password", example="password123"),
-     *                 @OA\Property(property="no_telephone", type="string", example="081234567890"),
-     *                 @OA\Property(property="image", type="string", format="binary"),
-     *                 @OA\Property(property="code", type="string", example="123456", description="Kode verifikasi dari email")
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=201,
-     *         description="Registrasi berhasil",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="success", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Registrasi berhasil."),
-     *             @OA\Property(
-     *                 property="data",
-     *                 type="object",
-     *                 @OA\Property(property="user", ref="#/components/schemas/User"),
-     *                 @OA\Property(property="token", type="string", example="1|abc123...")
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(response=422, description="Validasi gagal")
-     * )
-     */
-    public function register(RegisterRequest $request): JsonResponse
-    {
-        // Validasi kode verifikasi manually atau tambahkan ke request rule (pilih manual disini untuk pemisahan logic)
-        $request->validate([
-            'code' => 'required|string',
-        ]);
-
-        $cachedCode = Cache::get('otp_' . $request->email);
-
-        if (!$cachedCode || $cachedCode !== $request->code) {
-            return ApiResponse::error('Kode verifikasi salah atau sudah kadaluwarsa.', 422);
-        }
-
-        try {
-            return DB::transaction(function () use ($request) {
-                $data = $request->validated();
-
-                // Upload image jika ada
-                if ($request->hasFile('image')) {
-                    $data['image'] = $this->imageService->upload($request->file('image'), 'users');
-                }
-
-                // Set default role sebagai customer
-                $data['role'] = 'customer';
-
-                // Buat user baru
-                $user = User::create($data);
-
-                // Hapus OTP dari cache
-                Cache::forget('otp_' . $request->email);
-
-                // Generate token
-                $token = $user->createToken('auth_token')->plainTextToken;
-
-                // Log activity
-                Log::info("User registered: {$user->email}", ['user_id' => $user->id]);
-
-                return ApiResponse::created([
-                    'user' => $user,
-                    'token' => $token,
-                ], 'Registrasi berhasil. Selamat datang di Katalog Gitar!');
-            });
-        } catch (\Exception $e) {
-            Log::error('Registration failed: ' . $e->getMessage());
-            return ApiResponse::error('Registrasi gagal. Silakan coba lagi.', 500);
-        }
-    }
-
     /**
      * @OA\Post(
      *     path="/login",
@@ -239,9 +44,14 @@ class AuthController extends Controller
      *     @OA\Response(response=401, description="Email atau password salah")
      * )
      */
-    public function login(LoginRequest $request): JsonResponse
+    public function login(Request $request): JsonResponse
     {
-        $credentials = $request->validated();
+        $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
+
+        $credentials = $request->only('email', 'password');
 
         if (!Auth::attempt($credentials)) {
             return ApiResponse::error('Email atau password salah.', 401);

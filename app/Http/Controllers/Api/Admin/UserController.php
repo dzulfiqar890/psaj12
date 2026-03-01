@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
+use App\Models\ActivityLog;
 use App\Models\User;
 use App\Services\ImageService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+
 
 /**
  * Controller untuk manajemen user (Admin only)
@@ -24,8 +26,8 @@ class UserController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        $users = User::when($request->role, function ($query) use ($request) {
-            return $query->where('role', $request->role);
+        $users = User::when($request->has('is_admin'), function ($query) use ($request) {
+            return $query->where('is_admin', filter_var($request->is_admin, FILTER_VALIDATE_BOOLEAN));
         })
             ->when($request->search, function ($query) use ($request) {
                 return $query->where(function ($q) use ($request) {
@@ -51,11 +53,7 @@ class UserController extends Controller
 
                 $user = User::create($data);
 
-                Log::info("User created: {$user->email}", [
-                    'admin_id' => auth()->id(),
-                    'user_id' => $user->id,
-                    'action' => 'create',
-                ]);
+                ActivityLog::log('create', $user, "User '{$user->email}' ditambahkan");
 
                 return ApiResponse::created($user, 'User berhasil dibuat.');
             });
@@ -91,11 +89,7 @@ class UserController extends Controller
 
                 $user->update($data);
 
-                Log::info("User updated: {$user->email}", [
-                    'admin_id' => auth()->id(),
-                    'user_id' => $user->id,
-                    'action' => 'update',
-                ]);
+                ActivityLog::log('update', $user, "User '{$user->email}' diperbarui");
 
                 return ApiResponse::success($user, 'User berhasil diupdate.');
             });
@@ -119,11 +113,7 @@ class UserController extends Controller
                 $userEmail = $user->email;
                 $user->delete();
 
-                Log::info("User deleted: {$userEmail}", [
-                    'admin_id' => auth()->id(),
-                    'user_id' => $user->id,
-                    'action' => 'delete',
-                ]);
+                ActivityLog::log('delete', (object)['id' => null], "User '{$userEmail}' dihapus");
 
                 return ApiResponse::success(null, 'User berhasil dihapus.');
             });

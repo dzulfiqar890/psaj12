@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KING GITAR</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         html {
             scroll-behavior: smooth;
@@ -81,7 +81,7 @@
             font-size: 1.2rem;
             font-weight: 700;
             letter-spacing: 1.5px;
-            font-family: 'Times New Roman', serif;
+            font-family: 'Playfair Display', serif;
             text-transform: uppercase;
         }
 
@@ -349,7 +349,20 @@
             padding: 15px;
             position: relative;
             text-align: center;
-            transition: transform 0.2s;
+            transition: all 0.3s ease;
+            will-change: transform, opacity;
+        }
+
+        /* Scroll Reveal Base */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .product-card:hover {
@@ -563,6 +576,7 @@
 </head>
 
 
+
     <!-- ===== HEADER ===== -->
     <header id="mainHeader">
         <div class="container">
@@ -570,9 +584,8 @@
                 <!-- Logo -->
                 <a href="{{ url('/') }}" class="nav-logo">
                     <img src="{{ asset('Foto/Logo.png') }}" alt="King Gitar Logo">
-                    <span class="nav-logo-name">King Gitar</span>
+                    <span class="nav-logo-name">KING GITAR</span>
                 </a>
-
                 <!-- Search -->
                 <div class="nav-search">
                     <i class="fas fa-search" style="color:#aaa; font-size:0.85rem; flex-shrink:0;"></i>&nbsp;
@@ -581,43 +594,35 @@
                         <i class="fas fa-search"></i> Cari
                     </button>
                 </div>
-
-                <!-- Right Actions (Desktop) -->
+                <!-- Right Actions -->
                 <div class="nav-actions">
                     <a href="{{ url('/kategori') }}" class="nav-icon-btn" title="Kategori">
                         <i class="fas fa-th-large"></i>
-                        <span class="d-none d-md-inline">Kategori</span>
+                        <span>Kategori</span>
                     </a>
-                    <!-- Maps popup button -->
                     <button class="nav-icon-btn" id="openMapBtn" title="Lokasi Toko">
                         <i class="fas fa-map-marker-alt"></i>
                         <span>Maps</span>
                     </button>
                     @auth
-                        @if(Auth::user()->role === 'admin')
+                        @if(Auth::user()->is_admin)
                             <a href="{{ route('admin.dashboard') }}" class="nav-login-btn">Dashboard</a>
                         @else
-                            <span class="nav-icon-btn">
-                                <i class="fas fa-user-circle"></i>
-                            </span>
+                            <span class="nav-icon-btn"><i class="fas fa-user-circle"></i></span>
                         @endif
                     @else
                         <a href="{{ url('/login') }}" class="nav-login-btn">Masuk</a>
                     @endauth
                 </div>
-
-                <!-- Mobile Burger Button -->
                 <button class="mobile-burger-btn" id="mobileBurgerBtn" aria-label="Menu">
                     <i class="fas fa-bars"></i>
                 </button>
             </div>
-
-            <!-- Category Pills (loaded via JS) -->
+            <!-- Category Pills -->
             <nav class="nav-cats" id="navCatPills">
                 <a href="{{ url('/katalog') }}" class="nav-cat-pill active">
                     <i class="fas fa-border-all"></i> Semua
                 </a>
-                <!-- More injected by JS -->
             </nav>
         </div>
     </header>
@@ -629,15 +634,42 @@
                 <h3><i class="fas fa-map-marker-alt" style="color:#e74c3c; margin-right:6px;"></i> Lokasi Toko King Gitar</h3>
                 <button class="map-close-btn" id="closeMapBtn"><i class="fas fa-times"></i></button>
             </div>
-            <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.0!2d106.8!3d-6.2!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNsKwMTInMDAuMCJTIDEwNsKwNDgnMDAuMCJF!5e0!3m2!1sen!2sid!4v1700000000000!5m2!1sen!2sid"
-                allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-            </iframe>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.0!2d106.8!3d-6.2!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNsKwMTInMDAuMCJTIDEwNsKwNDgnMDAuMCJF!5e0!3m2!1sen!2sid!4v1700000000000!5m2!1sen!2sid"
+                allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
     </div>
 
+    <!-- Mobile Menu -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+    <div class="mobile-menu-drawer" id="mobileMenuDrawer">
+        <div class="mobile-menu-header">
+            <div class="mobile-menu-title"><img src="{{ asset('Foto/Logo.png') }}" style="height:24px;" alt="Logo"> KING GITAR</div>
+            <button class="mobile-menu-close" id="mobileMenuClose"><i class="fas fa-times"></i></button>
+        </div>
+        <ul class="mobile-menu-links">
+            <li><a href="{{ url('/') }}"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="{{ url('/katalog') }}" class="active"><i class="fas fa-th-large"></i> Katalog</a></li>
+            <li><a href="{{ url('/kategori') }}"><i class="fas fa-list"></i> Kategori</a></li>
+            <li><a href="#" id="mobileOpenMapBtn"><i class="fas fa-map-marker-alt"></i> Lokasi Toko</a></li>
+        </ul>
+        <div class="mobile-menu-footer">
+            @auth
+                @if(Auth::user()->is_admin)
+                    <a href="{{ route('admin.dashboard') }}" style="display:block;text-align:center;background:#1a1a1a;color:white;padding:12px;border-radius:12px;text-decoration:none;font-weight:600;">Dashboard</a>
+                @else
+                    <div style="display:flex;align-items:center;gap:12px;padding:12px;background:#f5f3f0;border-radius:12px;">
+                        <i class="fas fa-user-circle" style="font-size:1.5rem;color:#666;"></i>
+                        <span style="font-weight:600;color:#1a1a1a;">{{ Auth::user()->name }}</span>
+                    </div>
+                @endif
+            @else
+                <a href="{{ url('/login') }}" style="display:block;text-align:center;background:#D4AF37;color:white;padding:12px;border-radius:12px;text-decoration:none;font-weight:600;">Masuk</a>
+            @endauth
+        </div>
+    </div>
 
-    <!-- Hero Banner Slider -->
+    {{-- Hero Banner Slider --}}
+
     <div class="hero">
         <div class="container">
             <div style="position:relative; border-radius:20px; overflow:hidden; background: #f8fafc;" id="bannerSlider">
@@ -733,78 +765,10 @@
         </div>
     </footer>
 
-    <!-- Mobile Menu Container -->
-    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
-    <div class="mobile-menu-drawer" id="mobileMenuDrawer">
-        <div class="mobile-menu-header">
-            <div class="mobile-menu-title flex items-center gap-2">
-                <img src="{{ asset('Foto/Logo.png') }}" style="height:24px;" alt="Logo"> KING GITAR
-            </div>
-            <button class="mobile-menu-close" id="mobileMenuClose">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <ul class="mobile-menu-links">
-            <li><a href="{{ url('/') }}"><i class="fas fa-home"></i> Home</a></li>
-            <li><a href="{{ url('/katalog') }}" class="active"><i class="fas fa-th-large"></i> Katalog</a></li>
-            <li><a href="{{ url('/kategori') }}"><i class="fas fa-list"></i> Kategori</a></li>
-            <li><a href="#" id="mobileOpenMapBtn"><i class="fas fa-map-marker-alt"></i> Lokasi Toko (Maps)</a></li>
-        </ul>
-        <div class="mobile-menu-footer">
-            @auth
-                @if(Auth::user()->role === 'admin')
-                    <a href="{{ route('admin.dashboard') }}" style="display:block; text-align:center; background:#1a1a1a; color:white; padding:12px; border-radius:12px; text-decoration:none; font-weight:600;">Dashboard</a>
-                @else
-                    <div style="display:flex; align-items:center; gap:12px; padding:12px; background:#f5f3f0; border-radius:12px;">
-                        <i class="fas fa-user-circle" style="font-size:1.5rem; color:#666;"></i>
-                        <span style="font-weight:600; color:#1a1a1a;">{{ Auth::user()->name }}</span>
-                    </div>
-                @endif
-            @else
-                <a href="{{ url('/login') }}" style="display:block; text-align:center; background:#D4AF37; color:white; padding:12px; border-radius:12px; text-decoration:none; font-weight:600;">Masuk / Daftar</a>
-            @endauth
-        </div>
-    </div>
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Map popup
-            const openMapBtn = document.getElementById('openMapBtn');
-            const mobileOpenMapBtn = document.getElementById('mobileOpenMapBtn');
-            const closeMapBtn = document.getElementById('closeMapBtn');
-            const mapOverlay = document.getElementById('mapOverlay');
-
-            function openMap() {
-                mapOverlay.classList.add('active');
-                closeMobileMenu(); // close mobile drawer if open
-            }
-
-            if (openMapBtn) openMapBtn.addEventListener('click', openMap);
-            if (mobileOpenMapBtn) mobileOpenMapBtn.addEventListener('click', (e) => { e.preventDefault(); openMap(); });
-            if (closeMapBtn) closeMapBtn.addEventListener('click', () => mapOverlay.classList.remove('active'));
-            if (mapOverlay) mapOverlay.addEventListener('click', (e) => { if (e.target === mapOverlay) mapOverlay.classList.remove('active'); });
-
-            // Mobile Menu Drawer Logic
-            const mobileBurgerBtn = document.getElementById('mobileBurgerBtn');
-            const mobileMenuClose = document.getElementById('mobileMenuClose');
-            const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
-            const mobileMenuDrawer = document.getElementById('mobileMenuDrawer');
-
-            function openMobileMenu() {
-                mobileMenuOverlay.classList.add('active');
-                mobileMenuDrawer.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
-
-            function closeMobileMenu() {
-                mobileMenuOverlay.classList.remove('active');
-                mobileMenuDrawer.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-
-            if (mobileBurgerBtn) mobileBurgerBtn.addEventListener('click', openMobileMenu);
-            if (mobileMenuClose) mobileMenuClose.addEventListener('click', closeMobileMenu);
-            if (mobileMenuOverlay) mobileMenuOverlay.addEventListener('click', closeMobileMenu);
 
             // Scroll Reveal Animation with Intersection Observer
             const observerOptions = {
@@ -939,13 +903,13 @@
                 }
 
                 let html = '';
-                products.forEach(p => {
-                    let img = p.image_url ? p.image_url : '/Foto/3.png';
+                products.forEach((p, idx) => {
+                    let img = p.image_url ? p.image_url : '/Foto/default-guitar.png';
                     html += `
-                        <div class="product-card">
+                        <div class="product-card reveal" style="animation-delay: ${idx * 100}ms">
                             <button class="wishlist-btn"><i class="far fa-heart"></i></button>
                             <a href="/produk/${p.slug}" style="text-decoration: none; color: inherit;">
-                                <img src="${img}" alt="${p.name}" class="product-image" loading="lazy" onerror="this.src='/Foto/3.png'">
+                                <img src="${img}" alt="${p.name}" class="product-image" loading="lazy" onerror="this.src='/Foto/default-guitar.png'">
                                 <h3 class="product-name">${p.name}</h3>
                                 <p class="product-price">${p.formatted_price}</p>
                             </a>
@@ -953,6 +917,12 @@
                     `;
                 });
                 productsGrid.innerHTML = html;
+
+                // Trigger reveal functionality on dynamically added elements
+                setTimeout(() => {
+                    const revealElements = document.querySelectorAll('.product-card.reveal');
+                    revealElements.forEach(el => revealObserver.observe(el));
+                }, 100);
             }
 
             function renderPagination(meta) {
@@ -1011,12 +981,52 @@
                 }
             });
 
+            // Mobile Menu Drawer Logic
+            const mobileBurgerBtn = document.getElementById('mobileBurgerBtn');
+            const mobileMenuClose = document.getElementById('mobileMenuClose');
+            const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+            const mobileMenuDrawer = document.getElementById('mobileMenuDrawer');
+
+            function openMobileMenu() {
+                mobileMenuOverlay.classList.add('active');
+                mobileMenuDrawer.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeMobileMenu() {
+                mobileMenuOverlay.classList.remove('active');
+                mobileMenuDrawer.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            if (mobileBurgerBtn) mobileBurgerBtn.addEventListener('click', openMobileMenu);
+            if (mobileMenuClose) mobileMenuClose.addEventListener('click', closeMobileMenu);
+            if (mobileMenuOverlay) mobileMenuOverlay.addEventListener('click', closeMobileMenu);
+
+            // Map popup
+            const openMapBtn = document.getElementById('openMapBtn');
+            const mobileOpenMapBtn = document.getElementById('mobileOpenMapBtn');
+            const closeMapBtn = document.getElementById('closeMapBtn');
+            const mapOverlay = document.getElementById('mapOverlay');
+
+            function openMap() {
+                mapOverlay.classList.add('active');
+                closeMobileMenu(); // close mobile drawer if open
+            }
+
+            if (openMapBtn) openMapBtn.addEventListener('click', openMap);
+            if (mobileOpenMapBtn) mobileOpenMapBtn.addEventListener('click', (e) => { e.preventDefault(); openMap(); });
+            if (closeMapBtn) closeMapBtn.addEventListener('click', () => mapOverlay.classList.remove('active'));
+            if (mapOverlay) mapOverlay.addEventListener('click', (e) => { if (e.target === mapOverlay) mapOverlay.classList.remove('active'); });
+
             // Initialize
             fetchBanners();
             fetchCategories();
             fetchProducts();
         });
     </script>
+
+    @include('partials.chatbot')
 </body>
 
 </html>

@@ -23,8 +23,8 @@
             <select id="roleFilter"
                 class="px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-gold/20">
                 <option value="">Semua Role</option>
-                <option value="admin">Admin</option>
-                <option value="customer">Customer</option>
+                <option value="1">Admin</option>
+                <option value="0">Non-Admin</option>
             </select>
         </div>
 
@@ -86,11 +86,11 @@
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">Role *</label>
-                        <select id="f-role" required
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Admin *</label>
+                        <select id="f-is_admin" required
                             class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-gold/20 outline-none">
-                            <option value="customer">Customer</option>
-                            <option value="admin">Admin</option>
+                            <option value="0">Tidak</option>
+                            <option value="1">Ya (Admin)</option>
                         </select>
                     </div>
                     <div>
@@ -103,6 +103,7 @@
                     <label class="block text-sm font-medium text-slate-700 mb-1">Avatar</label>
                     <input type="file" id="f-image" accept="image/*"
                         class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-medium file:bg-cream file:text-gold hover:file:bg-gold/20">
+                    <p class="text-xs text-slate-400 mt-1">Maksimal 5MB (JPG, PNG, WEBP)</p>
                 </div>
                 <button type="submit"
                     class="w-full bg-gold hover:bg-yellow-600 text-white font-medium py-2.5 rounded-xl transition">Simpan</button>
@@ -125,7 +126,7 @@
             const fd = new FormData();
             fd.append('username', document.getElementById('f-username').value);
             fd.append('email', document.getElementById('f-email').value);
-            fd.append('role', document.getElementById('f-role').value);
+            fd.append('is_admin', document.getElementById('f-is_admin').value);
             fd.append('no_telephone', document.getElementById('f-phone').value);
             const pw = document.getElementById('f-password').value;
             if (pw) fd.append('password', pw);
@@ -150,7 +151,7 @@
             const role = document.getElementById('roleFilter').value;
             let url = '/users?';
             if (search) url += `search=${encodeURIComponent(search)}&`;
-            if (role) url += `role=${role}&`;
+            if (role !== '') url += `is_admin=${role}&`;
             try {
                 const res = await Api.get(url);
                 allData = res.data || [];
@@ -163,13 +164,15 @@
             if (!items.length) { tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-8 text-center text-slate-400">Tidak ada user.</td></tr>'; return; }
             tbody.innerHTML = items.map(u => {
                 const avatar = u.image_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(u.username)}&background=FFF4E6&color=D4AF37&size=40`;
-                const roleBadge = u.role === 'admin' ? 'bg-purple-50 text-purple-600' : 'bg-blue-50 text-blue-600';
+                const isAdmin = u.is_admin === true || u.is_admin === 1 || u.is_admin === '1';
+                const roleBadge = isAdmin ? 'bg-purple-50 text-purple-600' : 'bg-blue-50 text-blue-600';
+                const roleLabel = isAdmin ? 'Admin' : 'User';
                 return `
             <tr class="hover:bg-slate-50 transition-colors">
                 <td class="px-6 py-3"><img src="${avatar}" class="w-10 h-10 rounded-full object-cover border border-slate-100"></td>
                 <td class="px-6 py-3 font-medium text-slate-800">${u.username}</td>
                 <td class="px-6 py-3 text-slate-500 text-sm">${u.email}</td>
-                <td class="px-6 py-3"><span class="px-2.5 py-1 rounded-full text-xs font-semibold ${roleBadge}">${u.role}</span></td>
+                <td class="px-6 py-3"><span class="px-2.5 py-1 rounded-full text-xs font-semibold ${roleBadge}">${roleLabel}</span></td>
                 <td class="px-6 py-3 text-sm text-slate-500">${u.no_telephone || '-'}</td>
                 <td class="px-6 py-3 text-right">
                     <div class="flex items-center justify-end gap-1">
@@ -186,7 +189,7 @@
             document.getElementById('editId').value = data?.id || '';
             document.getElementById('f-username').value = data?.username || '';
             document.getElementById('f-email').value = data?.email || '';
-            document.getElementById('f-role').value = data?.role || 'customer';
+            document.getElementById('f-is_admin').value = (data?.is_admin === true || data?.is_admin === 1 || data?.is_admin === '1') ? '1' : '0';
             document.getElementById('f-phone').value = data?.no_telephone || '';
             document.getElementById('f-password').value = '';
             document.getElementById('f-image').value = '';

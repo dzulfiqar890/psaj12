@@ -12,7 +12,7 @@ use Laravel\Sanctum\HasApiTokens;
 /**
  * Model User
  * 
- * Mengelola data pengguna dengan role-based access control.
+ * Mengelola data pengguna admin.
  * Mendukung soft deletes dan autentikasi API via Sanctum.
  * 
  * @property int $id
@@ -21,7 +21,8 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string $password
  * @property string|null $image
  * @property string $email
- * @property string $role
+ * @property bool $is_admin
+ * @property string|null $google_id
  */
 class User extends Authenticatable
 {
@@ -38,7 +39,8 @@ class User extends Authenticatable
         'password',
         'image',
         'email',
-        'role',
+        'is_admin',
+        'google_id',
     ];
 
     /**
@@ -68,6 +70,7 @@ class User extends Authenticatable
     {
         return [
             'password' => 'hashed',
+            'is_admin' => 'boolean',
         ];
     }
 
@@ -84,42 +87,10 @@ class User extends Authenticatable
     }
 
     /**
-     * Relationship: User memiliki banyak Contact.
-     */
-    public function contacts()
-    {
-        return $this->hasMany(Contact::class);
-    }
-
-    /**
-     * Scope untuk filter user berdasarkan role customer.
-     */
-    public function scopeCustomers($query)
-    {
-        return $query->where('role', 'customer');
-    }
-
-    /**
-     * Scope untuk filter user berdasarkan role admin.
-     */
-    public function scopeAdmins($query)
-    {
-        return $query->where('role', 'admin');
-    }
-
-    /**
      * Cek apakah user adalah admin.
      */
     public function isAdmin(): bool
     {
-        return $this->role === 'admin';
-    }
-
-    /**
-     * Cek apakah user adalah customer.
-     */
-    public function isCustomer(): bool
-    {
-        return $this->role === 'customer';
+        return $this->is_admin;
     }
 }

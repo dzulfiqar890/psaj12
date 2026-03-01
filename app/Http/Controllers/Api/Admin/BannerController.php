@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BannerRequest;
+use App\Models\ActivityLog;
 use App\Models\Banner;
 use App\Services\ImageService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+
 
 /**
  * Controller untuk manajemen banner (Admin only)
@@ -39,11 +41,7 @@ class BannerController extends Controller
 
                 $banner = Banner::create($data);
 
-                Log::info("Banner created: {$banner->title}", [
-                    'user_id' => auth()->id(),
-                    'banner_id' => $banner->id,
-                    'action' => 'create',
-                ]);
+                ActivityLog::log('create', $banner, "Banner '{$banner->title}' ditambahkan");
 
                 return ApiResponse::created($banner, 'Banner berhasil dibuat.');
             });
@@ -74,11 +72,7 @@ class BannerController extends Controller
 
                 $banner->update($data);
 
-                Log::info("Banner updated: {$banner->title}", [
-                    'user_id' => auth()->id(),
-                    'banner_id' => $banner->id,
-                    'action' => 'update',
-                ]);
+                ActivityLog::log('update', $banner, "Banner '{$banner->title}' diperbarui");
 
                 return ApiResponse::success($banner, 'Banner berhasil diupdate.');
             });
@@ -97,11 +91,7 @@ class BannerController extends Controller
                 $bannerTitle = $banner->title;
                 $banner->delete();
 
-                Log::info("Banner deleted: {$bannerTitle}", [
-                    'user_id' => auth()->id(),
-                    'banner_id' => $banner->id,
-                    'action' => 'delete',
-                ]);
+                ActivityLog::log('delete', (object)['id' => null], "Banner '{$bannerTitle}' dihapus");
 
                 return ApiResponse::success(null, 'Banner berhasil dihapus.');
             });

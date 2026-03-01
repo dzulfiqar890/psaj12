@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Product;
 use App\Models\User;
-use App\Models\Contact;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 
@@ -48,8 +47,7 @@ class DashboardController extends Controller
     }
 
     /**
-     * Count unique IPs from sessions table if using 'database' driver,
-     * otherwise fall back to Contact count.
+     * Count unique IPs from sessions table if using 'database' driver.
      */
     private function getReachedAccounts(): int
     {
@@ -63,7 +61,6 @@ class DashboardController extends Controller
             // Silence
         }
 
-        // Fallback: count contacts as proxy for reach
-        return Contact::count();
+        return 0;
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
+use App\Models\ActivityLog;
 use App\Models\Category;
 use App\Models\Product;
 use App\Services\ImageService;
@@ -12,6 +13,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+
 
 /**
  * Controller untuk manajemen produk (Admin only)
@@ -98,11 +100,7 @@ class ProductController extends Controller
                 $product = Product::create($data);
                 $product->load('category');
 
-                Log::info("Product created: {$product->name}", [
-                    'user_id' => auth()->id(),
-                    'product_id' => $product->id,
-                    'action' => 'create',
-                ]);
+                ActivityLog::log('create', $product, "Produk '{$product->name}' ditambahkan");
 
                 return ApiResponse::created($product, 'Produk berhasil dibuat.');
             });
@@ -171,11 +169,7 @@ class ProductController extends Controller
                 $product->update($data);
                 $product->load('category');
 
-                Log::info("Product updated: {$product->name}", [
-                    'user_id' => auth()->id(),
-                    'product_id' => $product->id,
-                    'action' => 'update',
-                ]);
+                ActivityLog::log('update', $product, "Produk '{$product->name}' diperbarui");
 
                 return ApiResponse::success($product, 'Produk berhasil diupdate.');
             });
@@ -205,11 +199,7 @@ class ProductController extends Controller
                 $productName = $product->name;
                 $product->delete();
 
-                Log::info("Product deleted: {$productName}", [
-                    'user_id' => auth()->id(),
-                    'product_id' => $product->id,
-                    'action' => 'delete',
-                ]);
+                ActivityLog::log('delete', (object)['id' => null], "Produk '{$productName}' dihapus");
 
                 return ApiResponse::success(null, 'Produk berhasil dihapus.');
             });

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>King Gitar - Premium Guitar Store</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script>
         tailwind.config = {
@@ -132,7 +132,7 @@
                 class="text-2xl font-serif font-bold text-white transition-colors duration-300 flex items-center gap-2 group">
                 <span class="text-gold-500 text-3xl group-hover:scale-110 transition-transform duration-300"><img
                         src="{{ asset('Foto/Logo.png') }}" alt="" class="w-10 h-10"></span>
-                <span id="brand-name">King Gitar</span>
+                <span id="brand-name">KING GITAR</span>
             </a>
 
             <div class="hidden md:flex space-x-8 items-center">
@@ -146,17 +146,24 @@
                     class="nav-link text-white/90 hover:text-gold-500 transition-colors duration-300 font-medium text-sm uppercase tracking-wider relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-gold-500 after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">Contact</a>
 
                 @auth
-                    <form method="POST" action="{{ route('logout') }}" class="inline">
-                        @csrf
-                        <button type="submit"
+                    @if(Auth::user()->is_admin)
+                        <a href="{{ route('admin.dashboard') }}"
                             class="nav-link text-white/90 hover:text-gold-500 transition-all duration-300 font-medium text-sm uppercase tracking-wider border border-current rounded-full px-6 py-2 hover:bg-gold-500/10">
-                            Logout
-                        </button>
-                    </form>
+                            Dashboard
+                        </a>
+                    @else
+                        <form method="POST" action="{{ route('logout') }}" class="inline">
+                            @csrf
+                            <button type="submit"
+                                class="nav-link text-white/90 hover:text-gold-500 transition-all duration-300 font-medium text-sm uppercase tracking-wider border border-current rounded-full px-6 py-2 hover:bg-gold-500/10">
+                                Logout
+                            </button>
+                        </form>
+                    @endif
                 @else
                     <a href="{{ route('login') }}"
                         class="nav-link text-white/90 hover:text-gold-500 transition-all duration-300 font-medium text-sm uppercase tracking-wider border border-current rounded-full px-6 py-2 hover:bg-gold-500/10">
-                        Login
+                        Masuk
                     </a>
                 @endauth
             </div>
@@ -203,17 +210,24 @@
             </div>
             <div class="p-4 border-t border-gray-100">
                 @auth
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit"
-                            class="w-full text-center px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium rounded-lg transition-colors">
-                            Logout
-                        </button>
-                    </form>
+                    @if(Auth::user()->is_admin)
+                        <a href="{{ route('admin.dashboard') }}"
+                            class="block w-full text-center px-4 py-3 bg-dark-900 hover:bg-gold-500 text-white font-medium rounded-lg transition-colors">
+                            Dashboard
+                        </a>
+                    @else
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit"
+                                class="w-full text-center px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium rounded-lg transition-colors">
+                                Logout
+                            </button>
+                        </form>
+                    @endif
                 @else
                     <a href="{{ route('login') }}"
                         class="block w-full text-center px-4 py-3 bg-dark-900 hover:bg-gold-500 text-white font-medium rounded-lg transition-colors">
-                        Login
+                        Masuk
                     </a>
                 @endauth
             </div>
@@ -229,7 +243,7 @@
                     King Gitar <br>
 
                 </h1>
-                <p class="text-lg md:text-xl text-gray-200 mb-10 font-light leading-relaxed">
+                <p class="text-lg md:text-xl text-gray-200 mb-10  leading-relaxed">
                     King Gitar adalah platform e-commerce yang menyediakan berbagai pilihan gitar berkualitas, mulai
                     dari gitar akustik hingga elektrik. Kami menghadirkan produk dengan desain modern, material pilihan,
                     dan suara yang jernih untuk menunjang pengalaman bermusik Anda.
@@ -293,7 +307,7 @@
             gap: 4px;
             color: #D4AF37;
             text-decoration: none;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', sans-serif;
             font-weight: 500;
             font-size: 0.95rem;
             transition: color 0.3s ease;
@@ -340,7 +354,7 @@
             right: 16px;
             padding: 5px 14px;
             border-radius: 50px;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', sans-serif;
             font-size: 0.65rem;
             font-weight: 700;
             text-transform: uppercase;
@@ -431,7 +445,7 @@
         }
 
         .catalog-card__price {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', sans-serif;
             font-size: 1.1rem;
             font-weight: 700;
             color: #1a1a1a;
@@ -624,9 +638,14 @@
                 border: 1px solid rgba(255,255,255,0.14);
                 backdrop-filter: blur(12px);
                 border-radius: 20px;
-                padding: 36px 30px;
-                text-align: center;
+                padding: 28px 30px;
+                text-align: left;
                 transition: box-shadow .3s;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                min-height: 160px;
+                height: 300px;
             }
             .testi-card.active-card { box-shadow: 0 8px 32px rgba(212,175,55,0.25); border-color: rgba(212,175,55,0.4); }
             .testi-dot {
@@ -675,8 +694,7 @@
                         <!-- Loading placeholder -->
                         <div class="testi-slide">
                             <div class="testi-card">
-                                <div class="w-14 h-14 rounded-full mx-auto mb-5 bg-white/20 animate-pulse"></div>
-                                <div class="h-4 bg-white/20 rounded w-1/2 mx-auto mb-3 animate-pulse"></div>
+                                <div class="h-5 bg-white/20 rounded w-1/3 mb-2 animate-pulse"></div>
                                 <div class="h-16 bg-white/10 rounded animate-pulse"></div>
                             </div>
                         </div>
@@ -924,7 +942,7 @@
                         let priceRaw = product.price || product.harga || 0;
                         let priceFmt = (typeof priceRaw === 'string' && priceRaw.toLowerCase().includes('rp')) ? priceRaw : new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(priceRaw);
                         
-                        let imgSrc = product.image_url || '/Foto/3.png';
+                        let imgSrc = product.image_url || '/Foto/default-guitar.png';
                         
                         const catName = product.category?.name || product.kategori || 'NEW';
                         const detailUrl = '/produk/' + (product.slug || product.id);
@@ -936,7 +954,7 @@
                                 <span class="catalog-badge catalog-badge--gold">${catName}</span>
                                 <div class="catalog-card__image-wrap bg-gray-50/50 rounded-xl">
                                     <a href="${detailUrl}">
-                                        <img src="${imgSrc}" alt="${nameDsp}" onerror="this.src='/Foto/3.png'">
+                                        <img src="${imgSrc}" alt="${nameDsp}" onerror="this.src='/Foto/default-guitar.png'">
                                     </a>
                                 </div>
                                 <div class="catalog-card__info">
@@ -970,22 +988,11 @@
         function renderTesti() {
             if (!testiData.length || !testiTrack) return;
             testiTrack.innerHTML = testiData.map((t, i) => {
-                const stars = '★'.repeat(Math.min(5, t.rating || 5));
-                const initials = (t.name || 'A')[0].toUpperCase();
-                const imgHtml = t.image_url
-                    ? `<img src="${t.image_url}" alt="${t.name}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.style.display='none'">`
-                    : '';
                 return `
                 <div class="testi-slide">
                     <div class="testi-card" id="tcard-${i}">
-                        <div style="width:56px;height:56px;border-radius:50%;margin:0 auto 18px;overflow:hidden;border:2px solid #D4AF37;position:relative;">
-                            ${imgHtml}
-                            <div style="width:100%;height:100%;background:rgba(212,175,55,0.2);border-radius:50%;display:${t.image_url?'none':'flex'};align-items:center;justify-content:center;color:white;font-weight:700;font-size:1.2rem;">${initials}</div>
-                        </div>
-                        <p style="color:#FACC15;font-size:1.1rem;margin-bottom:8px;">${stars}</p>
-                        <h4 style="color:white;font-weight:700;font-size:1.05rem;margin-bottom:4px;">${t.name || 'Anonim'}</h4>
-                        <p style="color:rgba(255,255,255,0.55);font-size:.82rem;margin-bottom:16px;">${t.role || t.title || 'Pelanggan King Gitar'}</p>
-                        <p style="color:rgba(255,255,255,0.88);font-size:.9rem;line-height:1.6;font-style:italic;">&ldquo;${t.message || t.content || ''}&rdquo;</p>
+                        <h4 style="color:white;font-weight:700;font-size:1rem;margin:0;">${t.name || 'Anonim'}</h4>
+                        <p style="color:rgba(255,255,255,0.85);font-size:.9rem;line-height:1.7;font-style:italic;margin:0;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;">&ldquo;${t.testimony || ''}&rdquo;</p>
                     </div>
                 </div>`;
             }).join('');
@@ -1047,79 +1054,10 @@
         }
         fetchTestimonials();
 
-        // Chat Widget Toggle logic for landing page
-        function toggleLandingChat() {
-            const chatWindow = document.getElementById('landing-chat-window');
-            const badge = document.getElementById('landing-chat-badge');
-            
-            if (chatWindow.classList.contains('hidden')) {
-                chatWindow.classList.remove('hidden');
-                if(badge) badge.style.display = 'none';
-                setTimeout(() => {
-                    chatWindow.classList.remove('scale-95', 'opacity-0');
-                    chatWindow.classList.add('scale-100', 'opacity-100');
-                }, 10);
-            } else {
-                chatWindow.classList.remove('scale-100', 'opacity-100');
-                chatWindow.classList.add('scale-95', 'opacity-0');
-                setTimeout(() => {
-                    chatWindow.classList.add('hidden');
-                }, 300);
-            }
-        }
-        function insertLandingPrompt(text) {
-            document.getElementById('landing-chat-input').value = text;
-        }
+        // Chat Widget logic removed — replaced by partials.chatbot
     </script>
-    
-    <!-- Chatbot Widget Widget -->
-    <div class="fixed bottom-6 right-6 z-[60] flex flex-col items-end">
-        <!-- Chat Window -->
-        <div id="landing-chat-window" class="hidden w-[340px] bg-white rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.15)] border border-gray-100 overflow-hidden mb-4 transition-all duration-300 origin-bottom-right transform scale-95 opacity-0">
-            <div class="bg-gold-600 p-5 flex justify-between items-center text-white relative overflow-hidden">
-                <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 16px 16px;"></div>
-                <div class="flex items-center gap-3 relative z-10">
-                    <div class="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/20">
-                        <i class="ph-fill ph-sparkle text-white text-xl"></i>
-                    </div>
-                    <div>
-                        <h4 class="font-serif font-bold tracking-wide">King Gitar AI</h4>
-                        <p class="text-xs text-white/90">Online, siap membantu!</p>
-                    </div>
-                </div>
-                <button onclick="toggleLandingChat()" class="text-white/80 hover:text-white transition w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center relative z-10"><i class="ph-bold ph-x"></i></button>
-            </div>
-            <div class="p-5 h-[320px] overflow-y-auto bg-[#faf9f6]/50 flex flex-col gap-4">
-                <div class="bg-white p-4 rounded-2xl rounded-tl-sm border border-gray-100 text-sm md:w-[85%] shadow-sm text-gray-700 leading-relaxed border-l-2 border-l-gold-500">
-                    Halo, Sobat Gitaris! 🎸 Saya asisten AI pintar dari King Gitar. Ada yang bisa saya bantu atau rekomendasikan untuk Anda hari ini?
-                </div>
-                <div class="mt-2 space-y-2.5">
-                    <p class="text-xs text-gray-500 font-bold px-1 uppercase tracking-wider mb-2">💡 Prompt Recommendations</p>
-                    <button onclick="insertLandingPrompt('Rekomendasi gitar akustik pemula')" class="w-full text-left p-3 text-sm bg-white border border-gold-500/20 hover:border-gold-500 hover:shadow-md text-gray-700 font-medium rounded-xl transition duration-300 flex items-center gap-3 group">
-                        <span class="w-8 h-8 rounded-full bg-orange-50 text-orange-600 flex items-center justify-center group-hover:scale-110 transition shrink-0"><i class="ph-fill ph-fire"></i></span>
-                        <span class="truncate">Rekomendasi gitar akustik pemula</span>
-                    </button>
-                    <button onclick="insertLandingPrompt('Perbedaan Telecaster dan Stratocaster')" class="w-full text-left p-3 text-sm bg-white border border-gold-500/20 hover:border-gold-500 hover:shadow-md text-gray-700 font-medium rounded-xl transition duration-300 flex items-center gap-3 group">
-                        <span class="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-110 transition shrink-0"><i class="ph-fill ph-scales"></i></span>
-                        <span class="truncate">Perbedaan Telecaster & Stratocaster</span>
-                    </button>
-                </div>
-            </div>
-            <div class="p-4 bg-white border-t border-gray-100">
-                <div class="relative flex items-center gap-2">
-                    <input type="text" id="landing-chat-input" placeholder="Tanya saya apapun..." class="flex-1 bg-gray-50 hover:bg-white border border-gray-200 focus:border-gold-500 focus:ring-2 focus:ring-gold-500/20 rounded-xl px-4 py-3 text-sm transition-all outline-none">
-                    <button class="w-11 h-11 bg-dark-900 text-white rounded-xl hover:bg-gold-500 transition flex items-center justify-center shadow-lg shadow-dark-900/20 active:scale-95 shrink-0">
-                        <i class="ph-fill ph-paper-plane-right text-lg"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <!-- Chat Floating Button -->
-        <button onclick="toggleLandingChat()" class="w-16 h-16 bg-gold-500 hover:bg-gold-600 text-white rounded-full flex items-center justify-center shadow-[0_8px_30px_rgba(212,175,55,0.4)] transition-all duration-300 hover:scale-110 hover:-translate-y-1 group relative z-[61]">
-            <i class="ph-fill ph-sparkle text-3xl group-hover:rotate-12 transition-transform duration-500 flex items-center justify-center"></i>
-            <span class="absolute top-0 right-0 w-4 h-4 bg-red-500 border-2 border-white rounded-full block" id="landing-chat-badge"></span>
-        </button>
-    </div>
+
+    @include('partials.chatbot')
 </body>
 
 </html>

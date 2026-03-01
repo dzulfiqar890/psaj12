@@ -27,11 +27,6 @@ class ViewController extends Controller
         return view('admin.testimonials.index');
     }
 
-    public function contacts()
-    {
-        return view('admin.contacts.index');
-    }
-
     public function banners()
     {
         return view('admin.banners.index');

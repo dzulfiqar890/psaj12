@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detail Catalog - KING GITAR</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <style>
         html {
@@ -79,7 +79,7 @@
             font-size: 1.2rem;
             font-weight: 700;
             letter-spacing: 1.5px;
-            font-family: 'Times New Roman', serif;
+            font-family: 'Playfair Display', serif;
             text-transform: uppercase;
         }
 
@@ -497,51 +497,36 @@
 
 <body>
 
-    <!-- ===== PROFESSIONAL HEADER ===== -->
+    <!-- ===== HEADER ===== -->
     <header class="kgn-header" id="kgnHeader">
         <div class="container">
             <div class="kgn-nav-top">
-
-                <!-- Logo -->
                 <a href="{{ url('/') }}" class="kgn-logo">
                     <img src="{{ asset('Foto/Logo.png') }}" alt="King Gitar">
-                    <span class="kgn-logo-name">King Gitar</span>
+                    <span class="kgn-logo-name">KING GITAR</span>
                 </a>
-
-                <!-- Search -->
                 <div class="kgn-search">
-                    <i class="fas fa-search" style="color:#aaa; font-size:0.85rem; flex-shrink:0;"></i>&nbsp;
+                    <i class="fas fa-search" style="color:#aaa;font-size:0.85rem;flex-shrink:0;"></i>&nbsp;
                     <input type="text" id="kgnSearchInput" placeholder="Cari gitar berdasarkan kategori...">
-                    <button class="kgn-search-btn" id="kgnSearchBtn">
-                        <i class="fas fa-search"></i> Cari
-                    </button>
+                    <button class="kgn-search-btn" id="kgnSearchBtn"><i class="fas fa-search"></i> Cari</button>
                 </div>
-
-                <!-- Right Actions -->
                 <div class="kgn-actions">
                     <a href="{{ url('/katalog') }}" class="kgn-icon-btn" title="Katalog">
-                        <i class="fas fa-th"></i>
-                        <span>Katalog</span>
+                        <i class="fas fa-th"></i><span>Katalog</span>
                     </a>
-                    <!-- Maps popup button -->
                     <button class="kgn-icon-btn" id="openMapBtn" title="Lokasi Toko">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span>Maps</span>
+                        <i class="fas fa-map-marker-alt"></i><span>Maps</span>
                     </button>
                     @auth
-                        @if(Auth::user()->role === 'admin')
+                        @if(Auth::user()->is_admin)
                             <a href="{{ route('admin.dashboard') }}" class="kgn-btn-dark">Dashboard</a>
                         @else
-                            <span class="kgn-icon-btn">
-                                <i class="fas fa-user-circle"></i>
-                            </span>
+                            <span class="kgn-icon-btn"><i class="fas fa-user-circle"></i></span>
                         @endif
                     @else
                         <a href="{{ url('/login') }}" class="kgn-btn-dark">Masuk</a>
                     @endauth
                 </div>
-
-                <!-- Mobile Burger Button -->
                 <button class="mobile-burger-btn" id="mobileBurgerBtn" aria-label="Menu">
                     <i class="fas fa-bars"></i>
                 </button>
@@ -550,22 +535,48 @@
     </header>
 
     <!-- MAP POPUP -->
-    <!-- ===== MAP POPUP ===== -->
     <div class="map-overlay" id="mapOverlay">
         <div class="map-modal">
             <div class="map-modal-header">
-                <h3><i class="fas fa-map-marker-alt" style="color:#e74c3c; margin-right:6px;"></i> Lokasi Toko King Gitar</h3>
+                <h3><i class="fas fa-map-marker-alt" style="color:#e74c3c;margin-right:6px;"></i> Lokasi Toko King Gitar</h3>
                 <button class="map-close-btn" id="closeMapBtn"><i class="fas fa-times"></i></button>
             </div>
-            <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.0!2d106.8!3d-6.2!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNsKwMTInMDAuMCJTIDEwNsKwNDgnMDAuMCJF!5e0!3m2!1sen!2sid!4v1700000000000!5m2!1sen!2sid"
-                allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-            </iframe>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.0!2d106.8!3d-6.2!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNsKwMTInMDAuMCJTIDEwNsKwNDgnMDAuMCJF!5e0!3m2!1sen!2sid!4v1700000000000!5m2!1sen!2sid"
+                allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
     </div>
 
+    <!-- Mobile Menu -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+    <div class="mobile-menu-drawer" id="mobileMenuDrawer">
+        <div class="mobile-menu-header">
+            <div class="mobile-menu-title"><img src="{{ asset('Foto/Logo.png') }}" style="height:24px;" alt="Logo"> KING GITAR</div>
+            <button class="mobile-menu-close" id="mobileMenuClose"><i class="fas fa-times"></i></button>
+        </div>
+        <ul class="mobile-menu-links">
+            <li><a href="{{ url('/') }}"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="{{ url('/katalog') }}"><i class="fas fa-th-large"></i> Katalog</a></li>
+            <li><a href="{{ url('/kategori') }}" class="active"><i class="fas fa-list"></i> Kategori</a></li>
+            <li><a href="#" id="mobileOpenMapBtn"><i class="fas fa-map-marker-alt"></i> Lokasi Toko</a></li>
+        </ul>
+        <div class="mobile-menu-footer">
+            @auth
+                @if(Auth::user()->is_admin)
+                    <a href="{{ route('admin.dashboard') }}" style="display:block;text-align:center;background:#1a1a1a;color:white;padding:12px;border-radius:12px;text-decoration:none;font-weight:600;">Dashboard</a>
+                @else
+                    <div style="display:flex;align-items:center;gap:12px;padding:12px;background:#f5f3f0;border-radius:12px;">
+                        <i class="fas fa-user-circle" style="font-size:1.5rem;color:#666;"></i>
+                        <span style="font-weight:600;color:#1a1a1a;">{{ Auth::user()->name }}</span>
+                    </div>
+                @endif
+            @else
+                <a href="{{ url('/login') }}" style="display:block;text-align:center;background:#D4AF37;color:white;padding:12px;border-radius:12px;text-decoration:none;font-weight:600;">Masuk</a>
+            @endauth
+        </div>
+    </div>
 
     <!-- Main Content -->
+
     <main class="dk-main">
         <div class="container">
             <div class="dk-content">
@@ -632,9 +643,9 @@
             border-color: var(--gold);
         }
         .cat-sidebar-link.active {
-            background: var(--text-dark);
+            background: var(--gold);
             color: white;
-            border-color: var(--text-dark);
+            border-color: var(--gold);
         }
         .cat-sidebar-badge {
             background: #eaeaea;
@@ -756,7 +767,7 @@
         </ul>
         <div class="mobile-menu-footer">
             @auth
-                @if(Auth::user()->role === 'admin')
+                @if(Auth::user()->is_admin)
                     <a href="{{ route('admin.dashboard') }}" style="display:block; text-align:center; background:#1a1a1a; color:white; padding:12px; border-radius:12px; text-decoration:none; font-weight:600;">Dashboard</a>
                 @else
                     <div style="display:flex; align-items:center; gap:12px; padding:12px; background:#f5f3f0; border-radius:12px;">
@@ -878,11 +889,11 @@
 
                 let html = '';
                 products.forEach((p, idx) => {
-                    let img = p.image_url ? p.image_url : '/Foto/3.png';
+                    let img = p.image_url ? p.image_url : '/Foto/default-guitar.png';
                     // Re-apply reveal animation dynamically
                     html += `
                         <a href="/produk/${p.slug}" class="dk-card reveal" style="animation-delay: ${idx * 100}ms">
-                            <img src="${img}" alt="${p.name}" class="dk-card__img" loading="lazy" onerror="this.src='/Foto/3.png'">
+                            <img src="${img}" alt="${p.name}" class="dk-card__img" loading="lazy" onerror="this.src='/Foto/default-guitar.png'">
                             <h3 class="dk-card__name">${p.name}</h3>
                             <span class="dk-card__price">${p.formatted_price}</span>
                         </a>
@@ -997,6 +1008,8 @@
             fetchProducts();
         });
     </script>
+
+    @include('partials.chatbot')
 </body>
 
 </html>

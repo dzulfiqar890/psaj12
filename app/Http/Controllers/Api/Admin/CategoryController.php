@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
+use App\Models\ActivityLog;
 use App\Models\Category;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+
 
 /**
  * Controller untuk manajemen kategori (Admin only)
@@ -62,11 +64,7 @@ class CategoryController extends Controller
 
                 $category = Category::create($data);
 
-                Log::info("Category created: {$category->name}", [
-                    'user_id' => auth()->id(),
-                    'category_id' => $category->id,
-                    'action' => 'create',
-                ]);
+                ActivityLog::log('create', $category, "Kategori '{$category->name}' ditambahkan");
 
                 return ApiResponse::created($category, 'Kategori berhasil dibuat.');
             });
@@ -119,11 +117,7 @@ class CategoryController extends Controller
 
                 $category->update($data);
 
-                Log::info("Category updated: {$category->name}", [
-                    'user_id' => auth()->id(),
-                    'category_id' => $category->id,
-                    'action' => 'update',
-                ]);
+                ActivityLog::log('update', $category, "Kategori '{$category->name}' diperbarui");
 
                 return ApiResponse::success($category, 'Kategori berhasil diupdate.');
             });
@@ -160,11 +154,7 @@ class CategoryController extends Controller
                 $categoryName = $category->name;
                 $category->delete();
 
-                Log::info("Category deleted: {$categoryName}", [
-                    'user_id' => auth()->id(),
-                    'category_id' => $category->id,
-                    'action' => 'delete',
-                ]);
+                ActivityLog::log('delete', (object)['id' => null], "Kategori '{$categoryName}' dihapus");
 
                 return ApiResponse::success(null, 'Kategori berhasil dihapus.');
             });

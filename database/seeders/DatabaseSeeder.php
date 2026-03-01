@@ -29,16 +29,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@gitarkatalog.com',
             'password' => 'password123',
             'no_telephone' => '6285747938471',
-            'role' => 'admin',
-        ]);
-
-        // Customer sample
-        User::create([
-            'username' => 'customer1',
-            'email' => 'customer@example.com',
-            'password' => 'password123',
-            'no_telephone' => '081234567890',
-            'role' => 'customer',
+            'is_admin' => true,
         ]);
 
         $this->command->info('✓ Users seeded');
@@ -114,7 +105,7 @@ class DatabaseSeeder extends Seeder
                 'category_id' => 2,
                 'price' => 5500000,
                 'description' => 'Gitar elektrik dengan neck tipis dan cepat. Cocok untuk shredding dan metal.',
-                'stock' => 0, // Stok habis contoh
+                'stock' => 0,
             ],
             [
                 'name' => 'Yamaha C40 Classical Guitar',
@@ -212,6 +203,5 @@ class DatabaseSeeder extends Seeder
         $this->command->info('');
         $this->command->info('Login credentials:');
         $this->command->info('  Admin: admin@gitarkatalog.com / password123');
-        $this->command->info('  Customer: customer@example.com / password123');
     }
 }
