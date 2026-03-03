@@ -30,11 +30,13 @@ class SocialiteController extends Controller
     {
         try {
             // Bypass SSL on local dev (cURL error 60 fix)
+            // stateless() digunakan agar tidak bergantung pada state di session
+            // (mencegah bug saat pertama kali buka website, session belum establish)
             if (config('app.env') === 'local') {
                 $guzzle = new \GuzzleHttp\Client(['verify' => false]);
-                $googleUser = Socialite::driver('google')->setHttpClient($guzzle)->user();
+                $googleUser = Socialite::driver('google')->setHttpClient($guzzle)->stateless()->user();
             } else {
-                $googleUser = Socialite::driver('google')->user();
+                $googleUser = Socialite::driver('google')->stateless()->user();
             }
 
             // Cari user berdasarkan google_id atau email
@@ -56,6 +58,7 @@ class SocialiteController extends Controller
                 }
 
                 Auth::login($user);
+                session()->regenerate();
 
                 Log::info("User logged in via Google: {$user->email}", ['user_id' => $user->id]);
 
