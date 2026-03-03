@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Services\GeminiService;
+use App\Services\ChatbotService;
 use Illuminate\Http\Request;
 
 class ChatbotController extends Controller
 {
-    public function __construct(private GeminiService $gemini) {}
+    public function __construct(private ChatbotService $chatbot) {}
 
     public function chat(Request $request)
     {
@@ -22,7 +22,7 @@ class ChatbotController extends Controller
             ->values()
             ->toArray();
 
-        $result = $this->gemini->chat($request->input('message'), $history);
+        $result = $this->chatbot->chat($request->input('message'), $history);
 
         if (!$result['success']) {
             return response()->json([

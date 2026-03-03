@@ -1,4 +1,4 @@
-{{-- Chatbot Widget - King Gitar AI (Gemini-powered) --}}
+{{-- Chatbot Widget - King Gitar AI --}}
 {{-- Pure inline-CSS widget, works on all pages regardless of CSS framework --}}
 
 {{-- Icons Library (added here to ensure it works on all pages) --}}
@@ -36,29 +36,40 @@
             {{-- Prompt recommendations --}}
             <div id="kg-chat-prompts" style="display:flex;flex-direction:column;gap:8px;">
                 <p style="font-size:11px;color:#9ca3af;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin:4px 4px 0;">💡 Prompt Recommendations</p>
-                <button onclick="kgSendPrompt('Rekomendasi gitar akustik pemula')" style="display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px;background:white;border:1px solid rgba(212,175,55,0.2);border-radius:12px;cursor:pointer;font-size:13px;font-weight:500;color:#374151;transition:all 0.25s;" onmouseover="this.style.borderColor='#D4AF37';this.style.boxShadow='0 2px 8px rgba(212,175,55,0.15)'" onmouseout="this.style.borderColor='rgba(212,175,55,0.2)';this.style.boxShadow='none'">
+                <button onclick="kgSendPrompt('rekomendasi nama produk gitar terbaru')" style="display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px;background:white;border:1px solid rgba(212,175,55,0.2);border-radius:12px;cursor:pointer;font-size:13px;font-weight:500;color:#374151;transition:all 0.25s;" onmouseover="this.style.borderColor='#D4AF37';this.style.boxShadow='0 2px 8px rgba(212,175,55,0.15)'" onmouseout="this.style.borderColor='rgba(212,175,55,0.2)';this.style.boxShadow='none'">
                     <span style="width:32px;height:32px;min-width:32px;background:#fff3ea;color:#ea580c;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;"><i class="ph-fill ph-fire"></i></span>
-                    <span>Rekomendasi gitar akustik pemula</span>
+                    <span>rekomendasi nama produk gitar terbaru</span>
                 </button>
-                <button onclick="kgSendPrompt('Perbedaan Telecaster dan Stratocaster')" style="display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px;background:white;border:1px solid rgba(212,175,55,0.2);border-radius:12px;cursor:pointer;font-size:13px;font-weight:500;color:#374151;transition:all 0.25s;" onmouseover="this.style.borderColor='#D4AF37';this.style.boxShadow='0 2px 8px rgba(212,175,55,0.15)'" onmouseout="this.style.borderColor='rgba(212,175,55,0.2)';this.style.boxShadow='none'">
-                    <span style="width:32px;height:32px;min-width:32px;background:#eff6ff;color:#2563eb;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;"><i class="ph-fill ph-scales"></i></span>
-                    <span>Perbedaan Telecaster & Stratocaster</span>
+                <button onclick="kgSendPrompt('Gitar untuk pemula bagus apa?')" style="display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px;background:white;border:1px solid rgba(212,175,55,0.2);border-radius:12px;cursor:pointer;font-size:13px;font-weight:500;color:#374151;transition:all 0.25s;" onmouseover="this.style.borderColor='#D4AF37';this.style.boxShadow='0 2px 8px rgba(212,175,55,0.15)'" onmouseout="this.style.borderColor='rgba(212,175,55,0.2)';this.style.boxShadow='none'">
+                    <span style="width:32px;height:32px;min-width:32px;background:#eff6ff;color:#2563eb;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;"><i class="ph-fill ph-student"></i></span>
+                    <span>Gitar untuk pemula bagus apa?</span>
                 </button>
             </div>
         </div>
 
         {{-- Input area --}}
-        <div style="padding:16px;background:white;border-top:1px solid #f0f0f0;display:flex;align-items:center;gap:8px;">
-            <input type="text" id="kg-chat-input" placeholder="Tanya saya apapun..." maxlength="1000"
+        <div style="padding:16px;background:white;border-top:1px solid #f0f0f0;display:flex;align-items:center;gap:8px;width:100%;box-sizing:border-box;">
+    
+            <input type="text" id="kg-chat-input"
+                placeholder="Tanya saya apapun..." maxlength="1000"
                 onkeydown="if(event.key==='Enter')kgSendMessage()"
-                style="flex:1;background:#f9fafb;border:1.5px solid #e5e7eb;border-radius:12px;padding:12px 16px;font-size:13px;outline:none;transition:border 0.2s;font-family:inherit;color:#374151;"
+                style="flex:1 1 auto;width:100%;min-width:0;box-sizing:border-box;
+                background:#f9fafb;border:1.5px solid #e5e7eb;border-radius:12px;
+                padding:12px 16px;font-size:13px;outline:none;
+                transition:border 0.2s;font-family:inherit;color:#374151;"
                 onfocus="this.style.borderColor='#D4AF37';this.style.boxShadow='0 0 0 3px rgba(212,175,55,0.1)'"
                 onblur="this.style.borderColor='#e5e7eb';this.style.boxShadow='none'">
+
             <button id="kg-chat-send" onclick="kgSendMessage()"
-                style="width:44px;height:44px;min-width:44px;background:#1a1a1a;color:white;border:none;border-radius:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s;"
-                onmouseover="this.style.background='#D4AF37'" onmouseout="this.style.background='#1a1a1a'">
+                style="width:44px;height:44px;flex-shrink:0;
+                background:#1a1a1a;color:white;border:none;border-radius:12px;
+                cursor:pointer;display:flex;align-items:center;justify-content:center;
+                transition:background 0.2s;"
+                onmouseover="this.style.background='#D4AF37'"
+                onmouseout="this.style.background='#1a1a1a'">
                 <i class="ph-fill ph-paper-plane-right" style="font-size:18px;"></i>
             </button>
+
         </div>
     </div>
 
@@ -79,12 +90,15 @@
     .kg-dot { width:7px;height:7px;background:#bbb;border-radius:50%;display:inline-block;animation:kg-bounce 1.4s infinite; }
     .kg-dot:nth-child(2){animation-delay:.2s}
     .kg-dot:nth-child(3){animation-delay:.4s}
+    @keyframes kg-cursor-blink { 0%,100%{opacity:1} 50%{opacity:0} }
+    .kg-cursor { display:inline-block;width:2px;height:13px;background:#D4AF37;margin-left:2px;vertical-align:text-bottom;animation:kg-cursor-blink 0.7s infinite; }
 </style>
 
 <script>
 (function() {
     var kgHistory = [];
     var kgIsOpen = false;
+    var kgTypingAnimation = null; // track ongoing typewriter animation
 
     window.toggleKgChat = function() {
         var win = document.getElementById('kg-chat-window');
@@ -133,6 +147,67 @@
         wrap.appendChild(bubble);
         container.appendChild(wrap);
         container.scrollTop = container.scrollHeight;
+        return bubble;
+    }
+
+    // Typewriter animation for AI responses
+    function kgTypewriterMsg(text, onDone) {
+        var container = document.getElementById('kg-chat-messages');
+        var prompts = document.getElementById('kg-chat-prompts');
+        if (prompts) prompts.remove();
+
+        var wrap = document.createElement('div');
+        wrap.style.cssText = 'display:flex;';
+
+        var bubble = document.createElement('div');
+        bubble.style.cssText = 'background:white;color:#374151;padding:12px 16px;border-radius:0 16px 16px 16px;font-size:13px;max-width:85%;border:1px solid #f0f0f0;border-left:3px solid #D4AF37;box-shadow:0 1px 4px rgba(0,0,0,0.04);line-height:1.6;word-break:break-word;';
+
+        // Cursor element
+        var cursor = document.createElement('span');
+        cursor.className = 'kg-cursor';
+        bubble.appendChild(cursor);
+
+        wrap.appendChild(bubble);
+        container.appendChild(wrap);
+        container.scrollTop = container.scrollHeight;
+
+        // Parse text into segments: plain text or HTML tags
+        // We build the final HTML so we can type it character by character (visible chars only)
+        var finalHtml = text
+            .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+            .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+            .replace(/\*(.+?)\*/g,'<em>$1</em>')
+            .replace(/\n/g,'<br>');
+
+        // We type the raw text (without HTML) char by char, then apply formatting at the end.
+        // To do this cleanly, type the plain text char-by-char in a temp span, swap at end.
+        var plainText = text;
+        var i = 0;
+        var displayed = '';
+
+        function typeNext() {
+            if (i >= plainText.length) {
+                // Done: replace content with fully formatted HTML, remove cursor
+                bubble.innerHTML = finalHtml;
+                if (onDone) onDone();
+                return;
+            }
+            displayed += plainText[i];
+            i++;
+
+            // Render current displayed text escaped + cursor
+            var partialHtml = displayed
+                .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+                .replace(/\n/g,'<br>');
+            bubble.innerHTML = partialHtml + '<span class="kg-cursor"></span>';
+            container.scrollTop = container.scrollHeight;
+
+            // Speed: faster for long texts, slower for short
+            var delay = plainText.length > 200 ? 4 : 8;
+            kgTypingAnimation = setTimeout(typeNext, delay);
+        }
+
+        typeNext();
     }
 
     function kgShowTyping() {
@@ -149,16 +224,25 @@
         if (el) el.remove();
     }
 
-    window.kgSendMessage = async function() {
+    function kgSetInputEnabled(enabled) {
         var input = document.getElementById('kg-chat-input');
         var sendBtn = document.getElementById('kg-chat-send');
+        input.disabled = !enabled;
+        sendBtn.disabled = !enabled;
+        sendBtn.style.opacity = enabled ? '1' : '0.5';
+        if (enabled) input.focus();
+    }
+
+    window.kgSendMessage = async function() {
+        var input = document.getElementById('kg-chat-input');
         var message = input.value.trim();
         if (!message) return;
 
+        // Block if typewriter is still running
+        if (kgTypingAnimation !== null) return;
+
         input.value = '';
-        input.disabled = true;
-        sendBtn.disabled = true;
-        sendBtn.style.opacity = '0.5';
+        kgSetInputEnabled(false);
 
         kgAddMsg(message, true);
         kgHistory.push({ role: 'user', text: message });
@@ -181,21 +265,24 @@
             kgRemoveTyping();
             var data = await response.json();
 
-            if (data.success && data.data && data.data.reply) {
-                kgAddMsg(data.data.reply, false);
-                kgHistory.push({ role: 'model', text: data.data.reply });
-            } else {
-                kgAddMsg(data.message || 'Maaf, terjadi kesalahan. Silakan coba lagi. 😔', false);
-            }
+            var reply = (data.success && data.data && data.data.reply)
+                ? data.data.reply
+                : (data.message || 'Maaf, terjadi kesalahan. Silakan coba lagi. 😔');
+
+            // Start typewriter animation, re-enable input when done
+            kgTypingAnimation = true; // mark as busy
+            kgTypewriterMsg(reply, function() {
+                kgTypingAnimation = null;
+                kgHistory.push({ role: 'model', text: reply });
+                kgSetInputEnabled(true);
+            });
+
         } catch (err) {
             kgRemoveTyping();
+            kgTypingAnimation = null;
             kgAddMsg('Tidak dapat terhubung ke server. Periksa koneksi internet Anda. 🌐', false);
+            kgSetInputEnabled(true);
         }
-
-        input.disabled = false;
-        sendBtn.disabled = false;
-        sendBtn.style.opacity = '1';
-        input.focus();
     };
 })();
 </script>

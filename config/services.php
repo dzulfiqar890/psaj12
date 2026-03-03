@@ -41,12 +41,12 @@ return [
         'redirect' => env('GOOGLE_REDIRECT_URL', '/auth/google/callback'),
     ],
 
-    'gemini' => [
-        'key' => env('GEMINI_API_KEY'),
-    ],
+    // 'gemini' => [
+    //     'key' => env('GEMINI_API_KEY'),
+    // ],
 
     'openrouter' => [
-    'key' => env('OPENROUTER_API_KEY'),
-],
+        'key' => env('OPENROUTER_API_KEY'),
+    ],
 
 ];
