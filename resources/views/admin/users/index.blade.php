@@ -140,6 +140,11 @@
                 await Api.post(url, fd);
                 closeModal(); showToast(id ? 'User berhasil diupdate!' : 'User berhasil ditambahkan!'); loadData();
             } catch (err) {
+                // Jika 403 → kemungkinan admin mencabut haknya sendiri → redirect ke landing page
+                if (err.status === 403) {
+                    window.location.href = '/';
+                    return;
+                }
                 const errors = err.response?.errors;
                 if (errors) { Object.entries(errors).forEach(([k, v]) => showToast(v[0], 'error')); }
                 else showToast(err.response?.message || 'Gagal menyimpan', 'error');

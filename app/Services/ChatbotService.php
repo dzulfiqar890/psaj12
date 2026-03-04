@@ -8,12 +8,12 @@ use Illuminate\Support\Facades\Log;
 class ChatbotService
 {
     private string $apiKey;
-    private string $endpoint = 'https://openrouter.ai/api/v1/chat/completions';
+    private string $endpoint = 'https://api.groq.com/openai/v1/chat/completions';
     private ChatbotContextService $contextService;
 
     public function __construct(ChatbotContextService $contextService)
     {
-        $this->apiKey = config('services.openrouter.key', '');
+        $this->apiKey = config('services.groq.key', '');
         $this->contextService = $contextService;
     }
 
@@ -60,7 +60,7 @@ class ChatbotService
         $messages[] = ['role' => 'user', 'content' => $message];
 
         $payload = [
-            'model'       => 'liquid/lfm-2.5-1.2b-instruct:free',
+            'model'       => 'llama-3.1-8b-instant',
             'messages'    => $messages,
             'max_tokens'  => 1024,
             'temperature' => 0.3,

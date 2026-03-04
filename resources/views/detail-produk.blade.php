@@ -65,9 +65,10 @@
             box-shadow: 0 0 0 3px rgba(212,175,55,.1);
         }
         .nav-search input {
-            flex: 1; border: none; background: transparent;
+            flex: 1; min-width: 0; border: none; background: transparent;
             outline: none; font-size: .9rem; color: var(--dark);
             padding: 10px 0; font-family: 'Poppins', sans-serif;
+            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
         }
         .nav-search input::placeholder { color: #aaa; }
         .nav-search-btn {
@@ -130,10 +131,11 @@
             grid-template-columns: 1.4fr 1fr;
             gap: 30px;
             align-items: flex-start;
+            min-width: 0;
         }
 
         /* ===== LEFT COLUMN ===== */
-        .left-col {}
+        .left-col { min-width: 0; overflow: hidden; }
 
         .product-title {
             font-size: 1.35rem;
@@ -185,6 +187,7 @@
             border: 1px solid var(--border);
             padding: 24px;
             margin-bottom: 18px;
+            overflow: hidden;
         }
 
         .desc-card h3 {
@@ -202,6 +205,8 @@
             font-size: .88rem;
             color: #444;
             line-height: 1.5;
+            word-break: break-word;
+            overflow-wrap: break-word;
         }
         .desc-points li span.icon { flex-shrink: 0; font-size: 1rem; }
 
@@ -211,6 +216,8 @@
             border-top: 1px dashed #eee;
             font-size: .82rem;
             color: var(--gray);
+            word-break: break-word;
+            overflow-wrap: break-word;
         }
 
         /* Features */
@@ -248,6 +255,7 @@
 
         /* ===== RIGHT COLUMN ===== */
         .right-col {
+            min-width: 0;
         }
 
         .sidebar-alert {

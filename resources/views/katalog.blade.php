@@ -106,6 +106,7 @@
 
         .nav-search input {
             flex: 1;
+            min-width: 0;
             border: none;
             background: transparent;
             outline: none;
@@ -113,6 +114,9 @@
             color: #1a1a1a;
             padding: 10px 0;
             font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .nav-search input::placeholder { color: #aaa; }
@@ -223,14 +227,27 @@
 
         .nav-cat-pill i { font-size: 0.85rem; }
 
+        /* Banner Slider Container */
+        #bannerSlider {
+            aspect-ratio: 16 / 5;
+        }
+        @media (max-width: 768px) {
+            #bannerSlider { aspect-ratio: 16 / 7; }
+        }
+        @media (max-width: 480px) {
+            #bannerSlider { aspect-ratio: 16 / 9; }
+        }
+
         /* Banner Spinner */
         .banner-loader-wrap {
-            height: 420px;
+            width: 100%;
+            height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
             background: #f8fafc;
-            width: 100%;
+            position: absolute;
+            top: 0; left: 0;
         }
         .banner-spinner {
             width: 45px;
@@ -467,9 +484,10 @@
         }
 
         @media (max-width: 576px) {
-            .products-grid { grid-template-columns: 1fr; }
+            .products-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
             .footer-grid { grid-template-columns: 1fr; }
             .nav-search-btn span { display: none; }
+            .product-image { height: 160px; }
         }
 
         /* Mobile Burger Button */
@@ -678,7 +696,7 @@
                     <div class="banner-spinner"></div>
                 </div>
                 <!-- Slides injected by JS -->
-                <div style="display:flex; transition:transform .6s cubic-bezier(.4,0,.2,1); opacity: 0;" id="bannerTrack">
+                <div style="display:flex; height:100%; transition:transform .6s cubic-bezier(.4,0,.2,1); opacity: 0;" id="bannerTrack">
                 </div>
 
                 <!-- Arrows -->
@@ -828,9 +846,9 @@
                         track.innerHTML = banners.map(b => {
                             const img = b.image_url || '/Foto/8.png';
                             const inner = b.link
-                                ? `<a href="${b.link}"><img src="${img}" style="width:100%; height:420px; object-fit:cover; display:block;" alt="${b.title||'Banner'}" onerror="this.src='/Foto/8.png'"></a>`
-                                : `<img src="${img}" style="width:100%; height:420px; object-fit:cover; display:block;" alt="${b.title||'Banner'}" onerror="this.src='/Foto/8.png'">`;
-                            return `<div style="flex-shrink:0; width:100%;">${inner}</div>`;
+                                ? `<a href="${b.link}" style="display:block; width:100%; height:100%;"><img src="${img}" style="width:100%; height:100%; object-fit:cover; display:block;" alt="${b.title||'Banner'}" onerror="this.src='/Foto/8.png'"></a>`
+                                : `<img src="${img}" style="width:100%; height:100%; object-fit:cover; display:block;" alt="${b.title||'Banner'}" onerror="this.src='/Foto/8.png'">`;
+                            return `<div style="flex-shrink:0; width:100%; height:100%;">${inner}</div>`;
                         }).join('');
 
                         // Hide loader, show track
