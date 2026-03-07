@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="pageTitle">Produk - KING GITAR</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -404,6 +405,18 @@
             0% { background-position: 200% 0; }
             100% { background-position: -200% 0; }
         }
+        .dk-spinner {
+            width: 45px;
+            height: 45px;
+            border: 4px solid rgba(212, 175, 55, 0.1);
+            border-left-color: #D4AF37;
+            border-radius: 50%;
+            animation: dk-spin 1s linear infinite;
+        }
+        @keyframes dk-spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
 
         /* ===== FOOTER ===== */
         footer {
@@ -523,7 +536,7 @@
                         <i class="fas fa-th-large"></i><span>Katalog</span>
                     </a>
                     <button class="nav-icon-btn" id="openMapBtn" title="Lokasi Toko">
-                        <i class="fas fa-map-marker-alt"></i><span>Maps</span>
+                        <i class="fas fa-map-marker-alt"></i><span>Lokasi</span>
                     </button>
                     @auth
                         @if(Auth::user()->is_admin)
@@ -643,7 +656,7 @@
                             <i class="fab fa-whatsapp"></i> Pesan
                         </a>
 
-                        <p class="disclaimer">Pesanan kamu akan langsung kami proses, tinggal klik!</p>
+                        <p class="disclaimer">Hubungi kami via WhatsApp, tinggal klik!</p>
                     </div>
 
                     <!-- Map Embed -->
@@ -667,77 +680,20 @@
     <div class="container" id="loadingState" style="padding: 60px 0;">
         <div class="product-layout">
             <div class="left-col">
-                <div class="skeleton" style="height:28px; width:70%; margin-bottom:20px;"></div>
-                <div class="skeleton" style="height:380px; border-radius:16px; margin-bottom:22px;"></div>
-                <div class="skeleton" style="height:180px; border-radius:14px;"></div>
+                <div style="height:28px; width:70%; margin-bottom:20px;"></div>
+                <div style="position:relative; height:380px; border-radius:16px; margin-bottom:22px; overflow:hidden;">
+                    <div class="skeleton" style="position: absolute; inset: 0; z-index: 1;"></div>
+                    <div style="position: absolute; inset: 0; z-index: 2; display:flex; align-items:center; justify-content:center;">
+                        <div class="dk-spinner"></div>
+                    </div>
+                </div>
             </div>
             <div class="right-col">
-                <div class="skeleton" style="height:50px; border-radius:12px; margin-bottom:16px;"></div>
-                <div class="skeleton" style="height:350px; border-radius:16px;"></div>
             </div>
         </div>
     </div>
 
-    <!-- Unified Footer -->
-    <style>
-        .u-footer-wrap { background-color: #FFF4E6; padding: 60px 24px; color: #666; font-family: 'Poppins', sans-serif; font-size: 14px; }
-        .u-footer-top { max-width: 1280px; margin: 0 auto; text-align: center; margin-bottom: 60px; }
-        .u-footer-top h2 { font-size: 1.875rem; font-weight: 700; color: #1a1a1a; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 24px; font-family: serif; }
-        .u-footer-grid { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: repeat(1, 1fr); gap: 32px; text-align: left; }
-        @media (min-width: 768px) { .u-footer-grid { grid-template-columns: repeat(4, 1fr); } }
-        .u-footer-col h3 { font-weight: 700; font-size: 1.125rem; margin-bottom: 16px; color: #1a1a1a; }
-        .u-footer-col p { margin-bottom: 16px; cursor: pointer; transition: color 0.2s; }
-        .u-footer-col p:hover { color: #D4AF37; }
-        .u-footer-bottom-wrap { background-color: #FFF4E6; border-top: 1px solid #ebebeb; padding: 24px; }
-        .u-footer-bottom { max-width: 1280px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 16px; font-size: 14px; color: #666; }
-        @media (min-width: 768px) { .u-footer-bottom { flex-direction: row; } }
-        .u-footer-links { display: flex; gap: 24px; }
-        .u-footer-links a { color: inherit; text-decoration: none; transition: color 0.2s; }
-        .u-footer-links a:hover { color: #D4AF37; }
-    </style>
-    <section class="u-footer-wrap">
-        <div class="u-footer-top">
-            <h2 style="font-family: 'Playfair Display', serif;">Support</h2>
-        </div>
-        <div class="u-footer-grid">
-            <div class="u-footer-col">
-                <h3>Support</h3>
-                <p>Pusat Bantuan</p>
-                <p>Kebijakan Pengembalian</p>
-                <p>Syarat & Ketentuan</p>
-                <p>Panduan Pengguna</p>
-                <p>Layanan Darurat 24/7</p>
-            </div>
-            <div class="u-footer-col">
-                <h3>Hosting</h3>
-                <p>Go-Host for Property Owners</p>
-                <p>Go-Host Experience Partner</p>
-                <p>Gabung Jadi Supir & Guide</p>
-            </div>
-            <div class="u-footer-col">
-                <h3>GoFoot</h3>
-                <p>GoFoot 2026 Experience Update</p>
-                <p>Pusat Berita GoFoot</p>
-                <p>Karier di GoFoot</p>
-            </div>
-            <div class="u-footer-col">
-                <h3>Pusat Bantuan</h3>
-                <p>Tanya Jawab Umum (FAQ)</p>
-                <p>Panduan Penggunaan Aplikasi</p>
-                <p>Cara Booking Layanan</p>
-            </div>
-        </div>
-    </section>
-    <footer class="u-footer-bottom-wrap">
-        <div class="u-footer-bottom">
-            <div>&copy; 2026 King Gitar. Developed with precision.</div>
-            <div class="u-footer-links">
-                <a href="#">Privacy</a>
-                <a href="#">Terms</a>
-                <a href="#">Sitemap</a>
-            </div>
-        </div>
-    </footer>
+    @include('partials.footer')
 
     <!-- Mobile Menu Container -->
     <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
@@ -886,7 +842,7 @@
                     ctaBtn.href = buildWaUrl();
                     ctaBtn.target = '_blank';
                     ctaBtn.classList.remove('disabled');
-                    ctaBtn.innerHTML = `<i class="fab fa-whatsapp"></i> Ambil Sekarang`;
+                    ctaBtn.innerHTML = `<i class="fab fa-whatsapp"></i> Pesan Sekarang`;
                 } else {
                     ctaBtn.href = '#';
                     ctaBtn.target = '';

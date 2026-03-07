@@ -23,6 +23,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
             'security.headers' => \App\Http\Middleware\SecurityHeadersMiddleware::class,
+            'scramble.token' => \App\Http\Middleware\ScrambleTokenAccess::class,
         ]);
 
         // Exempt public API routes from CSRF verification

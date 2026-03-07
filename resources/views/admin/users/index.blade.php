@@ -22,9 +22,9 @@
             </div>
             <select id="roleFilter"
                 class="px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-gold/20">
-                <option value="">Semua Role</option>
+                <option value="">Semua Status</option>
                 <option value="1">Admin</option>
-                <option value="0">Non-Admin</option>
+                <option value="0">Non-Aktif</option>
             </select>
         </div>
 
@@ -37,7 +37,7 @@
                             <th class="px-6 py-4 text-xs uppercase text-slate-500 font-semibold tracking-wider">Username
                             </th>
                             <th class="px-6 py-4 text-xs uppercase text-slate-500 font-semibold tracking-wider">Email</th>
-                            <th class="px-6 py-4 text-xs uppercase text-slate-500 font-semibold tracking-wider">Role</th>
+                            <th class="px-6 py-4 text-xs uppercase text-slate-500 font-semibold tracking-wider">Status</th>
                             <th class="px-6 py-4 text-xs uppercase text-slate-500 font-semibold tracking-wider">Telepon</th>
                             <th class="px-6 py-4 text-xs uppercase text-slate-500 font-semibold tracking-wider text-right">
                                 Aksi</th>
@@ -77,8 +77,14 @@
                     <input type="email" id="f-email" required
                         class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-gold/20 focus:border-gold outline-none text-sm">
                 </div>
-                <div>
+                {{-- <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1" id="lbl-password">Password *</label>
+                    <input type="password" id="f-password"
+                        class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-gold/20 focus:border-gold outline-none text-sm">
+                    <p id="hint-password" class="text-xs text-slate-400 mt-1 hidden">Kosongkan jika tidak ingin mengubah
+                        password.</p>
+                </div> --}}
+                <div id="password-field-group"> <label class="block text-sm font-medium text-slate-700 mb-1" id="lbl-password">Password *</label>
                     <input type="password" id="f-password"
                         class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-gold/20 focus:border-gold outline-none text-sm">
                     <p id="hint-password" class="text-xs text-slate-400 mt-1 hidden">Kosongkan jika tidak ingin mengubah
@@ -171,7 +177,7 @@
                 const avatar = u.image_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(u.username)}&background=FFF4E6&color=D4AF37&size=40`;
                 const isAdmin = u.is_admin === true || u.is_admin === 1 || u.is_admin === '1';
                 const roleBadge = isAdmin ? 'bg-purple-50 text-purple-600' : 'bg-blue-50 text-blue-600';
-                const roleLabel = isAdmin ? 'Admin' : 'User';
+                const roleLabel = isAdmin ? 'Admin' : 'Non-Aktif';
                 return `
             <tr class="hover:bg-slate-50 transition-colors">
                 <td class="px-6 py-3"><img src="${avatar}" class="w-10 h-10 rounded-full object-cover border border-slate-100"></td>
@@ -190,22 +196,48 @@
             lucide.createIcons();
         }
 
+        // function openModal(data = null) {
+        //     document.getElementById('editId').value = data?.id || '';
+        //     document.getElementById('f-username').value = data?.username || '';
+        //     document.getElementById('f-email').value = data?.email || '';
+        //     document.getElementById('f-is_admin').value = (data?.is_admin === true || data?.is_admin === 1 || data?.is_admin === '1') ? '1' : '0';
+        //     document.getElementById('f-phone').value = data?.no_telephone || '';
+        //     document.getElementById('f-password').value = '';
+        //     document.getElementById('f-image').value = '';
+        //     const isEdit = !!data;
+        //     document.getElementById('f-password').required = !isEdit;
+        //     document.getElementById('lbl-password').textContent = isEdit ? 'Password (Opsional)' : 'Password *';
+        //     document.getElementById('hint-password').classList.toggle('hidden', !isEdit);
+        //     document.getElementById('modalTitle').textContent = isEdit ? 'Edit User' : 'Tambah User';
+        //     document.getElementById('modal').classList.remove('hidden'); document.getElementById('modal').classList.add('flex');
+        //     lucide.createIcons();
+        // }
         function openModal(data = null) {
-            document.getElementById('editId').value = data?.id || '';
-            document.getElementById('f-username').value = data?.username || '';
-            document.getElementById('f-email').value = data?.email || '';
-            document.getElementById('f-is_admin').value = (data?.is_admin === true || data?.is_admin === 1 || data?.is_admin === '1') ? '1' : '0';
-            document.getElementById('f-phone').value = data?.no_telephone || '';
-            document.getElementById('f-password').value = '';
-            document.getElementById('f-image').value = '';
-            const isEdit = !!data;
-            document.getElementById('f-password').required = !isEdit;
-            document.getElementById('lbl-password').textContent = isEdit ? 'Password (Opsional)' : 'Password *';
-            document.getElementById('hint-password').classList.toggle('hidden', !isEdit);
-            document.getElementById('modalTitle').textContent = isEdit ? 'Edit User' : 'Tambah User';
-            document.getElementById('modal').classList.remove('hidden'); document.getElementById('modal').classList.add('flex');
-            lucide.createIcons();
-        }
+    const isEdit = !!data;
+    const passwordGroup = document.getElementById('password-field-group');
+
+    document.getElementById('editId').value = data?.id || '';
+    document.getElementById('f-username').value = data?.username || '';
+    document.getElementById('f-email').value = data?.email || '';
+    document.getElementById('f-is_admin').value = (data?.is_admin === true || data?.is_admin === 1 || data?.is_admin === '1') ? '1' : '0';
+    document.getElementById('f-phone').value = data?.no_telephone || '';
+    document.getElementById('f-password').value = '';
+    document.getElementById('f-image').value = '';
+
+    // LOGIKA SEMBUNYIKAN PASSWORD
+    if (isEdit) {
+        passwordGroup.classList.add('hidden'); // Sembunyikan jika edit
+        document.getElementById('f-password').required = false;
+    } else {
+        passwordGroup.classList.remove('hidden'); // Munculkan jika tambah baru
+        document.getElementById('f-password').required = true;
+    }
+
+    document.getElementById('modalTitle').textContent = isEdit ? 'Edit User' : 'Tambah User';
+    document.getElementById('modal').classList.remove('hidden'); 
+    document.getElementById('modal').classList.add('flex');
+    lucide.createIcons();
+}
         function closeModal() { document.getElementById('modal').classList.add('hidden'); document.getElementById('modal').classList.remove('flex'); }
         function editItem(u) { openModal(u); }
         function deleteItem(id, name) {

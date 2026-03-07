@@ -33,23 +33,25 @@ class ChatbotContextService
         $lines[] = 'Kami menghadirkan pengalaman berbelanja yang sederhana, tenang, dan terkurasi. Mulai dari pemilihan produk hingga penyajian katalog, semuanya dirancang agar pelanggan dapat fokus menemukan gitar yang benar-benar sesuai dengan karakter dan kebutuhan musikal mereka.';
         $lines[] = '';
 
+        // --- Info Kontak & Lokasi ---
+        $lines[] = '=== KONTAK & LOKASI ===';
+        $lines[] = 'Nomor WhatsApp / Kontak: 6285724453063';
+        $lines[] = 'Google Maps / Lokasi Toko : https://maps.app.goo.gl/zhoiQYGW8puC2Cny5';
+        $lines[] = '';
+
         // --- Kategori Produk ---
-        $categories = Category::select('name', 'description')
-            ->orderBy('name')
-            ->get();
+        $categories = Category::orderBy('name')->get();
 
         if ($categories->isNotEmpty()) {
             $lines[] = '=== KATEGORI PRODUK KING GITAR ===';
             foreach ($categories as $cat) {
-                $desc = $cat->description ? " – {$cat->description}" : '';
-                $lines[] = "- {$cat->name}{$desc}";
+                $lines[] = "- " . json_encode($cat->toArray());
             }
             $lines[] = '';
         }
 
         // --- Daftar Produk (max 50, diurutkan terbaru) ---
-        $products = Product::with('category:id,name')
-            ->select('name', 'price', 'stock', 'description', 'category_id')
+        $products = Product::with('category')
             ->latest()
             ->limit(50)
             ->get();
@@ -57,13 +59,11 @@ class ChatbotContextService
         if ($products->isNotEmpty()) {
             $lines[] = '=== DAFTAR PRODUK (DATA REAL) ===';
             foreach ($products as $p) {
-                $categoryName = $p->category?->name ?? 'Umum';
-                $harga        = 'Rp ' . number_format((float) $p->price, 0, ',', '.');
-                $stok         = $p->stock > 0 ? "Stok: {$p->stock}" : 'Stok: Habis';
-                $desc         = $p->description
-                    ? ' | Deskripsi: ' . \Illuminate\Support\Str::limit(strip_tags($p->description), 80)
-                    : '';
-                $lines[] = "- [{$categoryName}] {$p->name} | Harga: {$harga} | {$stok}{$desc}";
+                $data = $p->toArray();
+                if (!empty($data['description'])) {
+                    $data['description'] = \Illuminate\Support\Str::limit(strip_tags($data['description']), 80);
+                }
+                $lines[] = "- " . json_encode($data);
             }
             $lines[] = '';
         }
@@ -77,7 +77,7 @@ class ChatbotContextService
         if ($testimonials->isNotEmpty()) {
             $lines[] = '=== TESTIMONI PUBLIK ===';
             foreach ($testimonials as $t) {
-                $lines[] = "- {$t->name}: \"{$t->testimony}\"";
+                $lines[] = "- " . json_encode($t->toArray());
             }
             $lines[] = '';
         }

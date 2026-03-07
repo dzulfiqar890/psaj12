@@ -7,6 +7,7 @@
     <title>King Gitar - Premium Guitar Store</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script>
         tailwind.config = {
@@ -31,14 +32,16 @@
         }
     </script>
     <style>
-        .shimmer-bg {
-            background: #f6f7f8;
-            background-image: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
-            background-repeat: no-repeat;
-            background-size: 800px 100%; 
-            animation: placeholderShimmer 1.5s linear infinite;
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 8px;
         }
-        @keyframes placeholderShimmer { 0% { background-position: -468px 0; } 100% { background-position: 468px 0; } }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
         .fade-in-up {
             opacity: 0;
             transform: translateY(20px);
@@ -143,7 +146,7 @@
                 <a href="#about"
                     class="nav-link text-white/90 hover:text-gold-500 transition-colors duration-300 font-medium text-sm uppercase tracking-wider relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-gold-500 after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">About</a>
                 <a href="#contact"
-                    class="nav-link text-white/90 hover:text-gold-500 transition-colors duration-300 font-medium text-sm uppercase tracking-wider relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-gold-500 after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">Contact</a>
+                    class="nav-link text-white/90 hover:text-gold-500 transition-colors duration-300 font-medium text-sm uppercase tracking-wider relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-gold-500 after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">Contacts</a>
 
                 @auth
                     @if(Auth::user()->is_admin)
@@ -205,7 +208,7 @@
                     <a href="{{ url('/katalog') }}"
                         class="block px-4 py-3 text-gray-800 hover:bg-gold-500/10 hover:text-gold-500 rounded-lg transition-colors font-medium">Katalog</a>
                     <a href="#contact"
-                        class="block px-4 py-3 text-gray-800 hover:bg-gold-500/10 hover:text-gold-500 rounded-lg transition-colors font-medium">Contact</a>
+                        class="block px-4 py-3 text-gray-800 hover:bg-gold-500/10 hover:text-gold-500 rounded-lg transition-colors font-medium">Contacts</a>
                 </nav>
             </div>
             <div class="p-4 border-t border-gray-100">
@@ -244,14 +247,14 @@
 
                 </h1>
                 <p class="text-lg md:text-xl text-gray-200 mb-10  leading-relaxed">
-                    King Gitar adalah platform e-commerce yang menyediakan berbagai pilihan gitar berkualitas, mulai
+                    King Gitar adalah platform katalog produk yang menyediakan berbagai pilihan gitar berkualitas, mulai
                     dari gitar akustik hingga elektrik. Kami menghadirkan produk dengan desain modern, material pilihan,
                     dan suara yang jernih untuk menunjang pengalaman bermusik Anda.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-start">
                     <a href="{{ url('/katalog') }}"
                         class="group px-8 py-4 bg-white text-dark-900 font-bold rounded-full transition-all duration-300 hover:bg-gold-500 hover:text-white shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(212,175,55,0.6)] flex items-center justify-center gap-2">
-                        View Collection
+                        Lihat Lebih Banyak
                         <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none"
                             stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -533,9 +536,21 @@
             <!-- Product Grid -->
             <div class="catalog-grid" id="latest-products-grid">
                 <!-- Skeleton Loading -->
-                <div class="catalog-card fade-in-up shimmer-bg" style="height: 380px; border-radius: 20px;"></div>
-                <div class="catalog-card fade-in-up shimmer-bg" style="height: 380px; border-radius: 20px;"></div>
-                <div class="catalog-card fade-in-up shimmer-bg" style="height: 380px; border-radius: 20px;"></div>
+                <div class="catalog-card fade-in-up" style="height: 380px; border-radius: 20px;">
+                    <div class="skeleton" style="width: 100%; height: 250px; border-radius: 12px; margin-bottom: 24px;"></div>
+                    <div class="skeleton" style="width: 70%; height: 20px; border-radius: 4px; margin: 0 auto 16px;"></div>
+                    <div class="skeleton" style="width: 40%; height: 20px; border-radius: 4px; margin: 0 auto;"></div>
+                </div>
+                <div class="catalog-card fade-in-up" style="height: 380px; border-radius: 20px;">
+                    <div class="skeleton" style="width: 100%; height: 250px; border-radius: 12px; margin-bottom: 24px;"></div>
+                    <div class="skeleton" style="width: 70%; height: 20px; border-radius: 4px; margin: 0 auto 16px;"></div>
+                    <div class="skeleton" style="width: 40%; height: 20px; border-radius: 4px; margin: 0 auto;"></div>
+                </div>
+                <div class="catalog-card fade-in-up" style="height: 380px; border-radius: 20px;">
+                    <div class="skeleton" style="width: 100%; height: 250px; border-radius: 12px; margin-bottom: 24px;"></div>
+                    <div class="skeleton" style="width: 70%; height: 20px; border-radius: 4px; margin: 0 auto 16px;"></div>
+                    <div class="skeleton" style="width: 40%; height: 20px; border-radius: 4px; margin: 0 auto;"></div>
+                </div>
             </div>
         </div>
         </div>
@@ -548,7 +563,7 @@
         <div class="relative z-10 text-center fade-in-up">
             <h2 class="text-6xl md:text-9xl font-serif font-bold text-white tracking-widest uppercase opacity-90">KING
                 GITAR</h2>
-            <p class="text-white/80 text-xl tracking-[0.5em] mt-4 uppercase">Est. 2026</p>
+            {{-- <p class="text-white/80 text-xl tracking-[0.5em] mt-4 uppercase">Est. 2026</p> --}}
         </div>
     </section>
 
@@ -611,7 +626,7 @@
     </section>
 
     <!-- Testimonials Section - 3-card Peek Slider -->
-    <section class="py-24 bg-cover bg-center relative overflow-hidden" style="background-image: url('{{ asset('Foto/7.png') }}');">
+    <section id="testimonials" class="py-24 bg-cover bg-center relative overflow-hidden" style="background-image: url('{{ asset('Foto/7.png') }}');">
         <div class="absolute inset-0 bg-dark-900/65 backdrop-blur-sm"></div>
 
         <style>
@@ -639,15 +654,31 @@
                 backdrop-filter: blur(12px);
                 border-radius: 20px;
                 padding: 28px 30px;
-                text-align: left;
+                text-align: center;
                 transition: box-shadow .3s;
                 display: flex;
                 flex-direction: column;
-                gap: 10px;
+                align-items: center;
+                gap: 15px;
                 min-height: 160px;
-                height: 300px;
+                height: 320px;
             }
-            .testi-card.active-card { box-shadow: 0 8px 32px rgba(212,175,55,0.25); border-color: rgba(212,175,55,0.4); }
+            .testi-avatar {
+                width: 60px;
+                height: 60px;
+                border: 2px solid #D4AF37;
+                border-radius: 50%;
+                background: transparent;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 1.4rem;
+                font-weight: 600;
+                margin-bottom: 5px;
+                text-transform: uppercase;
+            }
+            .testi-card.active-card { box-shadow: 0 4px 20px rgba(0,0,0,0.15); border-color: rgba(212,175,55,0.3); }
             .testi-dot {
                 width: 9px; height: 9px;
                 border-radius: 50%;
@@ -728,56 +759,7 @@
         </div>
     </div> -->
 
-    <!-- Suggestions & Form Section -->
-    <section id="contact" class="py-24 bg-[#FFF4E6]">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-16 fade-in-up">
-                <h2 class="text-3xl font-serif font-bold text-dark-900 mb-6 uppercase tracking-wider">Support</h2>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-sm">
-                <div class="space-y-4">
-                    <h3 class="font-bold text-lg mb-4">Support</h3>
-                    <p class="text-gray-600 hover:text-gold-500 cursor-pointer">Pusat Bantuan</p>
-                    <p class="text-gray-600 hover:text-gold-500 cursor-pointer">Kebijakan Pengembalian</p>
-                    <p class="text-gray-600 hover:text-gold-500 cursor-pointer">Syarat & Ketentuan</p>
-                    <p class="text-gray-600 hover:text-gold-500 cursor-pointer">Panduan Pengguna</p>
-                    <p class="text-gray-600 hover:text-gold-500 cursor-pointer">Layanan Darurat 24/7</p>
-                </div>
-                <div class="space-y-4">
-                    <h3 class="font-bold text-lg mb-4">Hosting</h3>
-                    <p class="text-gray-600 hover:text-gold-500 cursor-pointer">Go-Host for Property Owners</p>
-                    <p class="text-gray-600 hover:text-gold-500 cursor-pointer">Go-Host Experience Partner</p>
-                    <p class="text-gray-600 hover:text-gold-500 cursor-pointer">Gabung Jadi Supir & Guide</p>
-                </div>
-                <div class="space-y-4">
-                    <h3 class="font-bold text-lg mb-4">GoFoot</h3>
-                    <p class="text-gray-600 hover:text-gold-500 cursor-pointer">GoFoot 2026 Experience Update</p>
-                    <p class="text-gray-600 hover:text-gold-500 cursor-pointer">Pusat Berita GoFoot</p>
-                    <p class="text-gray-600 hover:text-gold-500 cursor-pointer">Karier di GoFoot</p>
-                </div>
-                <div class="space-y-4">
-                    <h3 class="font-bold text-lg mb-4">Pusat Bantuan</h3>
-                    <p class="text-gray-600 hover:text-gold-500 cursor-pointer">Tanya Jawab Umum (FAQ)</p>
-                    <p class="text-gray-600 hover:text-gold-500 cursor-pointer">Panduan Penggunaan Aplikasi</p>
-                    <p class="text-gray-600 hover:text-gold-500 cursor-pointer">Cara Booking Layanan</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-[#FFF4E6] py-6 border-t border-gray-200">
-        <div
-            class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
-            <div>&copy; 2026 King Gitar. Developed with precision.</div>
-            <div class="flex space-x-6 mt-4 md:mt-0">
-                <a href="#" class="hover:text-gold-500">Privacy</a>
-                <a href="#" class="hover:text-gold-500">Terms</a>
-                <a href="#" class="hover:text-gold-500">Sitemap</a>
-            </div>
-        </div>
-    </footer>
+    @include('partials.footer')
 
     <!-- JavaScript -->
     <script>
@@ -988,9 +970,11 @@
         function renderTesti() {
             if (!testiData.length || !testiTrack) return;
             testiTrack.innerHTML = testiData.map((t, i) => {
+                const initial = (t.name || 'A').charAt(0).toUpperCase();
                 return `
                 <div class="testi-slide">
                     <div class="testi-card" id="tcard-${i}">
+                        <div class="testi-avatar">${initial}</div>
                         <h4 style="color:white;font-weight:700;font-size:1rem;margin:0;">${t.name || 'Anonim'}</h4>
                         <p style="color:rgba(255,255,255,0.85);font-size:.9rem;line-height:1.7;font-style:italic;margin:0;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;">&ldquo;${t.testimony || ''}&rdquo;</p>
                     </div>

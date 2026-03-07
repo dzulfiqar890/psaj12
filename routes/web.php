@@ -27,6 +27,16 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/users', [App\Http\Controllers\Admin\ViewController::class, 'users'])->name('admin.users.index');
 });
 
+// Scramble Token Gate (POST handler)
+Route::post('/docs/api/verify', function (Illuminate\Http\Request $request) {
+    $token = env('SCRAMBLE_TOKEN');
+    if ($request->input('token') === $token) {
+        $request->session()->put('scramble_token_verified', true);
+        return redirect('/docs/api');
+    }
+    return redirect('/docs/api')->with('scramble_error', 'Token salah. Coba lagi.');
+})->name('scramble.verify');
+
 // Socialite Routes (Google Login)
 Route::get('/auth/google/redirect', [App\Http\Controllers\SocialiteController::class, 'redirectToGoogle'])->name('auth.google.redirect');
 Route::get('/auth/google/callback', [App\Http\Controllers\SocialiteController::class, 'handleGoogleCallback']);

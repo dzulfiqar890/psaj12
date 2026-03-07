@@ -48,9 +48,6 @@ API ini menggunakan **Bearer Token** untuk autentikasi. Untuk mendapatkan token:
 | Customer | Guest + Send Contacts, View My Contacts |
 | Admin | Full CRUD access ke semua resource |
 
-## Contoh Login
-
-Admin: `admin@gitarkatalog.com` / `password123`
         ',
     ],
 
@@ -152,7 +149,7 @@ Admin: `admin@gitarkatalog.com` / `password123`
 
     'middleware' => [
         'web',
-        RestrictedDocsAccess::class,
+        \App\Http\Middleware\ScrambleTokenAccess::class,
     ],
 
     'extensions' => [],
