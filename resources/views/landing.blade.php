@@ -1,10 +1,37 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="id" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>King Gitar - Premium Guitar Store</title>
+
+    {{-- ===== SEO Meta Tags ===== --}}
+    <title>King Gitar Subang - Toko Gitar Terlengkap di Subang Jawa Barat</title>
+    <meta name="description" content="King Gitar – toko gitar terlengkap di Subang, Jawa Barat. Tersedia gitar akustik & elektrik berkualitas dengan harga terjangkau. Temukan koleksi pilihan kami sekarang!">
+    <meta name="keywords" content="toko gitar subang, jual gitar subang, gitar akustik subang, gitar elektrik subang, toko alat musik subang, king gitar, beli gitar subang jawa barat">
+    <meta name="author" content="King Gitar">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{{ url('/') }}">
+    <link rel="icon" type="image/png" href="{{ asset('Foto/Logo.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('Foto/Logo.png') }}">
+
+    {{-- ===== Open Graph / Facebook ===== --}}
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="King Gitar Subang - Toko Gitar Terlengkap di Subang Jawa Barat">
+    <meta property="og:description" content="King Gitar – toko gitar terlengkap di Subang, Jawa Barat. Tersedia gitar akustik & elektrik berkualitas dengan harga terjangkau.">
+    <meta property="og:image" content="{{ asset('Foto/ogimage.png') }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="King Gitar Subang - Toko Gitar Terlengkap">
+    <meta property="og:url" content="{{ url('/') }}">
+    <meta property="og:locale" content="id_ID">
+    <meta property="og:site_name" content="King Gitar">
+
+    {{-- ===== Twitter Card ===== --}}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="King Gitar Subang - Toko Gitar Terlengkap di Subang Jawa Barat">
+    <meta name="twitter:description" content="Toko gitar terlengkap di Subang, Jawa Barat. Gitar akustik & elektrik berkualitas.">
+    <meta name="twitter:image" content="{{ asset('Foto/ogimage.png') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap"
@@ -535,7 +562,7 @@
                     <div class="catalog-title-underline"></div>
                 </div>
                 <a href="{{ url('/katalog') }}" class="catalog-view-all">
-                    View All
+                    Lihat Semua
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
@@ -807,11 +834,26 @@
 
                 <div class="testi-outer">
                     <div id="testiTrack" class="testi-track" style="padding: 8px 0 20px;">
-                        <!-- Loading placeholder -->
+                        <!-- Loading placeholders (3 skeletons) -->
                         <div class="testi-slide">
                             <div class="testi-card">
-                                <div class="h-5 bg-white/20 rounded w-1/3 mb-2 animate-pulse"></div>
-                                <div class="h-16 bg-white/10 rounded animate-pulse"></div>
+                                <div class="h-14 w-14 rounded-full bg-white/10 animate-pulse mb-2"></div>
+                                <div class="h-4 bg-white/20 rounded w-1/3 mb-3 animate-pulse"></div>
+                                <div class="h-20 bg-white/10 rounded w-full animate-pulse"></div>
+                            </div>
+                        </div>
+                        <div class="testi-slide">
+                            <div class="testi-card">
+                                <div class="h-14 w-14 rounded-full bg-white/10 animate-pulse mb-2"></div>
+                                <div class="h-4 bg-white/20 rounded w-1/3 mb-3 animate-pulse"></div>
+                                <div class="h-20 bg-white/10 rounded w-full animate-pulse"></div>
+                            </div>
+                        </div>
+                        <div class="testi-slide">
+                            <div class="testi-card">
+                                <div class="h-14 w-14 rounded-full bg-white/10 animate-pulse mb-2"></div>
+                                <div class="h-4 bg-white/20 rounded w-1/3 mb-3 animate-pulse"></div>
+                                <div class="h-20 bg-white/10 rounded w-full animate-pulse"></div>
                             </div>
                         </div>
                     </div>
@@ -1117,16 +1159,13 @@
                 const res = await fetch('/api/v1/testimonials');
                 const data = await res.json();
                 testiData = (data.success ? data.data : []) || [];
-                if (!testiData.length) {
-                    // Fallback placeholders
-                    testiData = [
-                        { name: 'Arya S.', role: 'Gitaris Akustik', message: 'King Gitar punya koleksi terbaik!', rating: 5 },
-                        { name: 'Rina D.', role: 'Guru Musik', message: 'Kualitas premium, pelayanan ramah.', rating: 5 },
-                        { name: 'Dika R.', role: 'Musisi Studio', message: 'Mudah order, gitar langsung siap pakai.', rating: 5 },
-                    ];
+                if (testiData.length > 0) {
+                    renderTesti();
+                    startTestiAuto();
+                } else {
+                    // No data: remain in skeleton state
+                    console.log('No testimonials found, showing skeleton.');
                 }
-                renderTesti();
-                startTestiAuto();
             } catch (e) {
                 console.error('Testi error:', e);
             }
