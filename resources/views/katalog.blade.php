@@ -893,16 +893,23 @@
         @auth
             @if(Auth::user()->is_admin)
                 <a href="{{ route('admin.dashboard') }}"
-                    style="display:block;text-align:center;background:#1a1a1a;color:white;padding:12px;border-radius:12px;text-decoration:none;font-weight:600;">Dashboard</a>
+                    style="display:block;text-align:center;background:#1a1a1a;color:white;padding:12px;border-radius:8px;text-decoration:none;font-weight:500;">
+                    Dashboard
+                </a>
             @else
-                <div style="display:flex;align-items:center;gap:12px;padding:12px;background:#f5f3f0;border-radius:12px;">
-                    <i class="fas fa-user-circle" style="font-size:1.5rem;color:#666;"></i>
-                    <span style="font-weight:600;color:#1a1a1a;">{{ Auth::user()->name }}</span>
-                </div>
+                <form method="POST" action="{{ route('logout') }}" style="margin: 0;">
+                    @csrf
+                    <button type="submit"
+                        style="width:100%;text-align:center;background:#f3f4f6;color:#1f2937;padding:12px;border-radius:8px;border:none;font-weight:500;cursor:pointer;">
+                        Logout
+                    </button>
+                </form>
             @endif
         @else
-            <a href="{{ url('/login') }}"
-                style="display:block;text-align:center;background:#D4AF37;color:white;padding:12px;border-radius:12px;text-decoration:none;font-weight:600;">Masuk</a>
+            <a href="{{ route('login') }}"
+                style="display:block;text-align:center;background:#1a1a1a;color:white;padding:12px;border-radius:8px;text-decoration:none;font-weight:500;">
+                Masuk
+            </a>
         @endauth
     </div>
 </div>
@@ -1010,10 +1017,20 @@
                     const loader = document.getElementById('bannerLoader');
 
                     track.innerHTML = banners.map(b => {
-                        const img = b.image_url || '/Foto/8.png';
-                        const inner = b.link
-                            ? `<a href="${b.link}" style="display:block; width:100%; height:100%;"><img src="${img}" style="width:100%; height:100%; object-fit:cover; display:block;" alt="" onerror="this.src='/Foto/8.png'"></a>`
-                            : `<img src="${img}" style="width:100%; height:100%; object-fit:cover; display:block;" alt="" onerror="this.src='/Foto/8.png'">`;
+                        let inner = '';
+                        if (b.image_url) {
+                            inner = b.link
+                                ? `<a href="${b.link}" style="display:block; width:100%; height:100%;"><img src="${b.image_url}" style="width:100%; height:100%; object-fit:cover; display:block;" alt=""></a>`
+                                : `<img src="${b.image_url}" style="width:100%; height:100%; object-fit:cover; display:block;" alt="">`;
+                        } else {
+                            // Render skeleton if no image available for the banner
+                            return `<div style="flex-shrink:0; width:100%; height:100%; position:relative;">
+                                        <div class="skeleton" style="position: absolute; inset: 0; z-index: 1;"></div>
+                                        <div style="position: absolute; inset: 0; z-index: 2; display:flex; align-items:center; justify-content:center;">
+                                            <div class="banner-spinner"></div>
+                                        </div>
+                                    </div>`;
+                        }
                         return `<div style="flex-shrink:0; width:100%; height:100%;">${inner}</div>`;
                     }).join('');
 
