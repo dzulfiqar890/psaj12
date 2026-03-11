@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>King Gitar - Premium Guitar Store</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script>
@@ -38,10 +40,17 @@
             animation: shimmer 1.5s infinite;
             border-radius: 8px;
         }
+
         @keyframes shimmer {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
         }
+
         .fade-in-up {
             opacity: 0;
             transform: translateY(20px);
@@ -537,18 +546,24 @@
             <div class="catalog-grid" id="latest-products-grid">
                 <!-- Skeleton Loading -->
                 <div class="catalog-card fade-in-up" style="height: 380px; border-radius: 20px;">
-                    <div class="skeleton" style="width: 100%; height: 250px; border-radius: 12px; margin-bottom: 24px;"></div>
-                    <div class="skeleton" style="width: 70%; height: 20px; border-radius: 4px; margin: 0 auto 16px;"></div>
+                    <div class="skeleton" style="width: 100%; height: 250px; border-radius: 12px; margin-bottom: 24px;">
+                    </div>
+                    <div class="skeleton" style="width: 70%; height: 20px; border-radius: 4px; margin: 0 auto 16px;">
+                    </div>
                     <div class="skeleton" style="width: 40%; height: 20px; border-radius: 4px; margin: 0 auto;"></div>
                 </div>
                 <div class="catalog-card fade-in-up" style="height: 380px; border-radius: 20px;">
-                    <div class="skeleton" style="width: 100%; height: 250px; border-radius: 12px; margin-bottom: 24px;"></div>
-                    <div class="skeleton" style="width: 70%; height: 20px; border-radius: 4px; margin: 0 auto 16px;"></div>
+                    <div class="skeleton" style="width: 100%; height: 250px; border-radius: 12px; margin-bottom: 24px;">
+                    </div>
+                    <div class="skeleton" style="width: 70%; height: 20px; border-radius: 4px; margin: 0 auto 16px;">
+                    </div>
                     <div class="skeleton" style="width: 40%; height: 20px; border-radius: 4px; margin: 0 auto;"></div>
                 </div>
                 <div class="catalog-card fade-in-up" style="height: 380px; border-radius: 20px;">
-                    <div class="skeleton" style="width: 100%; height: 250px; border-radius: 12px; margin-bottom: 24px;"></div>
-                    <div class="skeleton" style="width: 70%; height: 20px; border-radius: 4px; margin: 0 auto 16px;"></div>
+                    <div class="skeleton" style="width: 100%; height: 250px; border-radius: 12px; margin-bottom: 24px;">
+                    </div>
+                    <div class="skeleton" style="width: 70%; height: 20px; border-radius: 4px; margin: 0 auto 16px;">
+                    </div>
                     <div class="skeleton" style="width: 40%; height: 20px; border-radius: 4px; margin: 0 auto;"></div>
                 </div>
             </div>
@@ -591,7 +606,7 @@
                         </p>
                     </div>
                     <div>
-                        <img src="{{ asset('Foto/7.png') }}" alt="Acoustic Detail"
+                        <img src="{{ asset('Foto/7.png') }}" alt="Acoustic Detail" loading="lazy"
                             class="w-full h-auto object-cover rounded shadow-lg">
                     </div>
                 </div>
@@ -606,7 +621,7 @@
                         </p>
                     </div>
                     <div>
-                        <img src="{{ asset('Foto/6.png') }}" alt="Fretboard Detail"
+                        <img src="{{ asset('Foto/6.png') }}" alt="Fretboard Detail" loading="lazy"
                             class="w-full h-auto object-cover rounded shadow-lg">
                     </div>
                     <div>
@@ -626,31 +641,33 @@
     </section>
 
     <!-- Testimonials Section - 3-card Peek Slider -->
-    <section id="testimonials" class="py-24 bg-cover bg-center relative overflow-hidden" style="background-image: url('{{ asset('Foto/7.png') }}');">
+    <section id="testimonials" class="py-24 bg-cover bg-center relative overflow-hidden"
+        style="background-image: url('{{ asset('Foto/7.png') }}');">
         <div class="absolute inset-0 bg-dark-900/65 backdrop-blur-sm"></div>
 
         <style>
             .testi-outer {
                 position: relative;
                 overflow: hidden;
-                /* Fade edges to hint at adjacent cards */
+                /* Fade edges to hint at adjacent cards (desktop only) */
                 mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
                 -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
             }
+
             .testi-track {
                 display: flex;
-                transition: transform 0.55s cubic-bezier(.4,0,.2,1);
-                /* Each slide = 80% wide, leaving 10% peek on each side */
+                transition: transform 0.55s cubic-bezier(.4, 0, .2, 1);
             }
+
             .testi-slide {
                 flex: 0 0 80%;
                 padding: 0 14px;
                 box-sizing: border-box;
             }
-            @media (max-width: 768px) { .testi-slide { flex: 0 0 100%; } }
+
             .testi-card {
-                background: rgba(255,255,255,0.09);
-                border: 1px solid rgba(255,255,255,0.14);
+                background: rgba(255, 255, 255, 0.09);
+                border: 1px solid rgba(255, 255, 255, 0.14);
                 backdrop-filter: blur(12px);
                 border-radius: 20px;
                 padding: 28px 30px;
@@ -661,8 +678,10 @@
                 align-items: center;
                 gap: 15px;
                 min-height: 160px;
-                height: 320px;
+                height: auto;
+                min-height: 280px;
             }
+
             .testi-avatar {
                 width: 60px;
                 height: 60px;
@@ -677,33 +696,96 @@
                 font-weight: 600;
                 margin-bottom: 5px;
                 text-transform: uppercase;
+                flex-shrink: 0;
             }
-            .testi-card.active-card { box-shadow: 0 4px 20px rgba(0,0,0,0.15); border-color: rgba(212,175,55,0.3); }
+
+            .testi-card.active-card {
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+                border-color: rgba(212, 175, 55, 0.3);
+            }
+
             .testi-dot {
-                width: 9px; height: 9px;
+                width: 9px;
+                height: 9px;
                 border-radius: 50%;
-                background: rgba(255,255,255,0.3);
-                border: none; cursor: pointer;
+                background: rgba(255, 255, 255, 0.3);
+                border: none;
+                cursor: pointer;
                 transition: background .3s, transform .3s;
             }
-            .testi-dot.active { background: #D4AF37; transform: scale(1.2); }
+
+            .testi-dot.active {
+                background: #D4AF37;
+                transform: scale(1.2);
+            }
+
             .testi-arrow {
                 position: absolute;
                 top: 50%;
                 transform: translateY(-50%);
                 z-index: 10;
-                width: 44px; height: 44px;
+                width: 44px;
+                height: 44px;
                 border-radius: 50%;
-                background: rgba(255,255,255,0.12);
-                border: 1px solid rgba(255,255,255,0.2);
+                background: rgba(255, 255, 255, 0.12);
+                border: 1px solid rgba(255, 255, 255, 0.2);
                 color: white;
                 cursor: pointer;
-                display: flex; align-items: center; justify-content: center;
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 transition: background .2s;
             }
-            .testi-arrow:hover { background: #D4AF37; border-color: #D4AF37; }
-            .testi-arrow.left  { left: 6px; }
-            .testi-arrow.right { right: 6px; }
+
+            .testi-arrow:hover {
+                background: #D4AF37;
+                border-color: #D4AF37;
+            }
+
+            .testi-arrow.left {
+                left: 6px;
+            }
+
+            .testi-arrow.right {
+                right: 6px;
+            }
+
+            /* ===== Mobile Testimonial Fixes ===== */
+            @media (max-width: 768px) {
+                .testi-slide {
+                    flex: 0 0 88%;
+                    padding: 0 8px;
+                }
+
+                .testi-outer {
+                    /* Remove fade mask on mobile — causes card clipping */
+                    mask-image: none;
+                    -webkit-mask-image: none;
+                }
+
+                .testi-arrow {
+                    width: 32px;
+                    height: 32px;
+                }
+
+                .testi-arrow svg {
+                    width: 14px;
+                    height: 14px;
+                }
+
+                .testi-arrow.left {
+                    left: 2px;
+                }
+
+                .testi-arrow.right {
+                    right: 2px;
+                }
+
+                /* Reduce wrapper padding on mobile */
+                .testi-wrapper-padded {
+                    padding: 0 36px !important;
+                }
+            }
         </style>
 
         <div class="max-w-7xl mx-auto px-6 relative z-10">
@@ -713,11 +795,14 @@
             </div>
 
             <!-- Slider wrapper with arrows absolutely positioned on sides -->
-            <div style="position:relative; padding:0 56px;">
+            <div class="testi-wrapper-padded" style="position:relative; padding:0 56px;">
 
                 <!-- Left Arrow -->
                 <button onclick="goTesti((testiIdx-1+testiData.length)%testiData.length)" class="testi-arrow left">
-                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"
+                        viewBox="0 0 24 24">
+                        <path d="M15 18l-6-6 6-6" />
+                    </svg>
                 </button>
 
                 <div class="testi-outer">
@@ -734,7 +819,10 @@
 
                 <!-- Right Arrow -->
                 <button onclick="nextTesti()" class="testi-arrow right">
-                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"
+                        viewBox="0 0 24 24">
+                        <path d="M9 18l6-6-6-6" />
+                    </svg>
                 </button>
 
             </div>
@@ -898,13 +986,13 @@
         window.addEventListener('scroll', scrollSpy);
         // Run on load
         scrollSpy();
-        
+
         // Fetch 3 Latest Products
         async function fetchLatestProducts() {
             try {
                 const response = await fetch('/api/v1/products?per_page=3&sort=updated_at&order=desc');
                 const result = await response.json();
-                
+
                 let productsData = [];
                 if (result.data) {
                     if (Array.isArray(result.data.data)) productsData = result.data.data;
@@ -914,29 +1002,29 @@
                 } else if (Array.isArray(result)) {
                     productsData = result;
                 }
-                
+
                 // Get exactly 3 items
                 productsData = productsData.slice(0, 3);
-                
+
                 const grid = document.getElementById('latest-products-grid');
                 if (productsData.length > 0) {
                     grid.innerHTML = productsData.map(product => {
                         let priceRaw = product.price || product.harga || 0;
                         let priceFmt = (typeof priceRaw === 'string' && priceRaw.toLowerCase().includes('rp')) ? priceRaw : new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(priceRaw);
-                        
+
                         let imgSrc = product.image_url || '/Foto/default-guitar.png';
-                        
+
                         const catName = product.category?.name || product.kategori || 'NEW';
                         const detailUrl = '/produk/' + (product.slug || product.id);
-                        const nameDsp  = product.name || product.nama || 'Produk';
+                        const nameDsp = product.name || product.nama || 'Produk';
                         const priceFmt2 = product.formatted_price || new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(product.price || 0);
-                        
+
                         return `
                             <div class="catalog-card fade-in-up visible">
                                 <span class="catalog-badge catalog-badge--gold">${catName}</span>
                                 <div class="catalog-card__image-wrap bg-gray-50/50 rounded-xl">
                                     <a href="${detailUrl}">
-                                        <img src="${imgSrc}" alt="${nameDsp}" onerror="this.src='/Foto/default-guitar.png'">
+                                        <img src="${imgSrc}" alt="${nameDsp}" loading="lazy" onerror="this.src='/Foto/default-guitar.png'">
                                     </a>
                                 </div>
                                 <div class="catalog-card__info">
@@ -961,11 +1049,11 @@
 
         // ===== Testimonials Slider =====
         let testiData = [];
-        let testiIdx  = 0;
+        let testiIdx = 0;
         let testiTimer = null;
 
         const testiTrack = document.getElementById('testiTrack');
-        const testiDots  = document.getElementById('testiDots');
+        const testiDots = document.getElementById('testiDots');
 
         function renderTesti() {
             if (!testiData.length || !testiTrack) return;
@@ -984,7 +1072,7 @@
             // Dots
             if (testiDots) {
                 testiDots.innerHTML = testiData.map((_, i) =>
-                    `<button onclick="goTesti(${i})" class="testi-dot ${i===0?'active':''}" data-idx="${i}"></button>`
+                    `<button onclick="goTesti(${i})" class="testi-dot ${i === 0 ? 'active' : ''}" data-idx="${i}"></button>`
                 ).join('');
             }
 
@@ -994,10 +1082,17 @@
         function goTesti(idx) {
             testiIdx = idx;
             if (testiTrack) {
-                // Each slide is 80%. To center it with 10% peeking on both sides:
-                // offset = idx * 80 - 10  (in percent)
-                const offset = Math.max(0, idx * 80 - 10);
-                testiTrack.style.transform = `translateX(-${offset}%)`;
+                const isMobile = window.innerWidth <= 768;
+                if (isMobile) {
+                    // Each slide is 88% on mobile. Offset so active card is centered.
+                    // Center = idx * 88, minus half of remaining (100-88)/2 = 6%
+                    const offset = Math.max(0, idx * 88 - 6);
+                    testiTrack.style.transform = `translateX(-${offset}%)`;
+                } else {
+                    // Each slide is 80%. Center with 10% peek on sides.
+                    const offset = Math.max(0, idx * 80 - 10);
+                    testiTrack.style.transform = `translateX(-${offset}%)`;
+                }
                 // Highlight active card
                 testiTrack.querySelectorAll('.testi-card').forEach((c, i) =>
                     c.classList.toggle('active-card', i === idx));
@@ -1019,9 +1114,9 @@
 
         async function fetchTestimonials() {
             try {
-                const res  = await fetch('/api/v1/testimonials');
+                const res = await fetch('/api/v1/testimonials');
                 const data = await res.json();
-                testiData  = (data.success ? data.data : []) || [];
+                testiData = (data.success ? data.data : []) || [];
                 if (!testiData.length) {
                     // Fallback placeholders
                     testiData = [
@@ -1032,7 +1127,7 @@
                 }
                 renderTesti();
                 startTestiAuto();
-            } catch(e) {
+            } catch (e) {
                 console.error('Testi error:', e);
             }
         }

@@ -7,7 +7,8 @@
     <title>Detail Catalog - KING GITAR</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <style>
         html {
@@ -55,7 +56,9 @@
             transition: box-shadow 0.3s ease;
         }
 
-        .kgn-header.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
+        .kgn-header.scrolled {
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+        }
 
         .kgn-nav-top {
             display: flex;
@@ -74,7 +77,10 @@
             flex-shrink: 0;
         }
 
-        .kgn-logo img { height: 38px; object-fit: contain; }
+        .kgn-logo img {
+            height: 38px;
+            object-fit: contain;
+        }
 
         .kgn-logo-name {
             font-size: 1.2rem;
@@ -99,7 +105,7 @@
         .kgn-search:focus-within {
             background: white;
             border-color: #D4AF37;
-            box-shadow: 0 0 0 3px rgba(212,175,55,0.1);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
         }
 
         .kgn-search input {
@@ -113,7 +119,9 @@
             font-family: 'Poppins', sans-serif;
         }
 
-        .kgn-search input::placeholder { color: #aaa; }
+        .kgn-search input::placeholder {
+            color: #aaa;
+        }
 
         .kgn-search-btn {
             background: #D4AF37;
@@ -130,7 +138,10 @@
             transition: background 0.2s;
             white-space: nowrap;
         }
-        .kgn-search-btn:hover { background: #c9a22e; }
+
+        .kgn-search-btn:hover {
+            background: #c9a22e;
+        }
 
         .kgn-actions {
             display: flex;
@@ -155,8 +166,13 @@
             transition: color 0.2s;
         }
 
-        .kgn-icon-btn i { font-size: 1.1rem; }
-        .kgn-icon-btn:hover { color: #D4AF37; }
+        .kgn-icon-btn i {
+            font-size: 1.1rem;
+        }
+
+        .kgn-icon-btn:hover {
+            color: #D4AF37;
+        }
 
         .kgn-btn-dark {
             background: #1a1a1a;
@@ -171,32 +187,68 @@
             transition: background 0.2s;
             font-family: 'Poppins', sans-serif;
         }
-        .kgn-btn-dark:hover { background: #D4AF37; }
+
+        .kgn-btn-dark:hover {
+            background: #D4AF37;
+        }
 
         /* ===== Main Content ===== */
         /* ===== MAP POPUP ===== */
         .map-overlay {
-            display: none; position: fixed; inset: 0;
-            background: rgba(0,0,0,.5); z-index: 2000;
-            align-items: center; justify-content: center;
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
         }
-        .map-overlay.active { display: flex; }
+
+        .map-overlay.active {
+            display: flex;
+        }
+
         .map-modal {
-            background: white; border-radius: 20px;
-            overflow: hidden; width: 90%; max-width: 700px;
-            box-shadow: 0 20px 60px rgba(0,0,0,.2);
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            width: 90%;
+            max-width: 700px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .2);
         }
+
         .map-modal-header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 16px 20px; border-bottom: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-light);
         }
-        .map-modal-header h3 { font-size: 1rem; font-weight: 600; }
+
+        .map-modal-header h3 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
         .map-close-btn {
-            background: none; border: none; font-size: 1.3rem;
-            cursor: pointer; color: #999; transition: color .2s;
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            cursor: pointer;
+            color: #999;
+            transition: color .2s;
         }
-        .map-close-btn:hover { color: #e74c3c; }
-        .map-modal iframe { width: 100%; height: 380px; border: none; display: block; }
+
+        .map-close-btn:hover {
+            color: #e74c3c;
+        }
+
+        .map-modal iframe {
+            width: 100%;
+            height: 380px;
+            border: none;
+            display: block;
+        }
 
         .dk-main {
             padding: 30px 0 50px;
@@ -425,63 +477,81 @@
 
         /* ===== Responsive ===== */
         @media (max-width: 992px) {
-            .dk-content { flex-direction: column; }
-            .dk-grid-panel, .dk-map-panel { flex: 0 0 100%; width: 100%; }
-            .dk-map-panel { position: static; }
-            .dk-map-container { height: 280px; }
-            .dk-pills { display: none; }
-            .dk-footer-grid { grid-template-columns: 1fr 1fr; }
+            .dk-content {
+                flex-direction: column;
+            }
+
+            .dk-grid-panel,
+            .dk-map-panel {
+                flex: 0 0 100%;
+                width: 100%;
+            }
+
+            .dk-map-panel {
+                position: static;
+            }
+
+            .dk-map-container {
+                height: 280px;
+            }
+
+            .dk-pills {
+                display: none;
+            }
+
+            .dk-footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
         }
 
         @media (max-width: 768px) {
-            .kgn-nav-top { flex-wrap: nowrap; gap: 10px; padding: 10px 0; }
-            .kgn-logo { display: none; }
-            .kgn-search { flex: 1; margin-top: 0; }
-            .kgn-actions { display: none; }
-            .mobile-burger-btn { display: flex !important; margin-left: 0; }
+            .kgn-nav-top {
+                flex-wrap: nowrap;
+                gap: 8px;
+                padding: 10px 0;
+            }
+
+            .kgn-logo {
+                display: none;
+            }
+
+            .kgn-search {
+                flex: 1;
+                min-width: 0;
+                margin-top: 0;
+                max-width: none;
+            }
+
+            .kgn-search input {
+                min-width: 0;
+            }
+
+            .kgn-actions {
+                display: none;
+            }
+
+            .mobile-burger-btn {
+                display: flex !important;
+                margin-left: 0;
+                flex-shrink: 0;
+            }
         }
 
         @media (max-width: 640px) {
-            .dk-product-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-            .dk-header-inner { flex-wrap: wrap; justify-content: center; gap: 12px; }
-            .dk-actions { gap: 12px; }
-            .dk-footer-grid { grid-template-columns: 1fr; }
-            .dk-footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
-            .kgn-search { margin-top: 0; }
-            .kgn-search-btn span, .kgn-search-btn { padding: 9px 12px; }
-        }
+            .dk-product-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
 
-        /* Mobile Burger Button */
-        .mobile-burger-btn {
-            display: none; align-items: center; justify-content: center; background: none;
-            border: none; font-size: 1.5rem; color: #1a1a1a; cursor: pointer; padding: 5px;
-        }
+            .dk-header-inner {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 12px;
+            }
 
-        /* Mobile Menu Drawer */
-        .mobile-menu-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; }
-        .mobile-menu-overlay.active { display: block; }
-        .mobile-menu-drawer {
-            position: fixed; top: 0; right: -280px; width: 280px; height: 100vh;
-            background: white; z-index: 2001; transition: right 0.3s ease;
-            box-shadow: -5px 0 15px rgba(0,0,0,0.1); display: flex; flex-direction: column;
-        }
-        .mobile-menu-drawer.active { right: 0; }
-        .mobile-menu-header {
-            padding: 20px; border-bottom: 1px solid #f0ede8; display: flex; justify-content: space-between; align-items: center;
-        }
-        .mobile-menu-title { font-weight: 700; font-size: 1.1rem; font-family: 'Times New Roman', serif; text-transform: uppercase; letter-spacing: 1px; }
-        .mobile-menu-close { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #666; transition: color 0.2s; }
-        .mobile-menu-close:hover { color: #e74c3c; }
-        .mobile-menu-links { list-style: none; padding: 20px 0; overflow-y: auto; flex: 1; }
-        .mobile-menu-links li { margin-bottom: 5px; }
-        .mobile-menu-links a {
-            display: flex; align-items: center; gap: 12px; padding: 12px 20px; text-decoration: none; color: #444;
-            font-size: 0.95rem; font-weight: 500; transition: background 0.2s, color 0.2s;
-        }
-        .mobile-menu-links a i { font-size: 1.1rem; width: 24px; text-align: center; }
-        .mobile-menu-links a:hover, .mobile-menu-links a.active { background: #fefcf9; color: #D4AF37; }
-        .mobile-menu-footer { padding: 20px; border-top: 1px solid #f0ede8; }
-
+            .dk-actions {
+                gap: 12px;
+            }
 
             .dk-footer-grid {
                 grid-template-columns: 1fr;
@@ -492,6 +562,143 @@
                 gap: 12px;
                 text-align: center;
             }
+
+            .kgn-search {
+                margin-top: 0;
+            }
+
+            .kgn-search-btn span {
+                display: none;
+            }
+
+            .kgn-search-btn {
+                padding: 9px 12px;
+            }
+        }
+
+        /* Mobile Burger Button */
+        .mobile-burger-btn {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #1a1a1a;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        /* Mobile Menu Drawer */
+        .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+        }
+
+        .mobile-menu-overlay.active {
+            display: block;
+        }
+
+        .mobile-menu-drawer {
+            position: fixed;
+            top: 0;
+            right: -280px;
+            width: 280px;
+            height: 100vh;
+            background: white;
+            z-index: 2001;
+            transition: right 0.3s ease;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mobile-menu-drawer.active {
+            right: 0;
+        }
+
+        .mobile-menu-header {
+            padding: 20px;
+            border-bottom: 1px solid #f0ede8;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .mobile-menu-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            font-family: 'Times New Roman', serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .mobile-menu-close {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #666;
+            transition: color 0.2s;
+        }
+
+        .mobile-menu-close:hover {
+            color: #e74c3c;
+        }
+
+        .mobile-menu-links {
+            list-style: none;
+            padding: 20px 0;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .mobile-menu-links li {
+            margin-bottom: 5px;
+        }
+
+        .mobile-menu-links a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            text-decoration: none;
+            color: #444;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .mobile-menu-links a i {
+            font-size: 1.1rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        .mobile-menu-links a:hover,
+        .mobile-menu-links a.active {
+            background: #fefcf9;
+            color: #D4AF37;
+        }
+
+        .mobile-menu-footer {
+            padding: 20px;
+            border-top: 1px solid #f0ede8;
+        }
+
+
+        .dk-footer-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .dk-footer-bottom {
+            flex-direction: column;
+            gap: 12px;
+            text-align: center;
+        }
         }
     </style>
 </head>
@@ -539,10 +746,12 @@
     <div class="map-overlay" id="mapOverlay">
         <div class="map-modal">
             <div class="map-modal-header">
-                <h3><i class="fas fa-map-marker-alt" style="color:#e74c3c;margin-right:6px;"></i> Lokasi Toko King Gitar</h3>
+                <h3><i class="fas fa-map-marker-alt" style="color:#e74c3c;margin-right:6px;"></i> Lokasi Toko King Gitar
+                </h3>
                 <button class="map-close-btn" id="closeMapBtn"><i class="fas fa-times"></i></button>
             </div>
-            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d2032374.2945433152!2d107.1970067!3d-5.7875148!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6939e4a1897f0b%3A0xdbb9cdb4a5a9b33a!2sLucky%20Gitar%20Store!5e0!3m2!1sid!2sid!4v1772457416730!5m2!1sid!2sid"
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d2032374.2945433152!2d107.1970067!3d-5.7875148!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6939e4a1897f0b%3A0xdbb9cdb4a5a9b33a!2sLucky%20Gitar%20Store!5e0!3m2!1sid!2sid!4v1772457416730!5m2!1sid!2sid"
                 allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
     </div>
@@ -551,7 +760,8 @@
     <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
     <div class="mobile-menu-drawer" id="mobileMenuDrawer">
         <div class="mobile-menu-header">
-            <div class="mobile-menu-title"><img src="{{ asset('Foto/Logo.png') }}" style="height:24px;" alt="Logo"> KING GITAR</div>
+            <div class="mobile-menu-title"><img src="{{ asset('Foto/Logo.png') }}" style="height:24px;" alt="Logo"> KING
+                GITAR</div>
             <button class="mobile-menu-close" id="mobileMenuClose"><i class="fas fa-times"></i></button>
         </div>
         <ul class="mobile-menu-links">
@@ -563,7 +773,8 @@
         <div class="mobile-menu-footer">
             @auth
                 @if(Auth::user()->is_admin)
-                    <a href="{{ route('admin.dashboard') }}" style="display:block;text-align:center;background:#1a1a1a;color:white;padding:12px;border-radius:12px;text-decoration:none;font-weight:600;">Dashboard</a>
+                    <a href="{{ route('admin.dashboard') }}"
+                        style="display:block;text-align:center;background:#1a1a1a;color:white;padding:12px;border-radius:12px;text-decoration:none;font-weight:600;">Dashboard</a>
                 @else
                     <div style="display:flex;align-items:center;gap:12px;padding:12px;background:#f5f3f0;border-radius:12px;">
                         <i class="fas fa-user-circle" style="font-size:1.5rem;color:#666;"></i>
@@ -571,7 +782,8 @@
                     </div>
                 @endif
             @else
-                <a href="{{ url('/login') }}" style="display:block;text-align:center;background:#D4AF37;color:white;padding:12px;border-radius:12px;text-decoration:none;font-weight:600;">Masuk</a>
+                <a href="{{ url('/login') }}"
+                    style="display:block;text-align:center;background:#D4AF37;color:white;padding:12px;border-radius:12px;text-decoration:none;font-weight:600;">Masuk</a>
             @endauth
         </div>
     </div>
@@ -584,10 +796,12 @@
 
                 <!-- Left: Sidebar (Categories + Map) -->
                 <div class="dk-map-panel" style="flex: 0 0 30%;">
-                    
+
                     <!-- Category Filter -->
-                    <div style="background: white; border-radius: 20px; border: 1px solid var(--border-light); padding: 24px; margin-bottom: 24px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);">
-                        <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; color: var(--text-dark);">Kategori Produk</h3>
+                    <div
+                        style="background: white; border-radius: 20px; border: 1px solid var(--border-light); padding: 24px; margin-bottom: 24px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);">
+                        <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; color: var(--text-dark);">
+                            Kategori Produk</h3>
                         <ul id="categoryList" style="list-style: none; padding: 0; margin: 0;">
                             <li><span style="color: #999; font-size: 0.9rem;">Memuat daftar kategori...</span></li>
                         </ul>
@@ -612,7 +826,7 @@
                     <div class="dk-product-grid" id="productsGrid">
                         <!-- Products rendered via JS -->
                     </div>
-                    
+
                     <!-- Pagination -->
                     <div id="pagination" style="margin-top: 40px; display: flex; justify-content: center; gap: 10px;">
                     </div>
@@ -638,16 +852,19 @@
             background: #fafafa;
             border: 1px solid transparent;
         }
+
         .cat-sidebar-link:hover {
             background: var(--bg-cream);
             color: var(--gold);
             border-color: var(--gold);
         }
+
         .cat-sidebar-link.active {
             background: var(--gold);
             color: white;
             border-color: var(--gold);
         }
+
         .cat-sidebar-badge {
             background: #eaeaea;
             color: #666;
@@ -655,10 +872,12 @@
             border-radius: 20px;
             font-size: 0.75rem;
         }
+
         .cat-sidebar-link.active .cat-sidebar-badge {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             color: white;
         }
+
         .page-btn {
             padding: 8px 16px;
             border: 1px solid var(--border-light);
@@ -669,20 +888,25 @@
             font-weight: 500;
             color: var(--text-dark);
         }
+
         .page-btn:not([disabled]):hover {
             background: #f8f8f8;
             border-color: #ddd;
         }
+
         .page-btn.active-page {
             background: var(--gold);
             color: white;
             border-color: var(--gold);
         }
+
         @media (max-width: 992px) {
             .dk-content {
                 flex-direction: column-reverse;
             }
-            .dk-map-panel, .dk-grid-panel {
+
+            .dk-map-panel,
+            .dk-grid-panel {
                 flex: 0 0 100% !important;
             }
         }
@@ -710,15 +934,19 @@
         <div class="mobile-menu-footer">
             @auth
                 @if(Auth::user()->is_admin)
-                    <a href="{{ route('admin.dashboard') }}" style="display:block; text-align:center; background:#1a1a1a; color:white; padding:12px; border-radius:12px; text-decoration:none; font-weight:600;">Dashboard</a>
+                    <a href="{{ route('admin.dashboard') }}"
+                        style="display:block; text-align:center; background:#1a1a1a; color:white; padding:12px; border-radius:12px; text-decoration:none; font-weight:600;">Dashboard</a>
                 @else
-                    <div style="display:flex; align-items:center; gap:12px; padding:12px; background:#f5f3f0; border-radius:12px;">
+                    <div
+                        style="display:flex; align-items:center; gap:12px; padding:12px; background:#f5f3f0; border-radius:12px;">
                         <i class="fas fa-user-circle" style="font-size:1.5rem; color:#666;"></i>
                         <span style="font-weight:600; color:#1a1a1a;">{{ Auth::user()->name }}</span>
                     </div>
                 @endif
             @else
-                <a href="{{ url('/login') }}" style="display:block; text-align:center; background:#D4AF37; color:white; padding:12px; border-radius:12px; text-decoration:none; font-weight:600;">Masuk / Daftar</a>
+                <a href="{{ url('/login') }}"
+                    style="display:block; text-align:center; background:#D4AF37; color:white; padding:12px; border-radius:12px; text-decoration:none; font-weight:600;">Masuk
+                    / Daftar</a>
             @endauth
         </div>
     </div>
@@ -747,11 +975,17 @@
             let currentPage = 1;
             let currentCategory = '';
             let currentSearch = '';
-            
-            // Allow category selection via URL parameter
+
+            // Allow category/search selection via URL parameters
             const urlParams = new URLSearchParams(window.location.search);
-            if(urlParams.has('category_id')) {
+            if (urlParams.has('category_id')) {
                 currentCategory = urlParams.get('category_id');
+            }
+            if (urlParams.has('search')) {
+                currentSearch = urlParams.get('search');
+                // Pre-fill search input
+                const kgnSearchPrefill = document.getElementById('kgnSearchInput');
+                if (kgnSearchPrefill) kgnSearchPrefill.value = currentSearch;
             }
 
             const productsGrid = document.getElementById('productsGrid');
@@ -767,11 +1001,11 @@
                         // 'Semua Kategori' link
                         let activeAll = currentCategory === '' ? 'active' : '';
                         html += `<li><a href="#" class="cat-sidebar-link ${activeAll}" data-id="" data-name="Semua Produk">Semua Kategori</a></li>`;
-                        
-                        if(res.success) {
+
+                        if (res.success) {
                             res.data.forEach(cat => {
                                 let activeCls = (currentCategory == cat.id) ? 'active' : '';
-                                if(currentCategory == cat.id) {
+                                if (currentCategory == cat.id) {
                                     gridTitle.innerText = `Katalog: ${cat.name}`;
                                 }
                                 html += `<li>
@@ -793,7 +1027,7 @@
                                 currentCategory = e.currentTarget.getAttribute('data-id');
                                 let catName = e.currentTarget.getAttribute('data-name');
                                 gridTitle.innerText = currentCategory ? `Katalog: ${catName}` : 'Semua Produk';
-                                
+
                                 currentPage = 1;
                                 fetchProducts();
                             });
@@ -806,7 +1040,7 @@
                 productsGrid.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding: 40px;"><p style="color:#666;">Sedang memuat produk...</p></div>';
                 let url = `/api/v1/products?page=${currentPage}`;
                 if (currentCategory) url += `&category_id=${currentCategory}`;
-                if (currentSearch)  url += `&search=${encodeURIComponent(currentSearch)}`;
+                if (currentSearch) url += `&search=${encodeURIComponent(currentSearch)}`;
 
                 fetch(url)
                     .then(res => res.json())
@@ -842,7 +1076,7 @@
                     `;
                 });
                 productsGrid.innerHTML = html;
-                
+
                 // Trigger reveal functionality on dynamically added elements
                 setTimeout(() => {
                     const revealElements = document.querySelectorAll('.dk-card.reveal');
@@ -895,42 +1129,42 @@
             });
 
             // Map popup
-        const openMapBtn = document.getElementById('openMapBtn');
-        const mobileOpenMapBtn = document.getElementById('mobileOpenMapBtn');
-        const closeMapBtn = document.getElementById('closeMapBtn');
-        const mapOverlay = document.getElementById('mapOverlay');
+            const openMapBtn = document.getElementById('openMapBtn');
+            const mobileOpenMapBtn = document.getElementById('mobileOpenMapBtn');
+            const closeMapBtn = document.getElementById('closeMapBtn');
+            const mapOverlay = document.getElementById('mapOverlay');
 
-        function openMap() {
-            mapOverlay.classList.add('active');
-            closeMobileMenu(); // close mobile drawer if open
-        }
+            function openMap() {
+                mapOverlay.classList.add('active');
+                closeMobileMenu(); // close mobile drawer if open
+            }
 
-        if (openMapBtn) openMapBtn.addEventListener('click', openMap);
-        if (mobileOpenMapBtn) mobileOpenMapBtn.addEventListener('click', (e) => { e.preventDefault(); openMap(); });
-        if (closeMapBtn) closeMapBtn.addEventListener('click', () => mapOverlay.classList.remove('active'));
-        if (mapOverlay) mapOverlay.addEventListener('click', (e) => { if (e.target === mapOverlay) mapOverlay.classList.remove('active'); });
+            if (openMapBtn) openMapBtn.addEventListener('click', openMap);
+            if (mobileOpenMapBtn) mobileOpenMapBtn.addEventListener('click', (e) => { e.preventDefault(); openMap(); });
+            if (closeMapBtn) closeMapBtn.addEventListener('click', () => mapOverlay.classList.remove('active'));
+            if (mapOverlay) mapOverlay.addEventListener('click', (e) => { if (e.target === mapOverlay) mapOverlay.classList.remove('active'); });
 
-        // Mobile Menu Drawer Logic
-        const mobileBurgerBtn = document.getElementById('mobileBurgerBtn');
-        const mobileMenuClose = document.getElementById('mobileMenuClose');
-        const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
-        const mobileMenuDrawer = document.getElementById('mobileMenuDrawer');
+            // Mobile Menu Drawer Logic
+            const mobileBurgerBtn = document.getElementById('mobileBurgerBtn');
+            const mobileMenuClose = document.getElementById('mobileMenuClose');
+            const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+            const mobileMenuDrawer = document.getElementById('mobileMenuDrawer');
 
-        function openMobileMenu() {
-            mobileMenuOverlay.classList.add('active');
-            mobileMenuDrawer.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
+            function openMobileMenu() {
+                mobileMenuOverlay.classList.add('active');
+                mobileMenuDrawer.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
 
-        function closeMobileMenu() {
-            mobileMenuOverlay.classList.remove('active');
-            mobileMenuDrawer.classList.remove('active');
-            document.body.style.overflow = '';
-        }
+            function closeMobileMenu() {
+                mobileMenuOverlay.classList.remove('active');
+                mobileMenuDrawer.classList.remove('active');
+                document.body.style.overflow = '';
+            }
 
-        if (mobileBurgerBtn) mobileBurgerBtn.addEventListener('click', openMobileMenu);
-        if (mobileMenuClose) mobileMenuClose.addEventListener('click', closeMobileMenu);
-        if (mobileMenuOverlay) mobileMenuOverlay.addEventListener('click', closeMobileMenu);
+            if (mobileBurgerBtn) mobileBurgerBtn.addEventListener('click', openMobileMenu);
+            if (mobileMenuClose) mobileMenuClose.addEventListener('click', closeMobileMenu);
+            if (mobileMenuOverlay) mobileMenuOverlay.addEventListener('click', closeMobileMenu);
 
             // Wire search bar
             const kgnSearch = document.getElementById('kgnSearchInput');
