@@ -576,6 +576,10 @@
             }
         }
 
+        .mobile-menu-title img {
+            display: none !important;
+        }
+
         /* Mobile Burger Button */
         .mobile-burger-btn {
             display: none;

@@ -30,6 +30,7 @@
                         <div class="skeleton h-8 w-16 rounded-lg"></div>
                     </div>
                     <p class="text-sm text-slate-500 mt-0.5">Akun Terjangkau</p>
+                    <p class="text-xs text-pink-300 italic">*tidak akurat "berdasarkan IP"</p>
                 </div>
             </div>
         </div>
