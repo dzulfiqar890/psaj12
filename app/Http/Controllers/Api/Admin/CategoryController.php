@@ -61,6 +61,7 @@ class CategoryController extends Controller
         try {
             return DB::transaction(function () use ($request) {
                 $data = $request->validated();
+                $data['created_by'] = $request->user()->id;
 
                 $category = Category::create($data);
 

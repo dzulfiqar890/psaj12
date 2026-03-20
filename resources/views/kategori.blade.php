@@ -9,8 +9,193 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
+        rel="stylesheet"></head>
+
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header class="kgn-header" id="kgnHeader">
+        <div class="container">
+            <div class="kgn-nav-top">
+                <a href="{{ url('/') }}" class="kgn-logo">
+                    <img src="{{ asset('Foto/Logo.png') }}" alt="King Gitar">
+                    <span class="kgn-logo-name">KING GITAR</span>
+                </a>
+                <div class="kgn-search">
+                    <i class="fas fa-search" style="color:#aaa;font-size:0.85rem;flex-shrink:0;"></i>&nbsp;
+                    <input type="text" id="kgnSearchInput" placeholder="Cari gitar berdasarkan kategori...">
+                    <button class="kgn-search-btn" id="kgnSearchBtn"><i class="fas fa-search"></i> Cari</button>
+                </div>
+                <div class="kgn-actions">
+                    <a href="{{ url('/katalog') }}" class="kgn-icon-btn" title="Katalog">
+                        <i class="fas fa-th"></i><span>Katalog</span>
+                    </a>
+                    <button class="kgn-icon-btn" id="openMapBtn" title="Lokasi Toko">
+                        <i class="fas fa-map-marker-alt"></i><span>Lokasi</span>
+                    </button>
+                    @auth
+                        @if(Auth::user()->is_admin)
+                            <a href="{{ route('admin.dashboard') }}" class="kgn-btn-dark">Dashboard</a>
+                        @else
+                            <span class="kgn-icon-btn"><i class="fas fa-user-circle"></i></span>
+                        @endif
+                    @else
+                        <a href="{{ url('/login') }}" class="kgn-btn-dark">Masuk</a>
+                    @endauth
+                </div>
+                <button class="mobile-burger-btn" id="mobileBurgerBtn" aria-label="Menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAP POPUP -->
+    <div class="map-overlay" id="mapOverlay">
+        <div class="map-modal">
+            <div class="map-modal-header">
+                <h3><i class="fas fa-map-marker-alt" style="color:#e74c3c;margin-right:6px;"></i> Lokasi Toko King Gitar
+                </h3>
+                <button class="map-close-btn" id="closeMapBtn"><i class="fas fa-times"></i></button>
+            </div>
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d2032374.2945433152!2d107.1970067!3d-5.7875148!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6939e4a1897f0b%3A0xdbb9cdb4a5a9b33a!2sLucky%20Gitar%20Store!5e0!3m2!1sid!2sid!4v1772457416730!5m2!1sid!2sid"
+                allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+    <div class="mobile-menu-drawer" id="mobileMenuDrawer">
+        <div class="mobile-menu-header">
+            <div class="mobile-menu-title"><img src="{{ asset('Foto/Logo.png') }}" style="height:24px;" alt="Logo"> KING
+                GITAR</div>
+            <button class="mobile-menu-close" id="mobileMenuClose"><i class="fas fa-times"></i></button>
+        </div>
+        <ul class="mobile-menu-links">
+            <li><a href="{{ url('/') }}"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="{{ url('/katalog') }}"><i class="fas fa-th-large"></i> Katalog</a></li>
+            <li><a href="{{ url('/kategori') }}" class="active"><i class="fas fa-list"></i> Kategori</a></li>
+            <li><a href="#" id="mobileOpenMapBtn"><i class="fas fa-map-marker-alt"></i> Lokasi Toko</a></li>
+        </ul>
+        <div class="mobile-menu-footer">
+            @auth
+                @if(Auth::user()->is_admin)
+                    <a href="{{ route('admin.dashboard') }}"
+                        style="display:block;text-align:center;background:#1a1a1a;color:white;padding:12px;border-radius:8px;text-decoration:none;font-weight:500;">
+                        Dashboard
+                    </a>
+                @else
+                    <form method="POST" action="{{ route('logout') }}" style="margin: 0;">
+                        @csrf
+                        <button type="submit"
+                            style="width:100%;text-align:center;background:#f3f4f6;color:#1f2937;padding:12px;border-radius:8px;border:none;font-weight:500;cursor:pointer;">
+                            Logout
+                        </button>
+                    </form>
+                @endif
+            @else
+                <a href="{{ route('login') }}"
+                    style="display:block;text-align:center;background:#1a1a1a;color:white;padding:12px;border-radius:8px;text-decoration:none;font-weight:500;">
+                    Masuk
+                </a>
+            @endauth
+        </div>
+    </div>
+
+    <!-- Main Content -->
+
+    <main class="dk-main">
+        <div class="container">
+            <div class="dk-content">
+
+                <!-- Left: Sidebar (Categories + Map) -->
+                <div class="dk-map-panel" style="flex: 0 0 30%;">
+
+                    <!-- Category Filter -->
+                    <div
+                        style="background: white; border-radius: 20px; border: 1px solid var(--border-light); padding: 24px; margin-bottom: 24px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);">
+                        <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; color: var(--text-dark);">
+                            Kategori Produk</h3>
+                        <ul id="categoryList" style="list-style: none; padding: 0; margin: 0;">
+                            <li><span style="color: #999; font-size: 0.9rem;">Memuat daftar kategori...</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- Map Embed -->
+                    <div class="dk-map-container" style="height: 300px;">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d2032374.2945433152!2d107.1970067!3d-5.7875148!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6939e4a1897f0b%3A0xdbb9cdb4a5a9b33a!2sLucky%20Gitar%20Store!5e0!3m2!1sid!2sid!4v1772457416730!5m2!1sid!2sid"
+                            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                        <div class="dk-map-label">
+                            <i class="fas fa-map-marker-alt"></i>
+                            King Electric Guitars
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Product Grid -->
+                <div class="dk-grid-panel" style="flex: 0 0 68%;">
+                    <h2 class="dk-grid-title" id="gridTitle">Semua Produk</h2>
+                    <div class="dk-product-grid" id="productsGrid">
+                        <!-- Products rendered via JS -->
+                    </div>
+
+                    <!-- Pagination -->
+                    <div id="pagination" style="margin-top: 40px; display: flex; justify-content: center; gap: 10px;">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>@include('partials.footer')
+
+    <!-- Mobile Menu Container -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+    <div class="mobile-menu-drawer" id="mobileMenuDrawer">
+        <div class="mobile-menu-header">
+            <div class="mobile-menu-title flex items-center gap-2">
+                <img src="{{ asset('Foto/Logo.png') }}" style="height:24px;" alt="Logo"> KING GITAR
+            </div>
+            <button class="mobile-menu-close" id="mobileMenuClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <ul class="mobile-menu-links">
+            <li><a href="{{ url('/') }}"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="{{ url('/katalog') }}"><i class="fas fa-th-large"></i> Katalog</a></li>
+            <li><a href="{{ url('/kategori') }}" class="active"><i class="fas fa-list"></i> Kategori</a></li>
+            <li><a href="#" id="mobileOpenMapBtn"><i class="fas fa-map-marker-alt"></i> Lokasi Toko (Maps)</a></li>
+        </ul>
+        <div class="mobile-menu-footer">
+            @auth
+                @if(Auth::user()->is_admin)
+                    <a href="{{ route('admin.dashboard') }}"
+                        style="display:block;text-align:center;background:#1a1a1a;color:white;padding:12px;border-radius:8px;text-decoration:none;font-weight:500;">
+                        Dashboard
+                    </a>
+                @else
+                    <form method="POST" action="{{ route('logout') }}" style="margin: 0;">
+                        @csrf
+                        <button type="submit"
+                            style="width:100%;text-align:center;background:#f3f4f6;color:#1f2937;padding:12px;border-radius:8px;border:none;font-weight:500;cursor:pointer;">
+                            Logout
+                        </button>
+                    </form>
+                @endif
+            @else
+                <a href="{{ route('login') }}"
+                    style="display:block;text-align:center;background:#1a1a1a;color:white;padding:12px;border-radius:8px;text-decoration:none;font-weight:500;">
+                    Masuk
+                </a>
+            @endauth
+        </div>
+    </div>
+
+
     <style>
+
         html {
             scroll-behavior: smooth;
         }
@@ -704,150 +889,8 @@
             text-align: center;
         }
         }
-    </style>
-</head>
+    
 
-<body>
-
-    <!-- ===== HEADER ===== -->
-    <header class="kgn-header" id="kgnHeader">
-        <div class="container">
-            <div class="kgn-nav-top">
-                <a href="{{ url('/') }}" class="kgn-logo">
-                    <img src="{{ asset('Foto/Logo.png') }}" alt="King Gitar">
-                    <span class="kgn-logo-name">KING GITAR</span>
-                </a>
-                <div class="kgn-search">
-                    <i class="fas fa-search" style="color:#aaa;font-size:0.85rem;flex-shrink:0;"></i>&nbsp;
-                    <input type="text" id="kgnSearchInput" placeholder="Cari gitar berdasarkan kategori...">
-                    <button class="kgn-search-btn" id="kgnSearchBtn"><i class="fas fa-search"></i> Cari</button>
-                </div>
-                <div class="kgn-actions">
-                    <a href="{{ url('/katalog') }}" class="kgn-icon-btn" title="Katalog">
-                        <i class="fas fa-th"></i><span>Katalog</span>
-                    </a>
-                    <button class="kgn-icon-btn" id="openMapBtn" title="Lokasi Toko">
-                        <i class="fas fa-map-marker-alt"></i><span>Lokasi</span>
-                    </button>
-                    @auth
-                        @if(Auth::user()->is_admin)
-                            <a href="{{ route('admin.dashboard') }}" class="kgn-btn-dark">Dashboard</a>
-                        @else
-                            <span class="kgn-icon-btn"><i class="fas fa-user-circle"></i></span>
-                        @endif
-                    @else
-                        <a href="{{ url('/login') }}" class="kgn-btn-dark">Masuk</a>
-                    @endauth
-                </div>
-                <button class="mobile-burger-btn" id="mobileBurgerBtn" aria-label="Menu">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <!-- MAP POPUP -->
-    <div class="map-overlay" id="mapOverlay">
-        <div class="map-modal">
-            <div class="map-modal-header">
-                <h3><i class="fas fa-map-marker-alt" style="color:#e74c3c;margin-right:6px;"></i> Lokasi Toko King Gitar
-                </h3>
-                <button class="map-close-btn" id="closeMapBtn"><i class="fas fa-times"></i></button>
-            </div>
-            <iframe
-                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d2032374.2945433152!2d107.1970067!3d-5.7875148!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6939e4a1897f0b%3A0xdbb9cdb4a5a9b33a!2sLucky%20Gitar%20Store!5e0!3m2!1sid!2sid!4v1772457416730!5m2!1sid!2sid"
-                allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
-    </div>
-
-    <!-- Mobile Menu -->
-    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
-    <div class="mobile-menu-drawer" id="mobileMenuDrawer">
-        <div class="mobile-menu-header">
-            <div class="mobile-menu-title"><img src="{{ asset('Foto/Logo.png') }}" style="height:24px;" alt="Logo"> KING
-                GITAR</div>
-            <button class="mobile-menu-close" id="mobileMenuClose"><i class="fas fa-times"></i></button>
-        </div>
-        <ul class="mobile-menu-links">
-            <li><a href="{{ url('/') }}"><i class="fas fa-home"></i> Home</a></li>
-            <li><a href="{{ url('/katalog') }}"><i class="fas fa-th-large"></i> Katalog</a></li>
-            <li><a href="{{ url('/kategori') }}" class="active"><i class="fas fa-list"></i> Kategori</a></li>
-            <li><a href="#" id="mobileOpenMapBtn"><i class="fas fa-map-marker-alt"></i> Lokasi Toko</a></li>
-        </ul>
-        <div class="mobile-menu-footer">
-            @auth
-                @if(Auth::user()->is_admin)
-                    <a href="{{ route('admin.dashboard') }}"
-                        style="display:block;text-align:center;background:#1a1a1a;color:white;padding:12px;border-radius:8px;text-decoration:none;font-weight:500;">
-                        Dashboard
-                    </a>
-                @else
-                    <form method="POST" action="{{ route('logout') }}" style="margin: 0;">
-                        @csrf
-                        <button type="submit"
-                            style="width:100%;text-align:center;background:#f3f4f6;color:#1f2937;padding:12px;border-radius:8px;border:none;font-weight:500;cursor:pointer;">
-                            Logout
-                        </button>
-                    </form>
-                @endif
-            @else
-                <a href="{{ route('login') }}"
-                    style="display:block;text-align:center;background:#1a1a1a;color:white;padding:12px;border-radius:8px;text-decoration:none;font-weight:500;">
-                    Masuk
-                </a>
-            @endauth
-        </div>
-    </div>
-
-    <!-- Main Content -->
-
-    <main class="dk-main">
-        <div class="container">
-            <div class="dk-content">
-
-                <!-- Left: Sidebar (Categories + Map) -->
-                <div class="dk-map-panel" style="flex: 0 0 30%;">
-
-                    <!-- Category Filter -->
-                    <div
-                        style="background: white; border-radius: 20px; border: 1px solid var(--border-light); padding: 24px; margin-bottom: 24px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);">
-                        <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; color: var(--text-dark);">
-                            Kategori Produk</h3>
-                        <ul id="categoryList" style="list-style: none; padding: 0; margin: 0;">
-                            <li><span style="color: #999; font-size: 0.9rem;">Memuat daftar kategori...</span></li>
-                        </ul>
-                    </div>
-
-                    <!-- Map Embed -->
-                    <div class="dk-map-container" style="height: 300px;">
-                        <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d2032374.2945433152!2d107.1970067!3d-5.7875148!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6939e4a1897f0b%3A0xdbb9cdb4a5a9b33a!2sLucky%20Gitar%20Store!5e0!3m2!1sid!2sid!4v1772457416730!5m2!1sid!2sid"
-                            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-                        </iframe>
-                        <div class="dk-map-label">
-                            <i class="fas fa-map-marker-alt"></i>
-                            King Electric Guitars
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Right: Product Grid -->
-                <div class="dk-grid-panel" style="flex: 0 0 68%;">
-                    <h2 class="dk-grid-title" id="gridTitle">Semua Produk</h2>
-                    <div class="dk-product-grid" id="productsGrid">
-                        <!-- Products rendered via JS -->
-                    </div>
-
-                    <!-- Pagination -->
-                    <div id="pagination" style="margin-top: 40px; display: flex; justify-content: center; gap: 10px;">
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </main>
-
-    <style>
         .cat-sidebar-link {
             display: flex;
             justify-content: space-between;
@@ -921,51 +964,8 @@
                 flex: 0 0 100% !important;
             }
         }
+    
     </style>
-
-    @include('partials.footer')
-
-    <!-- Mobile Menu Container -->
-    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
-    <div class="mobile-menu-drawer" id="mobileMenuDrawer">
-        <div class="mobile-menu-header">
-            <div class="mobile-menu-title flex items-center gap-2">
-                <img src="{{ asset('Foto/Logo.png') }}" style="height:24px;" alt="Logo"> KING GITAR
-            </div>
-            <button class="mobile-menu-close" id="mobileMenuClose">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <ul class="mobile-menu-links">
-            <li><a href="{{ url('/') }}"><i class="fas fa-home"></i> Home</a></li>
-            <li><a href="{{ url('/katalog') }}"><i class="fas fa-th-large"></i> Katalog</a></li>
-            <li><a href="{{ url('/kategori') }}" class="active"><i class="fas fa-list"></i> Kategori</a></li>
-            <li><a href="#" id="mobileOpenMapBtn"><i class="fas fa-map-marker-alt"></i> Lokasi Toko (Maps)</a></li>
-        </ul>
-        <div class="mobile-menu-footer">
-            @auth
-                @if(Auth::user()->is_admin)
-                    <a href="{{ route('admin.dashboard') }}"
-                        style="display:block;text-align:center;background:#1a1a1a;color:white;padding:12px;border-radius:8px;text-decoration:none;font-weight:500;">
-                        Dashboard
-                    </a>
-                @else
-                    <form method="POST" action="{{ route('logout') }}" style="margin: 0;">
-                        @csrf
-                        <button type="submit"
-                            style="width:100%;text-align:center;background:#f3f4f6;color:#1f2937;padding:12px;border-radius:8px;border:none;font-weight:500;cursor:pointer;">
-                            Logout
-                        </button>
-                    </form>
-                @endif
-            @else
-                <a href="{{ route('login') }}"
-                    style="display:block;text-align:center;background:#1a1a1a;color:white;padding:12px;border-radius:8px;text-decoration:none;font-weight:500;">
-                    Masuk
-                </a>
-            @endauth
-        </div>
-    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {

@@ -14,26 +14,26 @@ class ViewController extends Controller
 
     public function products()
     {
-        return view('admin.products.index');
+        return view('admin.products');
     }
 
     public function categories()
     {
-        return view('admin.categories.index');
+        return view('admin.categories');
     }
 
     public function testimonials()
     {
-        return view('admin.testimonials.index');
+        return view('admin.testimonials');
     }
 
     public function banners()
     {
-        return view('admin.banners.index');
+        return view('admin.banners');
     }
 
     public function users()
     {
-        return view('admin.users.index');
+        return view('admin.users');
     }
 }

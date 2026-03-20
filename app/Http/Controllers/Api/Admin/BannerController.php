@@ -34,6 +34,7 @@ class BannerController extends Controller
         try {
             return DB::transaction(function () use ($request) {
                 $data = $request->validated();
+                $data['created_by'] = $request->user()->id;
 
                 if ($request->hasFile('image')) {
                     $data['image'] = $this->imageService->upload($request->file('image'), 'banners');

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use App\Models\User;
 
 /**
  * Model Banner
@@ -31,6 +32,7 @@ class Banner extends Model
         'image',
         'link',
         'is_active',
+        'created_by',
     ];
 
     /**
@@ -64,6 +66,14 @@ class Banner extends Model
         }
 
         return Storage::url($this->image);
+    }
+
+    /**
+     * Relationship: Banner dibuat oleh User tertentu.
+     */
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 
     /**

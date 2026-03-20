@@ -24,7 +24,9 @@ class TestimonialController extends Controller
 
     public function store(TestimonialRequest $request): JsonResponse
     {
-        $testimonial = Testimonial::create($request->validated());
+        $data = $request->validated();
+        $data['created_by'] = $request->user()->id;
+        $testimonial = Testimonial::create($data);
 
         ActivityLog::log('create', $testimonial, "Testimoni '{$testimonial->name}' ditambahkan");
 

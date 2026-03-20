@@ -32,72 +32,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <style>
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-
-        .sidebar-item {
-            transition: all 0.3s ease;
-        }
-
-        .sidebar-item:hover,
-        .sidebar-item.active {
-            background-color: #FFF4E6;
-        }
-
-        .sidebar-item:hover svg,
-        .sidebar-item.active svg {
-            color: #D4AF37;
-        }
-
-        .sidebar-item:hover span,
-        .sidebar-item.active span {
-            color: #D4AF37;
-            font-weight: 500;
-        }
-
-        .skeleton {
-            background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-        }
-
-        @keyframes shimmer {
-            0% {
-                background-position: 200% 0;
-            }
-
-            100% {
-                background-position: -200% 0;
-            }
-        }
-
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-
-        .card-hover:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.05), 0 8px 10px -6px rgb(0 0 0 / 0.05);
-        }
-    </style>
-</head>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script></head>
 
 <body class="bg-[#F0F4F8] text-slate-800 font-sans antialiased">
 
@@ -206,6 +141,73 @@
     </div>
 
     <!-- Admin API Helper -->
+
+    <style>
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .sidebar-item {
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-item:hover,
+        .sidebar-item.active {
+            background-color: #FFF4E6;
+        }
+
+        .sidebar-item:hover svg,
+        .sidebar-item.active svg {
+            color: #D4AF37;
+        }
+
+        .sidebar-item:hover span,
+        .sidebar-item.active span {
+            color: #D4AF37;
+            font-weight: 500;
+        }
+
+        .skeleton {
+            background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.05), 0 8px 10px -6px rgb(0 0 0 / 0.05);
+        }
+    
+    </style>
+
     <script>
         // Global config
         const API_BASE = '/api/v1/admin';

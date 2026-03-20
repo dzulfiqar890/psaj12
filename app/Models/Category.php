@@ -31,6 +31,7 @@ class Category extends Model
         'name',
         'description',
         'slug',
+        'created_by',
     ];
 
     /**
@@ -79,6 +80,14 @@ class Category extends Model
         }
 
         return $slug;
+    }
+
+    /**
+     * Relationship: Category dibuat oleh User tertentu.
+     */
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 
     /**

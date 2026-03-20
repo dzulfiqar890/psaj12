@@ -9,8 +9,160 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap"
-        rel="stylesheet">
+        rel="stylesheet"></head>
+
+
+
+<!-- ===== HEADER ===== -->
+<header id="mainHeader">
+    <div class="container">
+        <div class="nav-top">
+            <!-- Logo -->
+            <a href="{{ url('/') }}" class="nav-logo">
+                <img src="{{ asset('Foto/Logo.png') }}" alt="King Gitar Logo">
+                <span class="nav-logo-name">KING GITAR</span>
+            </a>
+            <!-- Search -->
+            <div class="nav-search">
+                <i class="fas fa-search" style="color:#aaa; font-size:0.85rem; flex-shrink:0;"></i>&nbsp;
+                <input type="text" id="searchInput" placeholder="Cari gitar berkualitas, coba lihat...">
+                <button class="nav-search-btn" id="searchBtn">
+                    <i class="fas fa-search"></i> Cari
+                </button>
+            </div>
+            <!-- Right Actions -->
+            <div class="nav-actions">
+                <a href="{{ url('/kategori') }}" class="nav-icon-btn" title="Kategori">
+                    <i class="fas fa-th-large"></i>
+                    <span>Kategori</span>
+                </a>
+                <button class="nav-icon-btn" id="openMapBtn" title="Lokasi Toko">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Lokasi</span>
+                </button>
+                @auth
+                    @if(Auth::user()->is_admin)
+                        <a href="{{ route('admin.dashboard') }}" class="nav-login-btn">Dashboard</a>
+                    @else
+                        <span class="nav-icon-btn"><i class="fas fa-user-circle"></i></span>
+                    @endif
+                @else
+                    <a href="{{ url('/login') }}" class="nav-login-btn">Masuk</a>
+                @endauth
+            </div>
+            <button class="mobile-burger-btn" id="mobileBurgerBtn" aria-label="Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <!-- Category Pills -->
+        <nav class="nav-cats" id="navCatPills">
+            <a href="{{ url('/katalog') }}" class="nav-cat-pill active">
+                <i class="fas fa-border-all"></i> Semua
+            </a>
+        </nav>
+    </div>
+</header>
+
+<!-- MAP POPUP -->
+<div class="map-overlay" id="mapOverlay">
+    <div class="map-modal">
+        <div class="map-modal-header">
+            <h3><i class="fas fa-map-marker-alt" style="color:#e74c3c; margin-right:6px;"></i> Lokasi Toko King Gitar
+            </h3>
+            <button class="map-close-btn" id="closeMapBtn"><i class="fas fa-times"></i></button>
+        </div>
+        <iframe
+            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d2032374.2945433152!2d107.1970067!3d-5.7875148!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6939e4a1897f0b%3A0xdbb9cdb4a5a9b33a!2sLucky%20Gitar%20Store!5e0!3m2!1sid!2sid!4v1772457416730!5m2!1sid!2sid"
+            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+</div>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+<div class="mobile-menu-drawer" id="mobileMenuDrawer">
+    <div class="mobile-menu-header">
+        <div class="mobile-menu-title"><img src="{{ asset('Foto/Logo.png') }}" style="height:24px;" alt="Logo"> KING
+            GITAR</div>
+        <button class="mobile-menu-close" id="mobileMenuClose"><i class="fas fa-times"></i></button>
+    </div>
+    <ul class="mobile-menu-links">
+        <li><a href="{{ url('/') }}"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="{{ url('/katalog') }}" class="active"><i class="fas fa-th-large"></i> Katalog</a></li>
+        <li><a href="{{ url('/kategori') }}"><i class="fas fa-list"></i> Kategori</a></li>
+        <li><a href="#" id="mobileOpenMapBtn"><i class="fas fa-map-marker-alt"></i> Lokasi Toko</a></li>
+    </ul>
+    <div class="mobile-menu-footer">
+        @auth
+            @if(Auth::user()->is_admin)
+                <a href="{{ route('admin.dashboard') }}"
+                    style="display:block;text-align:center;background:#1a1a1a;color:white;padding:12px;border-radius:8px;text-decoration:none;font-weight:500;">
+                    Dashboard
+                </a>
+            @else
+                <form method="POST" action="{{ route('logout') }}" style="margin: 0;">
+                    @csrf
+                    <button type="submit"
+                        style="width:100%;text-align:center;background:#f3f4f6;color:#1f2937;padding:12px;border-radius:8px;border:none;font-weight:500;cursor:pointer;">
+                        Logout
+                    </button>
+                </form>
+            @endif
+        @else
+            <a href="{{ route('login') }}"
+                style="display:block;text-align:center;background:#1a1a1a;color:white;padding:12px;border-radius:8px;text-decoration:none;font-weight:500;">
+                Masuk
+            </a>
+        @endauth
+    </div>
+</div>
+
+{{-- Hero Banner Slider --}}
+
+<div class="hero">
+    <div class="container">
+        <div style="position:relative; border-radius:20px; overflow:hidden; background: #f8fafc;" id="bannerSlider">
+            <!-- Loader placeholder -->
+            <div id="bannerLoader" class="banner-loader-wrap">
+                <div class="skeleton" style="position: absolute; inset: 0; z-index: 1;"></div>
+                <div class="banner-spinner" style="position: relative; z-index: 2;"></div>
+            </div>
+            <!-- Slides injected by JS -->
+            <div style="display:flex; height:100%; transition:transform .6s cubic-bezier(.4,0,.2,1); opacity: 0;"
+                id="bannerTrack">
+            </div>
+
+            <!-- Arrows -->
+            <!-- <button onclick="moveBanner(-1)" style="position:absolute; left:14px; top:50%; transform:translateY(-50%); background:rgba(0,0,0,.35); border:none; border-radius:50%; width:40px; height:40px; color:white; font-size:1.2rem; cursor:pointer; display:flex; align-items:center; justify-content:center;" aria-label="Prev"><i class="fas fa-chevron-left"></i></button>
+                <button onclick="moveBanner(1)"  style="position:absolute; right:14px; top:50%; transform:translateY(-50%); background:rgba(0,0,0,.35); border:none; border-radius:50%; width:40px; height:40px; color:white; font-size:1.2rem; cursor:pointer; display:flex; align-items:center; justify-content:center;" aria-label="Next"><i class="fas fa-chevron-right"></i></button> -->
+
+            <!-- Dots -->
+            <div id="bannerDots"
+                style="position:absolute; bottom:14px; left:50%; transform:translateX(-50%); display:flex; gap:7px;">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Product Grid -->
+<section class="products">
+    <div class="container">
+        <div class="products-grid" id="productsGrid">
+            <!-- Products rendered via JS -->
+        </div>
+        <!-- Pagination -->
+        <div id="pagination" style="margin-top: 40px; display: flex; justify-content: center; gap: 10px;"></div>
+    </div>
+</section>
+
+<!-- no sidebar styles needed anymore -->
+
+@include('partials.footer')
+
+
+
+
     <style>
+
         html {
             scroll-behavior: smooth;
         }
@@ -810,157 +962,8 @@
         }
 
         /* remove unused mobile menu styles */
+    
     </style>
-</head>
-
-
-
-<!-- ===== HEADER ===== -->
-<header id="mainHeader">
-    <div class="container">
-        <div class="nav-top">
-            <!-- Logo -->
-            <a href="{{ url('/') }}" class="nav-logo">
-                <img src="{{ asset('Foto/Logo.png') }}" alt="King Gitar Logo">
-                <span class="nav-logo-name">KING GITAR</span>
-            </a>
-            <!-- Search -->
-            <div class="nav-search">
-                <i class="fas fa-search" style="color:#aaa; font-size:0.85rem; flex-shrink:0;"></i>&nbsp;
-                <input type="text" id="searchInput" placeholder="Cari gitar berkualitas, coba lihat...">
-                <button class="nav-search-btn" id="searchBtn">
-                    <i class="fas fa-search"></i> Cari
-                </button>
-            </div>
-            <!-- Right Actions -->
-            <div class="nav-actions">
-                <a href="{{ url('/kategori') }}" class="nav-icon-btn" title="Kategori">
-                    <i class="fas fa-th-large"></i>
-                    <span>Kategori</span>
-                </a>
-                <button class="nav-icon-btn" id="openMapBtn" title="Lokasi Toko">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span>Lokasi</span>
-                </button>
-                @auth
-                    @if(Auth::user()->is_admin)
-                        <a href="{{ route('admin.dashboard') }}" class="nav-login-btn">Dashboard</a>
-                    @else
-                        <span class="nav-icon-btn"><i class="fas fa-user-circle"></i></span>
-                    @endif
-                @else
-                    <a href="{{ url('/login') }}" class="nav-login-btn">Masuk</a>
-                @endauth
-            </div>
-            <button class="mobile-burger-btn" id="mobileBurgerBtn" aria-label="Menu">
-                <i class="fas fa-bars"></i>
-            </button>
-        </div>
-        <!-- Category Pills -->
-        <nav class="nav-cats" id="navCatPills">
-            <a href="{{ url('/katalog') }}" class="nav-cat-pill active">
-                <i class="fas fa-border-all"></i> Semua
-            </a>
-        </nav>
-    </div>
-</header>
-
-<!-- MAP POPUP -->
-<div class="map-overlay" id="mapOverlay">
-    <div class="map-modal">
-        <div class="map-modal-header">
-            <h3><i class="fas fa-map-marker-alt" style="color:#e74c3c; margin-right:6px;"></i> Lokasi Toko King Gitar
-            </h3>
-            <button class="map-close-btn" id="closeMapBtn"><i class="fas fa-times"></i></button>
-        </div>
-        <iframe
-            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d2032374.2945433152!2d107.1970067!3d-5.7875148!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6939e4a1897f0b%3A0xdbb9cdb4a5a9b33a!2sLucky%20Gitar%20Store!5e0!3m2!1sid!2sid!4v1772457416730!5m2!1sid!2sid"
-            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-    </div>
-</div>
-
-<!-- Mobile Menu -->
-<div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
-<div class="mobile-menu-drawer" id="mobileMenuDrawer">
-    <div class="mobile-menu-header">
-        <div class="mobile-menu-title"><img src="{{ asset('Foto/Logo.png') }}" style="height:24px;" alt="Logo"> KING
-            GITAR</div>
-        <button class="mobile-menu-close" id="mobileMenuClose"><i class="fas fa-times"></i></button>
-    </div>
-    <ul class="mobile-menu-links">
-        <li><a href="{{ url('/') }}"><i class="fas fa-home"></i> Home</a></li>
-        <li><a href="{{ url('/katalog') }}" class="active"><i class="fas fa-th-large"></i> Katalog</a></li>
-        <li><a href="{{ url('/kategori') }}"><i class="fas fa-list"></i> Kategori</a></li>
-        <li><a href="#" id="mobileOpenMapBtn"><i class="fas fa-map-marker-alt"></i> Lokasi Toko</a></li>
-    </ul>
-    <div class="mobile-menu-footer">
-        @auth
-            @if(Auth::user()->is_admin)
-                <a href="{{ route('admin.dashboard') }}"
-                    style="display:block;text-align:center;background:#1a1a1a;color:white;padding:12px;border-radius:8px;text-decoration:none;font-weight:500;">
-                    Dashboard
-                </a>
-            @else
-                <form method="POST" action="{{ route('logout') }}" style="margin: 0;">
-                    @csrf
-                    <button type="submit"
-                        style="width:100%;text-align:center;background:#f3f4f6;color:#1f2937;padding:12px;border-radius:8px;border:none;font-weight:500;cursor:pointer;">
-                        Logout
-                    </button>
-                </form>
-            @endif
-        @else
-            <a href="{{ route('login') }}"
-                style="display:block;text-align:center;background:#1a1a1a;color:white;padding:12px;border-radius:8px;text-decoration:none;font-weight:500;">
-                Masuk
-            </a>
-        @endauth
-    </div>
-</div>
-
-{{-- Hero Banner Slider --}}
-
-<div class="hero">
-    <div class="container">
-        <div style="position:relative; border-radius:20px; overflow:hidden; background: #f8fafc;" id="bannerSlider">
-            <!-- Loader placeholder -->
-            <div id="bannerLoader" class="banner-loader-wrap">
-                <div class="skeleton" style="position: absolute; inset: 0; z-index: 1;"></div>
-                <div class="banner-spinner" style="position: relative; z-index: 2;"></div>
-            </div>
-            <!-- Slides injected by JS -->
-            <div style="display:flex; height:100%; transition:transform .6s cubic-bezier(.4,0,.2,1); opacity: 0;"
-                id="bannerTrack">
-            </div>
-
-            <!-- Arrows -->
-            <!-- <button onclick="moveBanner(-1)" style="position:absolute; left:14px; top:50%; transform:translateY(-50%); background:rgba(0,0,0,.35); border:none; border-radius:50%; width:40px; height:40px; color:white; font-size:1.2rem; cursor:pointer; display:flex; align-items:center; justify-content:center;" aria-label="Prev"><i class="fas fa-chevron-left"></i></button>
-                <button onclick="moveBanner(1)"  style="position:absolute; right:14px; top:50%; transform:translateY(-50%); background:rgba(0,0,0,.35); border:none; border-radius:50%; width:40px; height:40px; color:white; font-size:1.2rem; cursor:pointer; display:flex; align-items:center; justify-content:center;" aria-label="Next"><i class="fas fa-chevron-right"></i></button> -->
-
-            <!-- Dots -->
-            <div id="bannerDots"
-                style="position:absolute; bottom:14px; left:50%; transform:translateX(-50%); display:flex; gap:7px;">
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Product Grid -->
-<section class="products">
-    <div class="container">
-        <div class="products-grid" id="productsGrid">
-            <!-- Products rendered via JS -->
-        </div>
-        <!-- Pagination -->
-        <div id="pagination" style="margin-top: 40px; display: flex; justify-content: center; gap: 10px;"></div>
-    </div>
-</section>
-
-<!-- no sidebar styles needed anymore -->
-
-@include('partials.footer')
-
-
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {

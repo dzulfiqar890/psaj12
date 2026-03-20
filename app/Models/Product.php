@@ -40,6 +40,7 @@ class Product extends Model
         'description',
         'image',
         'stock',
+        'created_by',
     ];
 
     /**
@@ -164,6 +165,14 @@ class Product extends Model
         }
 
         return null;
+    }
+
+    /**
+     * Relationship: Product dibuat oleh User tertentu.
+     */
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 
     /**

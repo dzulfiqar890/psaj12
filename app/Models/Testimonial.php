@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 /**
  * Model Testimonial
@@ -28,6 +29,7 @@ class Testimonial extends Model
         'name',
         'testimony',
         'is_active',
+        'created_by',
     ];
 
     /**
@@ -40,6 +42,14 @@ class Testimonial extends Model
         return [
             'is_active' => 'boolean',
         ];
+    }
+
+    /**
+     * Relationship: Testimoni dibuat oleh User tertentu.
+     */
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 
     /**

@@ -12,8 +12,11 @@
     <meta name="author" content="King Gitar">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="{{ url('/') }}">
-    <link rel="icon" type="image/png" href="{{ asset('Foto/Logo.png') }}">
-    <link rel="apple-touch-icon" href="{{ asset('Foto/Logo.png') }}">
+    <link rel="icon" type="image/x-icon" href="https://king-gitar.gt.tc/Foto/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://king-gitar.gt.tc/Foto/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://king-gitar.gt.tc/Foto/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://king-gitar.gt.tc/Foto/favicon-16x16.png">
+    <link rel="manifest" href="https://king-gitar.gt.tc/Foto/site.webmanifest">
 
     {{-- ===== Open Graph / Facebook ===== --}}
     <meta property="og:type" content="website">
@@ -26,6 +29,8 @@
     <meta property="og:url" content="{{ url('/') }}">
     <meta property="og:locale" content="id_ID">
     <meta property="og:site_name" content="King Gitar">
+        
+    <meta name="google-site-verification" content="AWcx3JIoj1NcOzTVABnymZ1P7BjB6dhJ2x6ADXXh2a8" />
 
     {{-- ===== Twitter Card ===== --}}
     <meta name="twitter:card" content="summary_large_image">
@@ -34,7 +39,7 @@
     <meta name="twitter:image" content="{{ asset('Foto/ogimage.png') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
@@ -60,107 +65,15 @@
             }
         }
     </script>
-    <style>
-        .skeleton {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-            border-radius: 8px;
-        }
-
-        @keyframes shimmer {
-            0% {
-                background-position: 200% 0;
-            }
-
-            100% {
-                background-position: -200% 0;
-            }
-        }
-
-        .fade-in-up {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-        }
-
-        .fade-in-up.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .hero-bg {
-            position: relative;
-            background-image: url('{{ asset("Foto/1.png") }}');
-            background-size: cover;
-            background-position: center;
-            overflow: hidden;
-        }
-
-        .hero-bg::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.45);
-            /* tingkat gelap */
-            backdrop-filter: blur(3px);
-            /* blur halus */
-            z-index: 1;
-        }
-
-        .hero-bg>* {
-            position: relative;
-            z-index: 2;
-            /* konten tetap tajam */
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #D4AF37;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #C5A028;
-        }
-
-        /* Glassmorphism for Testimonial Cards */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Smooth transitions for navbar */
-        .nav-scrolled {
-            background-color: white;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            padding-top: 1rem !important;
-            padding-bottom: 1rem !important;
-        }
-
-        .nav-transparent {
-            background-color: transparent;
-            padding-top: 1.5rem !important;
-            padding-bottom: 1.5rem !important;
-        }
-
-        /* Active Link Scroll State */
-        .nav-link.active::after {
-            transform: scaleX(1);
-            transform-origin: bottom left;
-        }
-    </style>
-</head>
+    <script type="application/ld+json">
+    {
+      "@@context" : "https://schema.org",
+      "@@type" : "WebSite",
+      "name" : "King Gitar",
+      "alternateName" : ["King Gitar Subang", "Toko King Gitar"],
+      "url" : "https://king-gitar.gt.tc/"
+    }
+    </script></head>
 
 <body class="font-sans text-gray-800 antialiased bg-[#FAF9F6]">
 
@@ -302,8 +215,304 @@
         </div>
     </section>
 
-    <!-- Catalog Section CSS -->
+    <!-- Catalog Section CSS --><!-- Catalog Section -->
+    <section id="catalog" class="catalog-section">
+        <div class="catalog-container">
+            <!-- Header -->
+            <div class="catalog-header fade-in-up">
+                <div>
+                    <h2 class="catalog-title">Catalog Produk</h2>
+                    <div class="catalog-title-underline"></div>
+                </div>
+                <a href="{{ url('/katalog') }}" class="catalog-view-all">
+                    Lihat Semua
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </a>
+            </div>
+
+            <!-- Product Grid -->
+            <div class="catalog-grid" id="latest-products-grid">
+                <!-- Skeleton Loading -->
+                <div class="catalog-card fade-in-up" style="height: 380px; border-radius: 20px;">
+                    <div class="skeleton" style="width: 100%; height: 250px; border-radius: 12px; margin-bottom: 24px;">
+                    </div>
+                    <div class="skeleton" style="width: 70%; height: 20px; border-radius: 4px; margin: 0 auto 16px;">
+                    </div>
+                    <div class="skeleton" style="width: 40%; height: 20px; border-radius: 4px; margin: 0 auto;"></div>
+                </div>
+                <div class="catalog-card fade-in-up" style="height: 380px; border-radius: 20px;">
+                    <div class="skeleton" style="width: 100%; height: 250px; border-radius: 12px; margin-bottom: 24px;">
+                    </div>
+                    <div class="skeleton" style="width: 70%; height: 20px; border-radius: 4px; margin: 0 auto 16px;">
+                    </div>
+                    <div class="skeleton" style="width: 40%; height: 20px; border-radius: 4px; margin: 0 auto;"></div>
+                </div>
+                <div class="catalog-card fade-in-up" style="height: 380px; border-radius: 20px;">
+                    <div class="skeleton" style="width: 100%; height: 250px; border-radius: 12px; margin-bottom: 24px;">
+                    </div>
+                    <div class="skeleton" style="width: 70%; height: 20px; border-radius: 4px; margin: 0 auto 16px;">
+                    </div>
+                    <div class="skeleton" style="width: 40%; height: 20px; border-radius: 4px; margin: 0 auto;"></div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <!-- Branding Section (Mid) -->
+    <section class="h-[60vh] md:h-[80vh] relative flex items-center justify-center bg-fixed bg-center bg-cover"
+        style="background-image: url('{{ asset('Foto/6.png') }}');">
+        <div class="absolute inset-0 bg-black/50"></div>
+        <div class="relative z-10 text-center fade-in-up">
+            <h2 class="text-6xl md:text-9xl font-serif font-bold text-white tracking-widest uppercase opacity-90">KING
+                GITAR</h2>
+            {{-- <p class="text-white/80 text-xl tracking-[0.5em] mt-4 uppercase">Est. 2026</p> --}}
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 bg-[#FFF4E6] relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16 fade-in-up">
+                <h2 class="text-4xl md:text-5xl font-serif font-bold text-dark-900 mb-4">About King Gitar</h2>
+                <div class="w-full h-px bg-dark-900 mx-auto max-w-4xl"></div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12">
+                <!-- Left Column -->
+                <div class="fade-in-up flex flex-col gap-8">
+                    <div>
+                        <p class="text-lg text-dark-900 leading-relaxed font-serif mb-6">
+                            King Gitar hadir sebagai ruang bagi para pecinta musik untuk menemukan gitar dengan kualitas
+                            terbaik dan karakter suara yang otentik. Setiap instrumen dipilih dengan standar tinggi,
+                            mengutamakan detail, kenyamanan, dan keindahan desain.
+                        </p>
+                        <p class="text-lg text-dark-900 leading-relaxed font-serif">
+                            Kami percaya bahwa gitar bukan sekadar alat musik, tetapi bagian dari perjalanan musikal
+                            setiap pemain. Oleh karena itu, King Gitar menghadirkan koleksi gitar yang memadukan
+                            craftsmanship klasik, material berkualitas, dan sentuhan modern.
+                        </p>
+                    </div>
+                    <div>
+                        <img src="{{ asset('Foto/7.png') }}" alt="Acoustic Detail" loading="lazy"
+                            class="w-full h-auto object-cover rounded shadow-lg">
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div class="fade-in-up flex flex-col gap-8">
+                    <div>
+                        <p class="text-lg text-dark-900 leading-relaxed font-serif">
+                            Dengan tampilan elegan dan proses kurasi yang cermat, King Gitar berkomitmen menjadi
+                            destinasi terpercaya bagi musisi pemula hingga profesional untuk menemukan instrumen yang
+                            tepat dan bernilai jangka panjang.
+                        </p>
+                    </div>
+                    <div>
+                        <img src="{{ asset('Foto/6.png') }}" alt="Fretboard Detail" loading="lazy"
+                            class="w-full h-auto object-cover rounded shadow-lg">
+                    </div>
+                    <div>
+                        <p class="text-lg text-dark-900 leading-relaxed font-serif mb-6">
+                            Kami menghadirkan pengalaman berbelanja yang sederhana, tenang, dan terkurasi. Mulai dari
+                            pemilihan produk hingga penyajian katalog, semuanya dirancang agar pelanggan dapat fokus
+                            menemukan gitar yang benar-benar sesuai dengan karakter dan kebutuhan musikal mereka.
+                        </p>
+                        <p class="text-lg text-dark-900 leading-relaxed font-serif">
+                            Dengan komitmen pada kualitas dan pelayanan, King Gitar terus berupaya menjaga kepercayaan
+                            sebagai rumah bagi gitar-gitar pilihan yang siap menemani setiap perjalanan bermusik.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section - 3-card Peek Slider -->
+    <section id="testimonials" class="py-24 bg-cover bg-center relative overflow-hidden"
+        style="background-image: url('{{ asset('Foto/7.png') }}');">
+        <div class="absolute inset-0 bg-dark-900/65 backdrop-blur-sm"></div><div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="text-center mb-14 fade-in-up">
+                <h2 class="text-4xl md:text-5xl font-serif font-bold text-white mb-4">What Our Customers Say</h2>
+                <div class="w-16 h-1 bg-yellow-400 mx-auto"></div>
+            </div>
+
+            <!-- Slider wrapper with arrows absolutely positioned on sides -->
+            <div class="testi-wrapper-padded" style="position:relative; padding:0 56px;">
+
+                <!-- Left Arrow -->
+                <button onclick="goTesti((testiIdx-1+testiData.length)%testiData.length)" class="testi-arrow left">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"
+                        viewBox="0 0 24 24">
+                        <path d="M15 18l-6-6 6-6" />
+                    </svg>
+                </button>
+
+                <div class="testi-outer">
+                    <div id="testiTrack" class="testi-track" style="padding: 8px 0 20px;">
+                        <!-- Loading placeholders (3 skeletons) -->
+                        <div class="testi-slide">
+                            <div class="testi-card">
+                                <div class="h-14 w-14 rounded-full bg-white/10 animate-pulse mb-2"></div>
+                                <div class="h-4 bg-white/20 rounded w-1/3 mb-3 animate-pulse"></div>
+                                <div class="h-20 bg-white/10 rounded w-full animate-pulse"></div>
+                            </div>
+                        </div>
+                        <div class="testi-slide">
+                            <div class="testi-card">
+                                <div class="h-14 w-14 rounded-full bg-white/10 animate-pulse mb-2"></div>
+                                <div class="h-4 bg-white/20 rounded w-1/3 mb-3 animate-pulse"></div>
+                                <div class="h-20 bg-white/10 rounded w-full animate-pulse"></div>
+                            </div>
+                        </div>
+                        <div class="testi-slide">
+                            <div class="testi-card">
+                                <div class="h-14 w-14 rounded-full bg-white/10 animate-pulse mb-2"></div>
+                                <div class="h-4 bg-white/20 rounded w-1/3 mb-3 animate-pulse"></div>
+                                <div class="h-20 bg-white/10 rounded w-full animate-pulse"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Arrow -->
+                <button onclick="nextTesti()" class="testi-arrow right">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"
+                        viewBox="0 0 24 24">
+                        <path d="M9 18l6-6-6-6" />
+                    </svg>
+                </button>
+
+            </div>
+
+            <!-- Dots -->
+            <div id="testiDots" class="flex justify-center gap-2 mt-6"></div>
+        </div>
+    </section>
+
+    <!-- <div class="mt-16 pt-12 border-t border-gray-200 mb-16 ">
+        <div class="bg-white p-8 rounded-2xl shadow-lg max-w-3xl mx-auto">
+            <h3 class="text-2xl font-serif font-bold text-center mb-6">Masukan & Saran</h3>
+            <form class="space-y-5">
+                <input type="text" placeholder="Judul"
+                    class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-500 transition-all">
+                <textarea rows="4" placeholder="Tulis masukan Anda disini..."
+                    class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-500 transition-all"></textarea>
+                <button type="submit"
+                    class="w-full py-4 bg-dark-900 text-white font-bold rounded-lg hover:bg-gold-500 transition-colors uppercase tracking-widest">Kirim
+                    Masukan</button>
+            </form>
+        </div>
+    </div> -->
+
+    @include('partials.footer')
+
+    <!-- JavaScript -->
+
     <style>
+
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 8px;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero-bg {
+            position: relative;
+            background-image: url('{{ asset("Foto/1.png") }}');
+            background-size: cover;
+            background-position: center;
+            overflow: hidden;
+        }
+
+        .hero-bg::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            /* tingkat gelap (dipergelap dari 0.45 menjadi 0.75) */
+            backdrop-filter: blur(3px);
+            /* blur halus */
+            z-index: 1;
+        }
+
+        .hero-bg>* {
+            position: relative;
+            z-index: 2;
+            /* konten tetap tajam */
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #D4AF37;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C5A028;
+        }
+
+        /* Glassmorphism for Testimonial Cards */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Smooth transitions for navbar */
+        .nav-scrolled {
+            background-color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding-top: 1rem !important;
+            padding-bottom: 1rem !important;
+        }
+
+        .nav-transparent {
+            background-color: transparent;
+            padding-top: 1.5rem !important;
+            padding-bottom: 1.5rem !important;
+        }
+
+        /* Active Link Scroll State */
+        .nav-link.active::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+    
+
         /* ===== Catalog Section ===== */
         .catalog-section {
             padding: 80px 0;
@@ -550,129 +759,8 @@
                 height: 200px;
             }
         }
-    </style>
+    
 
-    <!-- Catalog Section -->
-    <section id="catalog" class="catalog-section">
-        <div class="catalog-container">
-            <!-- Header -->
-            <div class="catalog-header fade-in-up">
-                <div>
-                    <h2 class="catalog-title">Catalog Produk</h2>
-                    <div class="catalog-title-underline"></div>
-                </div>
-                <a href="{{ url('/katalog') }}" class="catalog-view-all">
-                    Lihat Semua
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </a>
-            </div>
-
-            <!-- Product Grid -->
-            <div class="catalog-grid" id="latest-products-grid">
-                <!-- Skeleton Loading -->
-                <div class="catalog-card fade-in-up" style="height: 380px; border-radius: 20px;">
-                    <div class="skeleton" style="width: 100%; height: 250px; border-radius: 12px; margin-bottom: 24px;">
-                    </div>
-                    <div class="skeleton" style="width: 70%; height: 20px; border-radius: 4px; margin: 0 auto 16px;">
-                    </div>
-                    <div class="skeleton" style="width: 40%; height: 20px; border-radius: 4px; margin: 0 auto;"></div>
-                </div>
-                <div class="catalog-card fade-in-up" style="height: 380px; border-radius: 20px;">
-                    <div class="skeleton" style="width: 100%; height: 250px; border-radius: 12px; margin-bottom: 24px;">
-                    </div>
-                    <div class="skeleton" style="width: 70%; height: 20px; border-radius: 4px; margin: 0 auto 16px;">
-                    </div>
-                    <div class="skeleton" style="width: 40%; height: 20px; border-radius: 4px; margin: 0 auto;"></div>
-                </div>
-                <div class="catalog-card fade-in-up" style="height: 380px; border-radius: 20px;">
-                    <div class="skeleton" style="width: 100%; height: 250px; border-radius: 12px; margin-bottom: 24px;">
-                    </div>
-                    <div class="skeleton" style="width: 70%; height: 20px; border-radius: 4px; margin: 0 auto 16px;">
-                    </div>
-                    <div class="skeleton" style="width: 40%; height: 20px; border-radius: 4px; margin: 0 auto;"></div>
-                </div>
-            </div>
-        </div>
-        </div>
-    </section>
-
-    <!-- Branding Section (Mid) -->
-    <section class="h-[60vh] md:h-[80vh] relative flex items-center justify-center bg-fixed bg-center bg-cover"
-        style="background-image: url('{{ asset('Foto/6.png') }}');">
-        <div class="absolute inset-0 bg-black/50"></div>
-        <div class="relative z-10 text-center fade-in-up">
-            <h2 class="text-6xl md:text-9xl font-serif font-bold text-white tracking-widest uppercase opacity-90">KING
-                GITAR</h2>
-            {{-- <p class="text-white/80 text-xl tracking-[0.5em] mt-4 uppercase">Est. 2026</p> --}}
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="py-24 bg-[#FFF4E6] relative">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-16 fade-in-up">
-                <h2 class="text-4xl md:text-5xl font-serif font-bold text-dark-900 mb-4">About King Gitar</h2>
-                <div class="w-full h-px bg-dark-900 mx-auto max-w-4xl"></div>
-            </div>
-
-            <div class="grid md:grid-cols-2 gap-12">
-                <!-- Left Column -->
-                <div class="fade-in-up flex flex-col gap-8">
-                    <div>
-                        <p class="text-lg text-dark-900 leading-relaxed font-serif mb-6">
-                            King Gitar hadir sebagai ruang bagi para pecinta musik untuk menemukan gitar dengan kualitas
-                            terbaik dan karakter suara yang otentik. Setiap instrumen dipilih dengan standar tinggi,
-                            mengutamakan detail, kenyamanan, dan keindahan desain.
-                        </p>
-                        <p class="text-lg text-dark-900 leading-relaxed font-serif">
-                            Kami percaya bahwa gitar bukan sekadar alat musik, tetapi bagian dari perjalanan musikal
-                            setiap pemain. Oleh karena itu, King Gitar menghadirkan koleksi gitar yang memadukan
-                            craftsmanship klasik, material berkualitas, dan sentuhan modern.
-                        </p>
-                    </div>
-                    <div>
-                        <img src="{{ asset('Foto/7.png') }}" alt="Acoustic Detail" loading="lazy"
-                            class="w-full h-auto object-cover rounded shadow-lg">
-                    </div>
-                </div>
-
-                <!-- Right Column -->
-                <div class="fade-in-up flex flex-col gap-8">
-                    <div>
-                        <p class="text-lg text-dark-900 leading-relaxed font-serif">
-                            Dengan tampilan elegan dan proses kurasi yang cermat, King Gitar berkomitmen menjadi
-                            destinasi terpercaya bagi musisi pemula hingga profesional untuk menemukan instrumen yang
-                            tepat dan bernilai jangka panjang.
-                        </p>
-                    </div>
-                    <div>
-                        <img src="{{ asset('Foto/6.png') }}" alt="Fretboard Detail" loading="lazy"
-                            class="w-full h-auto object-cover rounded shadow-lg">
-                    </div>
-                    <div>
-                        <p class="text-lg text-dark-900 leading-relaxed font-serif mb-6">
-                            Kami menghadirkan pengalaman berbelanja yang sederhana, tenang, dan terkurasi. Mulai dari
-                            pemilihan produk hingga penyajian katalog, semuanya dirancang agar pelanggan dapat fokus
-                            menemukan gitar yang benar-benar sesuai dengan karakter dan kebutuhan musikal mereka.
-                        </p>
-                        <p class="text-lg text-dark-900 leading-relaxed font-serif">
-                            Dengan komitmen pada kualitas dan pelayanan, King Gitar terus berupaya menjaga kepercayaan
-                            sebagai rumah bagi gitar-gitar pilihan yang siap menemani setiap perjalanan bermusik.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials Section - 3-card Peek Slider -->
-    <section id="testimonials" class="py-24 bg-cover bg-center relative overflow-hidden"
-        style="background-image: url('{{ asset('Foto/7.png') }}');">
-        <div class="absolute inset-0 bg-dark-900/65 backdrop-blur-sm"></div>
-
-        <style>
             .testi-outer {
                 position: relative;
                 overflow: hidden;
@@ -813,85 +901,9 @@
                     padding: 0 36px !important;
                 }
             }
-        </style>
+        
+    </style>
 
-        <div class="max-w-7xl mx-auto px-6 relative z-10">
-            <div class="text-center mb-14 fade-in-up">
-                <h2 class="text-4xl md:text-5xl font-serif font-bold text-white mb-4">What Our Customers Say</h2>
-                <div class="w-16 h-1 bg-yellow-400 mx-auto"></div>
-            </div>
-
-            <!-- Slider wrapper with arrows absolutely positioned on sides -->
-            <div class="testi-wrapper-padded" style="position:relative; padding:0 56px;">
-
-                <!-- Left Arrow -->
-                <button onclick="goTesti((testiIdx-1+testiData.length)%testiData.length)" class="testi-arrow left">
-                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"
-                        viewBox="0 0 24 24">
-                        <path d="M15 18l-6-6 6-6" />
-                    </svg>
-                </button>
-
-                <div class="testi-outer">
-                    <div id="testiTrack" class="testi-track" style="padding: 8px 0 20px;">
-                        <!-- Loading placeholders (3 skeletons) -->
-                        <div class="testi-slide">
-                            <div class="testi-card">
-                                <div class="h-14 w-14 rounded-full bg-white/10 animate-pulse mb-2"></div>
-                                <div class="h-4 bg-white/20 rounded w-1/3 mb-3 animate-pulse"></div>
-                                <div class="h-20 bg-white/10 rounded w-full animate-pulse"></div>
-                            </div>
-                        </div>
-                        <div class="testi-slide">
-                            <div class="testi-card">
-                                <div class="h-14 w-14 rounded-full bg-white/10 animate-pulse mb-2"></div>
-                                <div class="h-4 bg-white/20 rounded w-1/3 mb-3 animate-pulse"></div>
-                                <div class="h-20 bg-white/10 rounded w-full animate-pulse"></div>
-                            </div>
-                        </div>
-                        <div class="testi-slide">
-                            <div class="testi-card">
-                                <div class="h-14 w-14 rounded-full bg-white/10 animate-pulse mb-2"></div>
-                                <div class="h-4 bg-white/20 rounded w-1/3 mb-3 animate-pulse"></div>
-                                <div class="h-20 bg-white/10 rounded w-full animate-pulse"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Right Arrow -->
-                <button onclick="nextTesti()" class="testi-arrow right">
-                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"
-                        viewBox="0 0 24 24">
-                        <path d="M9 18l6-6-6-6" />
-                    </svg>
-                </button>
-
-            </div>
-
-            <!-- Dots -->
-            <div id="testiDots" class="flex justify-center gap-2 mt-6"></div>
-        </div>
-    </section>
-
-    <!-- <div class="mt-16 pt-12 border-t border-gray-200 mb-16 ">
-        <div class="bg-white p-8 rounded-2xl shadow-lg max-w-3xl mx-auto">
-            <h3 class="text-2xl font-serif font-bold text-center mb-6">Masukan & Saran</h3>
-            <form class="space-y-5">
-                <input type="text" placeholder="Judul"
-                    class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-500 transition-all">
-                <textarea rows="4" placeholder="Tulis masukan Anda disini..."
-                    class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-500 transition-all"></textarea>
-                <button type="submit"
-                    class="w-full py-4 bg-dark-900 text-white font-bold rounded-lg hover:bg-gold-500 transition-colors uppercase tracking-widest">Kirim
-                    Masukan</button>
-            </form>
-        </div>
-    </div> -->
-
-    @include('partials.footer')
-
-    <!-- JavaScript -->
     <script>
         // Navbar Scroll Effect
         const navbar = document.getElementById('navbar');
