@@ -135,8 +135,10 @@
             fd.append('is_admin', document.getElementById('f-is_admin').value);
             fd.append('no_telephone', document.getElementById('f-phone').value);
             const pw = document.getElementById('f-password').value;
-            if (pw) fd.append('password', pw);
-            if (!id) fd.append('password_confirmation', pw);
+            if (pw) {
+                fd.append('password', pw);
+                fd.append('password_confirmation', pw);
+            }
             const img = document.getElementById('f-image').files[0];
             if (img) fd.append('image', img);
             if (id) fd.append('_method', 'PUT');
@@ -224,13 +226,16 @@
     document.getElementById('f-password').value = '';
     document.getElementById('f-image').value = '';
 
-    // LOGIKA SEMBUNYIKAN PASSWORD
     if (isEdit) {
-        passwordGroup.classList.add('hidden'); // Sembunyikan jika edit
+        passwordGroup.classList.remove('hidden');
         document.getElementById('f-password').required = false;
+        document.getElementById('lbl-password').textContent = 'Ganti Password (Opsional)';
+        document.getElementById('hint-password').classList.remove('hidden');
     } else {
-        passwordGroup.classList.remove('hidden'); // Munculkan jika tambah baru
+        passwordGroup.classList.remove('hidden'); 
         document.getElementById('f-password').required = true;
+        document.getElementById('lbl-password').textContent = 'Password *';
+        document.getElementById('hint-password').classList.add('hidden');
     }
 
     document.getElementById('modalTitle').textContent = isEdit ? 'Edit User' : 'Tambah User';

@@ -369,6 +369,163 @@ Halaman landing berisi:
 
 ---
 
+### ⚡ Fitur 12: Application-Level Caching (Optimasi Performa)
+
+**Letak code:**
+- `app/Http/Controllers/Api/PublicApi/ProductController.php` — Cache list & detail produk
+- `app/Http/Controllers/Api/PublicApi/CategoryController.php` — Cache list & detail kategori
+- `app/Http/Controllers/Api/PublicApi/BannerController.php` — Cache banner aktif
+- `app/Http/Controllers/Api/Admin/ProductController.php` — Cache invalidation saat CRUD
+- `app/Http/Controllers/Api/Admin/CategoryController.php` — Cache invalidation saat CRUD
+- `app/Http/Controllers/Api/Admin/BannerController.php` — Cache invalidation saat CRUD
+
+**Teknik:** Menggunakan `Cache::remember()` agar query database hanya dijalankan sekali, lalu hasilnya disimpan ke cache. Request selanjutnya mengambil dari cache (instan).
+
+| Data | Cache Key | Durasi |
+|---|---|---|
+| List Produk | `products_index_v{version}_{md5_filter}` | 30 menit |
+| Detail Produk | `product_detail_{slug}` | 1 jam |
+| List Kategori | `categories_index` | 1 hari |
+| Detail Kategori | `category_detail_{slug}` | 1 jam |
+| Banner Aktif | `active_banners` | 1 hari |
+
+**Cache Invalidation:** Saat admin melakukan CRUD melalui Admin API, cache otomatis di-clear:
+```php
+// Letak: app/Http/Controllers/Api/Admin/ProductController.php
+Cache::increment('products_cache_version'); // Invalidasi semua list cache
+Cache::forget('product_detail_' . $product->slug); // Invalidasi detail spesifik
+```
+
+**Teknik Version-Based Cache Busting:** Untuk product list, cache key-nya bervariasi tergantung filter/search/page. Daripada hapus satu-satu, kita increment version number → semua cache lama otomatis tidak terpakai lagi.
+
+---
+
+### 🛡️ Fitur 13: Security Headers Middleware
+
+**Letak code:** `app/Http/Middleware/SecurityHeadersMiddleware.php`
+
+Middleware ini diterapkan secara **global** ke semua HTTP response untuk melindungi dari serangan umum:
+
+| Header | Value | Fungsi |
+|---|---|---|
+| `X-Frame-Options` | `DENY` | Cegah website di-embed iFrame (anti-clickjacking) |
+| `X-Content-Type-Options` | `nosniff` | Browser tidak boleh menebak MIME type |
+| `X-XSS-Protection` | `1; mode=block` | Proteksi cross-site scripting di browser lama |
+| `Referrer-Policy` | `strict-origin-when-cross-origin` | Batasi info referrer ke third-party |
+| `Permissions-Policy` | Batasi kamera, mikrofon, geolocation | Larang website akses hardware tanpa izin |
+| `Strict-Transport-Security` | Hanya di production | HSTS — paksa HTTPS |
+
+**Registrasi:** `bootstrap/app.php` → `$middleware->append(SecurityHeadersMiddleware::class)` — di-append secara global.
+
+---
+
+### 🚨 Fitur 14: Centralized Exception Handling (API Error Handling)
+
+**Letak code:** `bootstrap/app.php` → `withExceptions()`
+
+Semua error API diformat **konsisten** sebagai JSON dengan format `{success: false, message: "..."}`:
+
+| Exception | HTTP Code | Pesan |
+|---|---|---|
+| `ValidationException` | 422 | Detail error per field |
+| `AuthenticationException` | 401 | "Anda belum login" |
+| `AccessDeniedHttpException` | 403 | "Akses ditolak" |
+| `ModelNotFoundException` | 404 | "Data tidak ditemukan" |
+| `QueryException` (FK violation) | 409 | "Data masih digunakan" |
+| `QueryException` (duplicate) | 409 | "Data sudah ada" |
+| General error | 500 | Pesan detail (debug) atau generic (production) |
+
+**Mengapa penting?** Frontend yang consume API bisa selalu mengandalkan format response yang sama, tidak perlu handle HTML error page dari Laravel.
+
+---
+
+### 📦 Fitur 15: ApiResponse Helper (Konsisten API Format)
+
+**Letak code:** `app/Helpers/ApiResponse.php`
+
+Seluruh controller API menggunakan helper ini agar format JSON **100% konsisten**:
+
+```php
+// Letak: app/Helpers/ApiResponse.php
+ApiResponse::success($data, 'Berhasil.');           // 200 OK
+ApiResponse::created($data, 'Data berhasil dibuat.'); // 201 Created
+ApiResponse::paginated($paginator, 'Berhasil.');     // 200 + pagination metadata
+ApiResponse::successPaginated($array, $msg, $meta);  // 200 + cached pagination
+ApiResponse::error('Gagal.', 400);                   // Error responses
+ApiResponse::notFound('Tidak ditemukan.');            // 404
+ApiResponse::unauthorized();                          // 401
+ApiResponse::forbidden();                             // 403
+```
+
+Semua response selalu punya shape: `{ success: bool, message: string, data?: any, pagination?: object }`
+
+---
+
+### 📊 Fitur 16: Admin Dashboard (Statistik & Activity Log)
+
+**Letak code:**
+- `app/Http/Controllers/Api/Admin/DashboardController.php` — API statistik
+- `app/Http/Controllers/Admin/ViewController.php` — Render Blade views
+- `resources/views/admin/` — 7 halaman admin (dashboard, products, categories, banners, testimonials, users, layout)
+
+**Dashboard API** (`GET /api/v1/admin/stats`) mengembalikan:
+- Total produk, total user, reached accounts (unique IP dari session)
+- **10 aktivitas terakhir** dengan icon, waktu relatif (`"3 jam yang lalu"`), dan nama user
+
+**Admin Views:** Admin panel dibangun dengan Blade + layout system (`admin/layout.blade.php`), semua halaman CRUD di-manage via API calls dari JavaScript di masing-masing Blade view.
+
+**Reached Accounts:** Menghitung unique IP dari tabel `sessions` (jika session driver = database). Ini memberi gambaran berapa banyak pengunjung unik yang mengakses website.
+
+---
+
+### 💬 Fitur 17: Chatbot Widget (Frontend Interaktif)
+
+**Letak code:** `resources/views/partials/chatbot.blade.php` (289 baris)
+
+Widget AI ini muncul di **semua halaman** publik sebagai floating button. Fitur-fitur UI-nya:
+
+1. **Floating Action Button (FAB)** — tombol emas dengan ikon sparkle, ada badge notifikasi
+2. **Prompt Recommendations** — tombol cepat seperti "Rekomendasi gitar terbaru" dan "Gitar untuk pemula"
+3. **Typewriter Animation** — jawaban AI ditampilkan karakter per karakter dengan cursor berkedip, memberi efek "AI sedang mengetik"
+4. **Markdown Rendering** — `**bold**` dan `*italic*` di-render di chat bubble
+5. **Chat History** — riwayat percakapan (max 20 pesan terakhir) dikirim ke API agar AI punya konteks
+6. **Input Lock** — saat AI masih menjawab, user tidak bisa kirim pesan baru (anti-spam)
+7. **Pure Inline CSS** — widget ini tidak bergantung pada Tailwind atau framework CSS apapun, sehingga bekerja di halaman manapun
+
+---
+
+### 🧩 Fitur 18: Model Lengkap (Eloquent Patterns)
+
+Selain `Product.php` yang sudah dibahas, model lain juga punya pattern menarik:
+
+**User Model** (`app/Models/User.php`):
+- `HasApiTokens` (Sanctum) — memungkinkan user memiliki banyak API token
+- `SoftDeletes` — user yang dihapus bisa dipulihkan
+- `password` di-cast ke `hashed` — Laravel otomatis hash password saat set
+- `$hidden = ['password']` — password tidak pernah muncul di JSON response
+
+**Category Model** (`app/Models/Category.php`):
+- Auto-slug di `boot()` — sama seperti Product, slug di-generate otomatis
+- `withTrashed()` pada slug check — slug produk yang sudah di-soft-delete juga dicek
+- `hasMany(Product::class)` — relasi one-to-many ke produk
+
+**Banner Model** (`app/Models/Banner.php`):
+- `scopeActive()` — filter banner yang `is_active = true`
+- `$appends = ['image_url']` — URL gambar otomatis di accessor
+- `is_active` di-cast ke `boolean`
+
+**Testimonial Model** (`app/Models/Testimonial.php`):
+- `scopeActive()` — sama seperti Banner, filter testimoni aktif
+- Minimal dan fokus — hanya `name`, `testimony`, `is_active`, `created_by`
+
+**ActivityLog Model** (`app/Models/ActivityLog.php`):
+- Static helper `log($action, $model, $description)` — dipanggil di semua Admin controller
+- `getTimeAgoAttribute()` — accessor yang mengembalikan `"3 jam yang lalu"` menggunakan Carbon `diffForHumans()`
+- `getIconAttribute()` — icon berbeda untuk create/update/delete menggunakan PHP `match` expression
+- `properties` di-cast ke `array` — bisa simpan data tambahan dalam JSON
+
+---
+
 ## BAGIAN 4 — PENJELASAN CODE INTI (Live Code Walkthrough)
 
 > *Bagian ini cocok ditampilkan sambil buka VS Code dan sorot kode satu per satu*
@@ -452,6 +609,53 @@ foreach ($products as $p) {
 1. `Str::uuid()` → nama file unik, anti-overwrite
 2. `storeAs($folder, $filename, 'public')` → simpan ke `storage/app/public/{folder}/`
 3. `update()` → pattern "delete dulu, upload baru" mencegah file orphan/sampah di storage
+
+### 4.6 Middleware Stack (3 Custom Middleware)
+
+**File:** `app/Http/Middleware/` — Ada 3 custom middleware:
+
+1. **AdminMiddleware** — Cek `$request->user()->is_admin`. Kalau bukan admin: API → 403 JSON, Web → redirect ke login.
+2. **SecurityHeadersMiddleware** — Tambahkan 6 security headers ke setiap response. HSTS hanya aktif di production.
+3. **ScrambleTokenAccess** — Gate untuk `/docs/api`. Cek session flag `scramble_token_verified`, kalau belum → tampilkan halaman input token.
+
+Tunjukkan registrasi di `bootstrap/app.php`:
+```php
+$middleware->alias(['admin' => AdminMiddleware::class, ...]);
+$middleware->append(SecurityHeadersMiddleware::class); // global
+$middleware->statefulApi(); // Sanctum SPA support
+$middleware->throttleApi('api'); // rate limiting
+```
+
+### 4.7 Bootstrap App (Exception Handling Terpusat)
+
+**File:** `bootstrap/app.php` → `withExceptions()`
+
+Tunjukkan bagaimana setiap tipe exception di-render ke format JSON yang konsisten:
+- `ValidationException` → kirim balik detail error per field ke frontend
+- `QueryException` → deteksi error code MySQL (1451 = FK violation, 1062 = duplicate)
+- Production vs Debug → di production pesan error di-sanitize, di debug ditampilkan lengkap
+
+### 4.8 ApiResponse Helper (Standardisasi Format)
+
+**File:** `app/Helpers/ApiResponse.php`
+
+1. `success()`, `error()`, `created()`, `notFound()` — shortcut methods untuk berbagai HTTP status
+2. `paginated()` — menerima `LengthAwarePaginator` object (dari Eloquent langsung)
+3. `successPaginated()` — menerima array biasa (dari cache, karena Paginator object tidak bisa di-serialize)
+
+### 4.9 Admin Dashboard & ViewController
+
+**File API:** `app/Http/Controllers/Api/Admin/DashboardController.php`
+- `stats()` → aggregate data (count produk, user, unique IP)
+- `ActivityLog::with('user')` → 10 log terakhir dengan accessor `time_ago` dan `icon`
+
+**File View:** `app/Http/Controllers/Admin/ViewController.php`
+- Controller ini **hanya return view**, tanpa logika apapun — semua data diambil via API call dari JavaScript di Blade
+- Pattern ini memisahkan "render halaman" dari "ambil data", konsisten dengan arsitektur API-first
+
+**Admin Layout:** `resources/views/admin/layout.blade.php`
+- Layout dasar semua halaman admin (sidebar, header, content area)
+- 6 halaman admin: dashboard, products, categories, banners, testimonials, users
 
 ---
 
@@ -689,32 +893,29 @@ php artisan optimize
 ## BAGIAN 8 — POIN TAMBAHAN YANG MENARIK UNTUK DITONJOLKAN
 
 ### 🏗️ Arsitektur yang Bersih (MVC + Service Layer)
-Project ini memisahkan concern dengan sangat baik: **Model** (data), **Controller** (terima request, kirim response), **Service** (logika bisnis), dan **View** (presentasi). Ini membuat kode mudah di-maintain dan scale.
+Project ini memisahkan concern dengan sangat baik: **Model** (data), **Controller** (terima request, kirim response), **Service** (logika bisnis), dan **View** (presentasi). Ini membuat kode mudah di-maintain dan scale. Semua response API selalu menggunakan standardisasi format lewat `ApiResponse` helper.
+
+### ⚡ Optimasi Performa & Caching (Micro-optimization)
+- **Application Caching:** List produk, detail produk, kategori, dan banner di-cache otomatis dengan mekanisme versi (Cache Busting) agar tidak membebani database setiap kali user visit. Jika admin update data, cache otomatis *invalidated*.
+- **Lazy Loading (Image):** Semua image yang ditampilkan di katalog menggunakan atribut `loading="lazy"` agar gambar tidak didownload jika belum masuk layar (menghemat bandwidth dan mempercepat First Contentful Paint).
+
+### 🛡️ Keamanan yang Kuat
+- 6 Security Headers diregister secara global (HSTS, Anti-clickjacking, dll).
+- Error Handling terpusat di `bootstrap/app.php` mencegah stack trace error bocor ke publik.
+- CSRF protection web, API Sanctum token `HasApiTokens`, SQL Injection prevention via Eloquent, dan Gate token statis untuk Scramble API Documentation.
+
+### 🎨 Frontend Interaktif (Native & Cepat)
+Meskipun admin panel menggunakan Blade tradisional, UI publik (Landing, Chatbot) dibangun dengan **Pure CSS/Inline Styles** untuk widget spesifik seperti Chatbot. Ini membuat widget AI dapat dimasukkan ke page manapun tanpa bentrok _class_ CSS. Tidak ada page reloads—semuanya menggunakan AJAX Fetch dengan animasi modern (skeletons, floating buttons, typewriter animation).
 
 ### 🚦 Rate Limiting yang Berlapis
 Setiap endpoint punya rate limit berbeda sesuai sensitivitasnya:
 - Login: 5/menit (anti brute-force)
-- Chatbot: 30/menit (anti spam AI)
+- Chatbot: 30/menit (anti spam request AI ke Groq)
 - API umum: 60/menit
 - Admin: 120/menit
 
-### 📦 Composer Scripts yang Produktif
-Script `composer dev` dan `composer setup` di `composer.json` mempermudah onboarding developer baru. Hanya perlu satu command untuk mulai development.
-
-### 🌐 Dual Hosting Strategy
-- **InfinityFree** — hosting produksi gratis untuk demo
-- **Railway** — testing & CI deployment otomatis via git push
-
-### 🔒 Keamanan yang Diperhatikan
-- CSRF protection otomatis di semua form web (Laravel default)
-- Mass assignment protection via `$fillable`
-- Sanctum token dibuat per-device, bisa revoke individual
-- SQL Injection terlindungi via Eloquent parameterized query
-- Google OAuth hanya untuk admin terdaftar
-- Dokumentasi API terlindungi token gate
-
 ### 📅 Audit Trail dengan created_by
-Setiap produk, kategori, banner, dan testimoni menyimpan `created_by` sebagai foreign key ke tabel `users`. Ini memungkinkan pelacakan siapa yang membuat data apa.
+Setiap data penting (produk, kategori, banner, testimoni) menyimpan `created_by` sebagai foreign key ke tabel `users`. Digabungkan dengan Activity Log Dashboard, admin bisa memonitor persis siapa yang membuat/mengedit data kapan.
 
 ---
 
@@ -722,9 +923,9 @@ Setiap produk, kategori, banner, dan testimoni menyimpan `created_by` sebagai fo
 
 > *[Kamera / layar kembali ke landing page]*
 
-"Jadi itulah overview teknis dari project King Gitar. Dari sisi stack kita pakai **Laravel 12** sebagai tulang punggung, **Sanctum** untuk API auth, **Socialite** untuk Google login, **Groq AI** untuk chatbot, **Scramble** untuk dokumentasi API otomatis. Dari sisi teknik coding, kita terapkan **Service Layer**, **Eloquent Scopes**, **Model Events**, **SoftDeletes**, dan **Route Model Binding** dengan slug.
+"Jadi itulah overview teknis dari project King Gitar. Dari sisi stack kita pakai **Laravel 12** sebagai tulang punggung, **Sanctum** untuk API auth, **Socialite** untuk Google login, **Groq AI** untuk chatbot cerdas, **Scramble** untuk dokumentasi API otomatis, dan cache layer performa tinggi. Dari sisi teknik coding, diterapkan **Service Layer**, **Eloquent Pattern**, **Model Events**, **Security Headers**, dan Standardisasi **Exception Handling**.
 
-Yang membuat project ini lebih dari sekedar CRUD biasa adalah fitur-fitur seperti chatbot AI yang sadar konteks produk, Google OAuth, WhatsApp order generator, SEO-friendly URL, skeleton loading, dan dokumentasi API otomatis yang bisa langsung di-test.
+Yang membuat project ini menonjol adalah perhatian terhadap UX: chatbot dengan typewriter UI, katalog yang super-cepat berkat lazy loading dan caching, dashboard admin interaktif, order otomatis integrasi WhatsApp, dan sistem security yang berlapis.
 
 Semoga video ini bermanfaat! Kalau ada pertanyaan, tinggalkan di kolom komentar."
 
@@ -737,13 +938,14 @@ Semoga video ini bermanfaat! Kalau ada pertanyaan, tinggalkan di kolom komentar.
 | File | Baris Kunci | Topik |
 |---|---|---|
 | `routes/web.php` | 21-28, 31-42 | Admin routes, Google OAuth, Scramble gate |
-| `routes/api.php` | 61-63, 68-73, 78-109 | Chatbot, Auth, Admin CRUD |
-| `app/Models/Product.php` | 71-88, 93-113, 147-156 | Boot events, slug, WhatsApp |
-| `app/Services/ChatbotService.php` | 35-49, 65-70 | System prompt, payload Groq |
-| `app/Services/ChatbotContextService.php` | 53-68 | Context builder dari DB |
-| `app/Services/ImageService.php` | 27-38, 84-91 | Upload UUID, update pattern |
-| `app/Http/Controllers/SocialiteController.php` | 29-78 | Google callback flow |
-| `composer.json` | 11-17, 54-57 | Dependencies, composer dev |
+| `routes/api.php` | 61-90, 78-109 | Chatbot, Auth, Caching API, Admin CRUD |
+| `app/Models/Product.php` | 71-88, 93-113 | Boot events, auto-slug, WhatsApp format |
+| `app/Services/ChatbotService.php` | 35-49, 120-130 | System prompt, API payload Groq |
+| `app/Services/ImageService.php` | 27-38, 84-91 | Upload UUID unik, delete/update |
+| `bootstrap/app.php` | 22-42, 44-123 | Middleware Global, API Exception Handler |
+| `app/Http/Controllers/Api/PublicApi/ProductController.php` | 40-80 | Caching logic, successPaginated |
+| `resources/views/partials/chatbot.blade.php` | 155-212 | JS Typewriter Animation Logic |
+| `composer.json` | 11-17, 54-57 | Package dependencies, NPM + Artisan concurrently |
 
 ### Urutan Demo Postman yang Disarankan
 1. `GET /api/v1/` — info API
