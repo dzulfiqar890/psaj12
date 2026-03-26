@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * Controller untuk akses produk publik (Guest)
@@ -38,25 +39,46 @@ class ProductController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $products = Product::with('category:id,name,slug')
-            ->search($request->input('search'))
-            ->byCategory($request->input('category_id'))
-            ->byPriceRange(
-                $request->input('min_price'),
-                $request->input('max_price')
-            )
-            ->latest()
-            ->paginate(12);
+        $version = Cache::get('products_cache_version', 1);
+        $cacheKey = 'products_index_v' . $version . '_' . md5(json_encode($request->all()));
 
-        // Transform data untuk menambahkan info stok
-        $products->getCollection()->transform(function ($product) {
-            $data = $product->toArray();
-            $data['is_in_stock'] = $product->isInStock();
-            $data['formatted_price'] = $product->formatted_price;
-            return $data;
+        $paginatedResult = Cache::remember($cacheKey, now()->addMinutes(30), function () use ($request) {
+            $products = Product::with('category:id,name,slug')
+                ->search($request->input('search'))
+                ->byCategory($request->input('category_id'))
+                ->byPriceRange(
+                    $request->input('min_price'),
+                    $request->input('max_price')
+                )
+                ->latest()
+                ->paginate(12);
+
+            // Transform data untuk menambahkan info stok
+            $products->getCollection()->transform(function ($product) {
+                $data = $product->toArray();
+                $data['is_in_stock'] = $product->isInStock();
+                $data['formatted_price'] = $product->formatted_price;
+                return $data;
+            });
+
+            return [
+                'data' => $products->items(),
+                'pagination' => [
+                    'total' => $products->total(),
+                    'per_page' => $products->perPage(),
+                    'current_page' => $products->currentPage(),
+                    'last_page' => $products->lastPage(),
+                    'from' => $products->firstItem(),
+                    'to' => $products->lastItem(),
+                ]
+            ];
         });
 
-        return ApiResponse::paginated($products, 'Data produk berhasil diambil.');
+        return ApiResponse::successPaginated(
+            $paginatedResult['data'],
+            'Data produk berhasil diambil.',
+            $paginatedResult['pagination']
+        );
     }
 
     /**
@@ -91,13 +113,19 @@ class ProductController extends Controller
      */
     public function show(Product $product): JsonResponse
     {
-        $product->load('category:id,name,slug');
+        $cacheKey = 'product_detail_' . $product->slug;
 
-        $productData = $product->toArray();
-        $productData['formatted_price'] = $product->formatted_price;
-        $productData['is_in_stock'] = $product->isInStock();
-        $productData['whatsapp_link'] = $product->isInStock() ? $product->getWhatsAppLink() : null;
-        $productData['stock_message'] = $product->getStockMessage();
+        $productData = Cache::remember($cacheKey, now()->addHour(), function () use ($product) {
+            $product->load('category:id,name,slug');
+
+            $data = $product->toArray();
+            $data['formatted_price'] = $product->formatted_price;
+            $data['is_in_stock'] = $product->isInStock();
+            $data['whatsapp_link'] = $product->isInStock() ? $product->getWhatsAppLink() : null;
+            $data['stock_message'] = $product->getStockMessage();
+
+            return $data;
+        });
 
         return ApiResponse::success($productData);
     }

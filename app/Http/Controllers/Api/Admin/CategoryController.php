@@ -8,6 +8,7 @@ use App\Http\Requests\CategoryRequest;
 use App\Models\ActivityLog;
 use App\Models\Category;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -67,6 +68,11 @@ class CategoryController extends Controller
 
                 ActivityLog::log('create', $category, "Kategori '{$category->name}' ditambahkan");
 
+                // Invalidasi cache kategori list
+                Cache::forget('categories_index');
+                // Juga invalidasi product cache karena withCount berubah
+                Cache::increment('products_cache_version');
+
                 return ApiResponse::created($category, 'Kategori berhasil dibuat.');
             });
         } catch (\Exception $e) {
@@ -120,6 +126,10 @@ class CategoryController extends Controller
 
                 ActivityLog::log('update', $category, "Kategori '{$category->name}' diperbarui");
 
+                // Invalidasi cache kategori
+                Cache::forget('categories_index');
+                Cache::forget('category_detail_' . $category->slug);
+
                 return ApiResponse::success($category, 'Kategori berhasil diupdate.');
             });
         } catch (\Exception $e) {
@@ -152,10 +162,15 @@ class CategoryController extends Controller
 
         try {
             return DB::transaction(function () use ($category) {
+                $categorySlug = $category->slug;
                 $categoryName = $category->name;
                 $category->delete();
 
                 ActivityLog::log('delete', (object)['id' => null], "Kategori '{$categoryName}' dihapus");
+
+                // Invalidasi cache kategori
+                Cache::forget('categories_index');
+                Cache::forget('category_detail_' . $categorySlug);
 
                 return ApiResponse::success(null, 'Kategori berhasil dihapus.');
             });

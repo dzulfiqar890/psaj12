@@ -11,6 +11,7 @@ use App\Models\Product;
 use App\Services\ImageService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -103,6 +104,9 @@ class ProductController extends Controller
 
                 ActivityLog::log('create', $product, "Produk '{$product->name}' ditambahkan");
 
+                // Invalidasi cache produk list
+                Cache::increment('products_cache_version');
+
                 return ApiResponse::created($product, 'Produk berhasil dibuat.');
             });
         } catch (\Exception $e) {
@@ -172,6 +176,10 @@ class ProductController extends Controller
 
                 ActivityLog::log('update', $product, "Produk '{$product->name}' diperbarui");
 
+                // Invalidasi cache produk list & detail
+                Cache::increment('products_cache_version');
+                Cache::forget('product_detail_' . $product->slug);
+
                 return ApiResponse::success($product, 'Produk berhasil diupdate.');
             });
         } catch (\Exception $e) {
@@ -197,10 +205,15 @@ class ProductController extends Controller
                 // Hapus gambar
                 $this->imageService->delete($product->image);
 
+                $productSlug = $product->slug;
                 $productName = $product->name;
                 $product->delete();
 
                 ActivityLog::log('delete', (object)['id' => null], "Produk '{$productName}' dihapus");
+
+                // Invalidasi cache produk list & detail
+                Cache::increment('products_cache_version');
+                Cache::forget('product_detail_' . $productSlug);
 
                 return ApiResponse::success(null, 'Produk berhasil dihapus.');
             });

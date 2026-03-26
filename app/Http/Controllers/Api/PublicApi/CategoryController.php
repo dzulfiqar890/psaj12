@@ -6,6 +6,7 @@ use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * Controller untuk akses kategori publik (Guest)
@@ -22,9 +23,11 @@ class CategoryController extends Controller
      */
     public function index(): JsonResponse
     {
-        $categories = Category::withCount('products')
-            ->orderBy('name')
-            ->get();
+        $categories = Cache::remember('categories_index', now()->addDay(), function () {
+            return Category::withCount('products')
+                ->orderBy('name')
+                ->get();
+        });
 
         return ApiResponse::success($categories, 'Data kategori berhasil diambil.');
     }
@@ -41,12 +44,17 @@ class CategoryController extends Controller
      */
     public function show(Category $category): JsonResponse
     {
-        $category->load([
-            'products' => function ($query) {
-                $query->latest()->take(12);
-            }
-        ]);
+        $cacheKey = 'category_detail_' . $category->slug;
 
-        return ApiResponse::success($category);
+        $categoryData = Cache::remember($cacheKey, now()->addHour(), function () use ($category) {
+            $category->load([
+                'products' => function ($query) {
+                    $query->latest()->take(12);
+                }
+            ]);
+            return $category;
+        });
+
+        return ApiResponse::success($categoryData);
     }
 }

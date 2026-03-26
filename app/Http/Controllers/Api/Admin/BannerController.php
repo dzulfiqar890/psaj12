@@ -9,6 +9,7 @@ use App\Models\ActivityLog;
 use App\Models\Banner;
 use App\Services\ImageService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -44,6 +45,9 @@ class BannerController extends Controller
 
                 ActivityLog::log('create', $banner, "Banner '{$banner->title}' ditambahkan");
 
+                // Invalidasi banner cache
+                Cache::forget('active_banners');
+
                 return ApiResponse::created($banner, 'Banner berhasil dibuat.');
             });
         } catch (\Exception $e) {
@@ -75,6 +79,9 @@ class BannerController extends Controller
 
                 ActivityLog::log('update', $banner, "Banner '{$banner->title}' diperbarui");
 
+                // Invalidasi banner cache
+                Cache::forget('active_banners');
+
                 return ApiResponse::success($banner, 'Banner berhasil diupdate.');
             });
         } catch (\Exception $e) {
@@ -93,6 +100,9 @@ class BannerController extends Controller
                 $banner->delete();
 
                 ActivityLog::log('delete', (object)['id' => null], "Banner '{$bannerTitle}' dihapus");
+
+                // Invalidasi banner cache
+                Cache::forget('active_banners');
 
                 return ApiResponse::success(null, 'Banner berhasil dihapus.');
             });

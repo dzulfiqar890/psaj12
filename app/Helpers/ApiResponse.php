@@ -79,6 +79,24 @@ class ApiResponse
     }
 
     /**
+     * Response sukses dengan data dan pagination array (untuk cached data).
+     *
+     * @param array $data Items data
+     * @param string $message Pesan sukses
+     * @param array $pagination Array pagination metadata
+     * @return JsonResponse
+     */
+    public static function successPaginated(array $data, string $message = 'Data berhasil diambil.', array $pagination = []): JsonResponse
+    {
+        return response()->json([
+            'success' => true,
+            'message' => $message,
+            'data' => $data,
+            'pagination' => $pagination,
+        ], 200);
+    }
+
+    /**
      * Response untuk data yang baru dibuat (201 Created).
      *
      * @param mixed $data Data yang baru dibuat

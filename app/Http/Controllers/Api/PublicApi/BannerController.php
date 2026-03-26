@@ -6,6 +6,7 @@ use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Models\Banner;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * Controller untuk akses banner publik (Guest)
@@ -22,9 +23,11 @@ class BannerController extends Controller
      */
     public function index(): JsonResponse
     {
-        $banners = Banner::active()
-            ->latest()
-            ->get();
+        $banners = Cache::remember('active_banners', now()->addDay(), function () {
+            return Banner::active()
+                ->latest()
+                ->get();
+        });
 
         return ApiResponse::success($banners, 'Data banner berhasil diambil.');
     }
