@@ -102,9 +102,14 @@ class AuthController extends Controller
         }
 
         // Untuk session-based authentication (Scramble)
+        // Logout dari guard web
         Auth::guard('web')->logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+
+        // Cek apakah request memiliki session sebelum menghapusnya
+        if ($request->hasSession()) {
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        }
 
         // Log activity
         Log::info("User logged out: {$user->email}", ['user_id' => $user->id]);
