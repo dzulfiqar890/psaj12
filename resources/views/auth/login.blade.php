@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - King Gitar</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
+    @if(app()->environment('local'))
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            tailwind.config = {
+                theme: {
                 extend: {
                     fontFamily: {
                         sans: ['Poppins', 'sans-serif'],
@@ -27,8 +27,11 @@
                     }
                 }
             }
-        }
-    </script>
+        </script>
+    @else
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @endif
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body class="bg-[#FAF9F6] h-screen flex font-sans text-gray-800">

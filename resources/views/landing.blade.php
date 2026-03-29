@@ -37,34 +37,38 @@
     <meta name="twitter:title" content="King Gitar Subang - Toko Gitar Terlengkap di Subang Jawa Barat">
     <meta name="twitter:description" content="Toko gitar terlengkap di Subang, Jawa Barat. Gitar akustik & elektrik berkualitas.">
     <meta name="twitter:image" content="{{ asset('Foto/ogimage.png') }}">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        serif: ['Playfair Display', 'serif'],
-                    },
-                    colors: {
-                        gold: {
-                            500: '#D4AF37',
-                            600: '#C5A028',
+    @if(app()->environment('local'))
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        fontFamily: {
+                            sans: ['Inter', 'sans-serif'],
+                            serif: ['Playfair Display', 'serif'],
                         },
-                        dark: {
-                            900: '#1a1a1a',
-                            800: '#2d2d2d',
+                        colors: {
+                            gold: {
+                                500: '#D4AF37',
+                                600: '#C5A028',
+                            },
+                            dark: {
+                                900: '#1a1a1a',
+                                800: '#2d2d2d',
+                            }
                         }
                     }
                 }
             }
-        }
-    </script>
+        </script>
+    @else
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @endif
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
     <script type="application/ld+json">
     {
       "@@context" : "https://schema.org",
@@ -453,7 +457,7 @@
             content: "";
             position: absolute;
             inset: 0;
-            background: rgba(0, 0, 0, 0.75);
+            background: rgba(0, 0, 0, 0.65);
             /* tingkat gelap (dipergelap dari 0.45 menjadi 0.75) */
             backdrop-filter: blur(3px);
             /* blur halus */

@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>API Docs – Masukkan Token</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    @if(app()->environment('local'))
+        <script src="https://cdn.tailwindcss.com"></script>
+    @else
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @endif
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         body { background: #0f0f0f; font-family: 'Segoe UI', sans-serif; }
