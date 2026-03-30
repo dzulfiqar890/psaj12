@@ -39,7 +39,7 @@ class ProductController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $version = Cache::get('products_cache_version', 1);
+        $version = Cache::get('products_cache_version', 0);
         $cacheKey = 'products_index_v' . $version . '_' . md5(json_encode($request->all()));
 
         $paginatedResult = Cache::remember($cacheKey, now()->addMinutes(30), function () use ($request) {

@@ -70,8 +70,8 @@ class CategoryController extends Controller
 
                 // Invalidasi cache kategori list
                 Cache::forget('categories_index');
-                // Juga invalidasi product cache karena withCount berubah
-                Cache::increment('products_cache_version');
+                // Juga invalidasi product cache karena withCount berubah (manual increment agar kompatibel dengan database driver)
+                Cache::forever('products_cache_version', (int) Cache::get('products_cache_version', 0) + 1);
 
                 return ApiResponse::created($category, 'Kategori berhasil dibuat.');
             });

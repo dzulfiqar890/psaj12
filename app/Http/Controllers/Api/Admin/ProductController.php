@@ -104,8 +104,8 @@ class ProductController extends Controller
 
                 ActivityLog::log('create', $product, "Produk '{$product->name}' ditambahkan");
 
-                // Invalidasi cache produk list
-                Cache::increment('products_cache_version');
+                // Invalidasi cache produk list (manual increment agar kompatibel dengan database driver)
+                Cache::forever('products_cache_version', (int) Cache::get('products_cache_version', 0) + 1);
 
                 return ApiResponse::created($product, 'Produk berhasil dibuat.');
             });
@@ -176,8 +176,8 @@ class ProductController extends Controller
 
                 ActivityLog::log('update', $product, "Produk '{$product->name}' diperbarui");
 
-                // Invalidasi cache produk list & detail
-                Cache::increment('products_cache_version');
+                // Invalidasi cache produk list & detail (manual increment agar kompatibel dengan database driver)
+                Cache::forever('products_cache_version', (int) Cache::get('products_cache_version', 0) + 1);
                 Cache::forget('product_detail_' . $product->slug);
 
                 return ApiResponse::success($product, 'Produk berhasil diupdate.');
@@ -211,8 +211,8 @@ class ProductController extends Controller
 
                 ActivityLog::log('delete', (object)['id' => null], "Produk '{$productName}' dihapus");
 
-                // Invalidasi cache produk list & detail
-                Cache::increment('products_cache_version');
+                // Invalidasi cache produk list & detail (manual increment agar kompatibel dengan database driver)
+                Cache::forever('products_cache_version', (int) Cache::get('products_cache_version', 0) + 1);
                 Cache::forget('product_detail_' . $productSlug);
 
                 return ApiResponse::success(null, 'Produk berhasil dihapus.');
