@@ -69,7 +69,7 @@ class CategoryController extends Controller
                 ActivityLog::log('create', $category, "Kategori '{$category->name}' ditambahkan");
 
                 // Invalidasi cache kategori list
-                Cache::forget('categories_index');
+                Cache::forever('categories_cache_version', (int) Cache::get('categories_cache_version', 0) + 1);
                 // Juga invalidasi product cache karena withCount berubah (manual increment agar kompatibel dengan database driver)
                 Cache::forever('products_cache_version', (int) Cache::get('products_cache_version', 0) + 1);
 
@@ -127,7 +127,7 @@ class CategoryController extends Controller
                 ActivityLog::log('update', $category, "Kategori '{$category->name}' diperbarui");
 
                 // Invalidasi cache kategori
-                Cache::forget('categories_index');
+                Cache::forever('categories_cache_version', (int) Cache::get('categories_cache_version', 0) + 1);
                 Cache::forget('category_detail_' . $category->slug);
 
                 return ApiResponse::success($category, 'Kategori berhasil diupdate.');
@@ -169,7 +169,7 @@ class CategoryController extends Controller
                 ActivityLog::log('delete', (object)['id' => null], "Kategori '{$categoryName}' dihapus");
 
                 // Invalidasi cache kategori
-                Cache::forget('categories_index');
+                Cache::forever('categories_cache_version', (int) Cache::get('categories_cache_version', 0) + 1);
                 Cache::forget('category_detail_' . $categorySlug);
 
                 return ApiResponse::success(null, 'Kategori berhasil dihapus.');

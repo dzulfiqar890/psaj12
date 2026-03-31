@@ -106,6 +106,8 @@ class ProductController extends Controller
 
                 // Invalidasi cache produk list (manual increment agar kompatibel dengan database driver)
                 Cache::forever('products_cache_version', (int) Cache::get('products_cache_version', 0) + 1);
+                // Invalidasi cache kategori agar products_count ikut ter-refresh
+                Cache::forever('categories_cache_version', (int) Cache::get('categories_cache_version', 0) + 1);
 
                 return ApiResponse::created($product, 'Produk berhasil dibuat.');
             });
@@ -179,6 +181,8 @@ class ProductController extends Controller
                 // Invalidasi cache produk list & detail (manual increment agar kompatibel dengan database driver)
                 Cache::forever('products_cache_version', (int) Cache::get('products_cache_version', 0) + 1);
                 Cache::forget('product_detail_' . $product->slug);
+                // Invalidasi cache kategori agar products_count ikut ter-refresh (misal pindah kategori)
+                Cache::forever('categories_cache_version', (int) Cache::get('categories_cache_version', 0) + 1);
 
                 return ApiResponse::success($product, 'Produk berhasil diupdate.');
             });
@@ -214,6 +218,8 @@ class ProductController extends Controller
                 // Invalidasi cache produk list & detail (manual increment agar kompatibel dengan database driver)
                 Cache::forever('products_cache_version', (int) Cache::get('products_cache_version', 0) + 1);
                 Cache::forget('product_detail_' . $productSlug);
+                // Invalidasi cache kategori agar products_count ikut ter-refresh
+                Cache::forever('categories_cache_version', (int) Cache::get('categories_cache_version', 0) + 1);
 
                 return ApiResponse::success(null, 'Produk berhasil dihapus.');
             });

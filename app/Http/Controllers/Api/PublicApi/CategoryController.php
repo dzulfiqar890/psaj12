@@ -23,7 +23,10 @@ class CategoryController extends Controller
      */
     public function index(): JsonResponse
     {
-        $categories = Cache::remember('categories_index', now()->addDay(), function () {
+        $version = Cache::get('categories_cache_version', 0);
+        $cacheKey = 'categories_index_v' . $version;
+
+        $categories = Cache::rememberForever($cacheKey, function () {
             return Category::withCount('products')
                 ->orderBy('name')
                 ->get();
